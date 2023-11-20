@@ -10,7 +10,7 @@
     - [ ] Read One
     - [ ] Read Many
     - [ ] Delete
-- [ ] Adicionar logs para escrita e leitura
+- [ ] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
 - [ ] Adicionar autenticação nas rotas
 - [ ] Adicionar error handlers personalizados
 - [ ] Criar configuração de container docker e configurar docker-compose
