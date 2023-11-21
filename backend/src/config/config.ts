@@ -2,7 +2,7 @@ import "dotenv/config";
 
 const config = {
 	PORT: process.env.PORT,
-	mongoURI: process.env.MONGO_URI,
+	mongoURL: process.env.MONGO_URL,
 };
 
 export default config;

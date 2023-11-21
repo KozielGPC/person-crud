@@ -8,7 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/api/person", personRoutes);
+app.use("/users", personRoutes);
 app.all("*", function (req: Request, res: Response) {
 	return responseHandler.successResponseWithData(res, "Page not found", {});
 });

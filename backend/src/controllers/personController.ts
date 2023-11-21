@@ -1,72 +1,70 @@
 import connectDB from "../config/database";
-import personModel from "../models/personModel";
+import { CreateUserDto } from "../interfaces/User/create-user-input.dto";
+import userModel from "../models/userModel";
+import responseHandler from "../tools/apiResponseHandler";
 
-const database = connectDB();
 export class PersonController {
-	// PersonModel: any;
-	// constructor(PersonModel: any) {
-	// 	this.PersonModel = PersonModel;
-	// }
-
-	// create(req, res) {
-	// 	const person = new this.PersonModel(req.body);
-	// 	person.save((err, data) => {
-	// 		if (err) {
-	// 			res.status(500).send(err);
-	// 		} else {
-	// 			res.status(201).send(data);
-	// 		}
-	// 	});
-	// }
-
-	// read(req, res) {
-	// 	this.PersonModel.findById(req.params.id, (err, data) => {
-	// 		if (err) {
-	// 			res.status(500).send(err);
-	// 		} else {
-	// 			res.status(200).send(data);
-	// 		}
-	// 	});
-	// }
-
-	findMany(req, res) {
-		// this.PersonModel.find((err, data) => {
-		// 	if (err) {
-		// 		res.status(500).send(err);
-		// 	} else {
-		// res.status(200).send(data);
-		res.status(200).send([
-			{
-				name: "John",
-				age: 30,
-			},
-		]);
-		// 	}
-		// });
+	PersonModel: any;
+	constructor(PersonModel: any) {
+		this.PersonModel = PersonModel;
 	}
 
-	// update(req, res) {
-	// 	this.PersonModel.findByIdAndUpdate(
-	// 		req.params.id,
-	// 		req.body,
-	// 		{ new: true },
-	// 		(err, data) => {
-	// 			if (err) {
-	// 				res.status(500).send(err);
-	// 			} else {
-	// 				res.status(200).send(data);
-	// 			}
-	// 		}
-	// 	);
-	// }
+	async create(req, res) {
+		try {
+			const input: CreateUserDto = req.body;
 
-	// delete(req, res) {
-	// 	this.PersonModel.findByIdAndDelete(req.params.id, (err) => {
-	// 		if (err) {
-	// 			res.status(500).send(err);
-	// 		} else {
-	// 			res.status(200).send({ message: "Person successfully deleted" });
-	// 		}
-	// 	});
-	// }
+			const newUser = new userModel(input);
+
+			const savedUser = await newUser.save();
+			return responseHandler.successResponseWithData(
+				res,
+				"User created successfully",
+				savedUser
+			);
+		} catch (error) {
+			return responseHandler.internalErrorResponse(res, "Error creating user");
+		}
+	}
+
+	async findMany(req, res) {
+		try {
+			await connectDB();
+			const allUsers = await userModel.find();
+			return responseHandler.successResponseWithData(res, "Users found", allUsers);
+		} catch (error) {
+			return responseHandler.internalErrorResponse(res, "Error finding users");
+		}
+	}
+
+	async update(req, res) {
+		try {
+			await connectDB();
+			const updatedUser = await userModel.findOneAndUpdate(
+				{ email: "john.doe@example.com" },
+				{ $set: { age: 31 } },
+				{ new: true } // Return the updated document
+			);
+		} catch (error) {
+			return responseHandler.internalErrorResponse(res, "Error during user update");
+		}
+	}
+
+	async delete(req, res) {
+		try {
+			await connectDB();
+			const deletedUser = await userModel.findOneAndDelete({
+				email: "john.doe@example.com",
+			});
+			if (!deletedUser) {
+				return responseHandler.notFoundResponse(res, "User not found");
+			}
+			return responseHandler.successResponseWithData(
+				res,
+				"User deleted successfully",
+				deletedUser
+			);
+		} catch (error) {
+			return responseHandler.internalErrorResponse(res, "Error during user deletion");
+		}
+	}
 }
