@@ -1,15 +1,17 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 interface IPerson extends Document {
- name: string;
- age: number;
- email: string;
+	name: string;
+	age: number;
+	email: string;
 }
 
 const PersonSchema: Schema = new Schema({
- name: { type: String, required: true },
- age: { type: Number, required: true },
- email: { type: String, required: true },
+	name: { type: String, required: true },
+	age: { type: Number, required: true },
+	email: { type: String, required: true },
 });
 
-export default mongoose.model<IPerson>('Person', PersonSchema);
+const PersonModel = mongoose.model<IPerson>("Person", PersonSchema);
+
+export default PersonModel;

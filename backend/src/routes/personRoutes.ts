@@ -1,8 +1,12 @@
-import { Router } from 'express';
-import personController from '../controllers/personController';
+import { Router } from "express";
+import { PersonController } from "../controllers/personController";
+// import personModel from "../models/personModel";
 
 const personRoutes = Router();
 
-personRoutes.post('/', personController.create);
+const personController = new PersonController();
+
+personRoutes.get("/", personController.findMany);
+// personRoutes.post("/", personController.create);
 
 export default personRoutes;
