@@ -2,18 +2,19 @@
 
 ### Backend
 - [x] Criar setup inicial 
-- [ ] Criar conexão com banco de dados
-- [ ] Criar modelos do banco de dados
+- [x] Criar conexão com banco de dados
+- [x] Criar modelos do banco de dados
 - [ ] Criar migrações do banco de dados
 - [ ] Criar rotas
-    - [ ] Create
+    - [x] Create
     - [ ] Update
     - [ ] Read One
-    - [ ] Read Many
+    - [x] Read Many
     - [ ] Delete
 - [ ] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
 - [ ] Adicionar autenticação nas rotas
 - [x] Adicionar error handlers personalizados
+- [ ] Adicionar documentação de rotas com swagger
 - [ ] Criar configuração de container docker e configurar docker-compose
 - [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
