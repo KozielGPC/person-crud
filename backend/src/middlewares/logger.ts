@@ -1,9 +1,10 @@
 import LogModel from "../models/logModel";
+import connectDB from "../config/database";
 
 const logger = (req, res, next) => {
 	req.timestamp = Date.now();
 
-	res.on("finish", () => {
+	res.on("finish", async () => {
 		const responseTime = Date.now();
 		const { method, url } = req;
 		const userAgent = req.get("user-agent");
@@ -22,6 +23,8 @@ const logger = (req, res, next) => {
 		};
 
 		console.log(logInput);
+
+		await connectDB();
 
 		const log = new LogModel(logInput);
 		log.save();
