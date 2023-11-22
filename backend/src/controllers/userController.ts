@@ -1,3 +1,4 @@
+import { validationResult } from "express-validator";
 import connectDB from "../config/database";
 import { CreateUserDto } from "../interfaces/User/create-user-input.dto";
 import userModel, { IUser } from "../models/userModel";
@@ -7,6 +8,14 @@ import { Request, Response } from "express";
 export class UserController {
 	async create(req: Request, res: Response) {
 		try {
+			await connectDB();
+			const errors = validationResult(req);
+			console.log(errors);
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({ errors: errors.array() });
+			}
+
 			const input: CreateUserDto = req.body;
 
 			const newUser = new userModel(input);
@@ -18,6 +27,8 @@ export class UserController {
 				savedUser
 			);
 		} catch (error) {
+			console.log(error);
+
 			return responseHandler.internalErrorResponse(res, "Error creating user");
 		}
 	}
