@@ -10,8 +10,8 @@
     - [ ] Update
     - [x] Read One
     - [x] Read Many
-    - [ ] Delete
-- [ ] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
+    - [x] Delete
+- [x] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
 - [ ] Adicionar autenticação nas rotas
 - [x] Adicionar error handlers personalizados
 - [ ] Adicionar documentação de rotas com swagger
