@@ -12,7 +12,7 @@ interface IPhoneNumber {
 	type: string;
 }
 
-interface IUser extends Document {
+export interface IUser extends Document {
 	firstName: string;
 	lastName: string;
 	addresses: IAddress[];

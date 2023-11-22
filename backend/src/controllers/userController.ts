@@ -1,15 +1,10 @@
 import connectDB from "../config/database";
 import { CreateUserDto } from "../interfaces/User/create-user-input.dto";
-import userModel from "../models/userModel";
+import userModel, { IUser } from "../models/userModel";
 import responseHandler from "../tools/apiResponseHandler";
 import { Request, Response } from "express";
 
-export class PersonController {
-	PersonModel: any;
-	constructor(PersonModel: any) {
-		this.PersonModel = PersonModel;
-	}
-
+export class UserController {
 	async create(req: Request, res: Response) {
 		try {
 			const input: CreateUserDto = req.body;

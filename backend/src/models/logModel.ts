@@ -1,4 +1,16 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+
+interface ILog extends Document {
+	requestTime: Date;
+	responseTime: Date;
+	method: string;
+	url: string;
+	statusCode: number;
+	userAgent: string;
+	body: any;
+	params: Object;
+	query: Object;
+}
 
 const logSchema: Schema = new Schema({
 	requestTime: { type: Date, required: true },
@@ -12,6 +24,6 @@ const logSchema: Schema = new Schema({
 	query: { type: Object, required: true },
 });
 
-const LogModel = mongoose.model('Log', logSchema);
+const LogModel = mongoose.model<ILog>('Log', logSchema);
 
 export default LogModel;
