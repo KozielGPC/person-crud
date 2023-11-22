@@ -16,7 +16,7 @@ interface IUser extends Document {
 	firstName: string;
 	lastName: string;
 	addresses: IAddress[];
-	age: number;
+	dateOfBirth: Date;
 	email: string;
 	documentNumber: string;
 	phoneNumbers: IPhoneNumber[];
@@ -24,7 +24,7 @@ interface IUser extends Document {
 
 const addressSchema: Schema = new Schema({
 	street: { type: String, required: true },
-	city: { type: String, required: true, },
+	city: { type: String, required: true },
 	state: { type: String, required: true },
 	zipCode: { type: String, required: true },
 });
@@ -38,7 +38,7 @@ const userSchema: Schema = new Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	addresses: [addressSchema],
-	age: { type: Number, required: true },
+	dateOfBirth: { type: Date, required: true },
 	email: { type: String, required: true, unique: true },
 	documentNumber: { type: String, required: true, unique: true },
 	phoneNumbers: [phoneNumberSchema],

@@ -10,12 +10,8 @@ class IPhoneNumber {
 	type: string;
 }
 
-export class CreateUserDto {
-	firstName: string;
-	lastName: string;
+export class UpdateUserDto {
 	addresses: IAddress[];
-	dateOfBirth: Date;
 	email: string;
-	documentNumber: string;
 	phoneNumbers: IPhoneNumber[];
 }

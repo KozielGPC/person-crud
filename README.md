@@ -8,7 +8,7 @@
 - [ ] Criar rotas
     - [x] Create
     - [ ] Update
-    - [ ] Read One
+    - [x] Read One
     - [x] Read Many
     - [ ] Delete
 - [ ] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
