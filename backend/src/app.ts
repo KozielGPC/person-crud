@@ -8,7 +8,7 @@ import userRoutes from "./routes/userRoutes";
 import logRoutes from "./routes/logRoutes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpecs from "./swagger";
-import { listen } from './config/consumer';
+import { listen } from "./config/consumer";
 
 const app = express();
 
