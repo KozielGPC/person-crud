@@ -1,44 +1,10 @@
 import { body } from "express-validator";
-
-function validateDocumentNumber(documentNumber: string) {
-	documentNumber = documentNumber.replace(/[^\d]/g, "");
-
-	if (documentNumber.length !== 11) {
-		return false;
-	}
-
-	if (/^(\d)\1{10}$/.test(documentNumber)) {
-		return false;
-	}
-
-	let sum = 0;
-	for (let i = 0; i < 9; i++) {
-		sum += parseInt(documentNumber.charAt(i)) * (10 - i);
-	}
-	let firstDigit = 11 - (sum % 11);
-
-	if (firstDigit > 9) {
-		firstDigit = 0;
-	}
-	if (parseInt(documentNumber.charAt(9)) !== firstDigit) {
-		return false;
-	}
-
-	sum = 0;
-	for (let i = 0; i < 10; i++) {
-		sum += parseInt(documentNumber.charAt(i)) * (11 - i);
-	}
-	let secondDigit = 11 - (sum % 11);
-
-	if (secondDigit > 9) {
-		secondDigit = 0;
-	}
-	if (parseInt(documentNumber.charAt(10)) !== secondDigit) {
-		return false;
-	}
-
-	return true;
-}
+import {
+	validateCEP,
+	validateCPF,
+	validateEmail,
+	validatePhoneNumber,
+} from "./utils";
 
 function CreateUserValidator() {
 	return [
@@ -61,20 +27,16 @@ function CreateUserValidator() {
 			.withMessage("Email is required")
 			.isString()
 			.withMessage("Email must be a string")
-			.custom((value) => {
-				const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-				return regex.test(value);
-			})
+			.custom((value) => validateEmail(value))
 			.withMessage("Email must be a valid email address"),
 		body("documentNumber")
 			.notEmpty()
 			.withMessage("Document number is required")
 			.isString()
 			.withMessage("Document number must be a string")
-			.custom((value) => {
-				return validateDocumentNumber(value);
-			})
+			.custom((value) => validateCPF(value))
 			.withMessage("Document number must be a valid CPF"),
+		body("addresses").isArray().withMessage("Addresses must be an array"),
 		body("addresses.*.street")
 			.notEmpty()
 			.withMessage("Street is required")
@@ -94,12 +56,21 @@ function CreateUserValidator() {
 			.notEmpty()
 			.withMessage("Zip code is required")
 			.isString()
-			.withMessage("Zip code must be a string"),
+			.withMessage("Zip code must be a string")
+			.custom((value) => validateCEP(value))
+			.withMessage("Zip code must be a valid zip code"),
+		body("phoneNumbers")
+			.isArray()
+			.withMessage("Phone numbers must be an array"),
 		body("phoneNumbers.*.number")
 			.notEmpty()
 			.withMessage("Phone number is required")
 			.isString()
-			.withMessage("Phone number must be a string"),
+			.withMessage("Phone number must be a string")
+			.custom((value) => validatePhoneNumber(value))
+			.withMessage(
+				"Phone number type must be a valid phone number. Correct format: (99) 99999-9999 or (99) 9999-9999"
+			),
 		body("phoneNumbers.*.type")
 			.notEmpty()
 			.withMessage("Phone number type is required")
