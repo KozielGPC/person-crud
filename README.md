@@ -16,10 +16,10 @@
     - [x] Read Many
     - [x] Delete
 - [x] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
-- [ ] Adicionar validação de input nas rotas
+- [x] Adicionar validação de input nas rotas
 - [x] Adicionar autenticação nas rotas (gerar API-KEY para validar requisições)
 - [x] Adicionar error e success handlers personalizados
-- [ ] Adicionar documentação de rotas com swagger
+- [x] Adicionar documentação de rotas com swagger
 - [ ] Criar configuração de container docker e configurar docker-compose
 - [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados

@@ -6,14 +6,16 @@ import logger from "./middlewares/logger";
 import authenticateKey from "./middlewares/authentication";
 import userRoutes from "./routes/userRoutes";
 import logRoutes from "./routes/logRoutes";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from './swagger';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(logger);
-app.use(authenticateKey);
-app.use("/users", userRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use("/users", authenticateKey, userRoutes);
 app.use("/logs", logRoutes);
 app.all("*", function (req: Request, res: Response) {
 	return responseHandler.notFoundResponse(res, "Page not found");
