@@ -1,6 +1,4 @@
-import LogModel from "../models/logModel";
-import connectDB from "../config/database";
-
+import { send } from "../config/producer";
 const logger = (req, res, next) => {
 	req.timestamp = Date.now();
 
@@ -24,10 +22,7 @@ const logger = (req, res, next) => {
 
 		console.log(logInput);
 
-		await connectDB();
-
-		const log = new LogModel(logInput);
-		log.save();
+		await send(logInput);
 	});
 
 	next();

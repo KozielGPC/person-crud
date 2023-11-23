@@ -23,7 +23,7 @@
 - [ ] Criar configuração de container docker e configurar docker-compose
 - [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
-- [ ] Implementar fila com RabbitMQ
+- [x] Implementar fila com RabbitMQ
 - [ ] Criar service de websocket
 
 ### Frontend
