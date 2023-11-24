@@ -1,21 +1,17 @@
 import { useContext } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import SubmitButton from "../SubmitButton";
 import axios from "axios";
-import TextField from "@mui/material/TextField";
-import { Box, Grid } from "@mui/material";
-import Button from "@mui/material/Button";
+import { Form, Input, Button } from "antd";
+
+type FieldType = {
+	apiKey?: string;
+};
 
 export const ApiKeyValidatorContainer = () => {
 	const { apiKey, setApiKey, validApiKey, setValidApiKey } =
 		useContext(ApiKeyContext);
 
-	const handleApiKeyChange = (event: any) => {
-		setApiKey(event.target.value);
-	};
-
-	const handleSubmitApiKey = async (e: any) => {
-		e.preventDefault();
+	const handleSubmit = async () => {
 		const { data, status } = await axios.get(
 			"http://localhost:3001/validate-api-key",
 			{
@@ -31,37 +27,35 @@ export const ApiKeyValidatorContainer = () => {
 		}
 	};
 
+	const onFinishFailed = (errorInfo: any) => {
+		console.log("Failed:", errorInfo);
+	};
+
 	return (
-		<Box>
-			<Grid container spacing={3}>
-				<Grid item xs>
-					<form onSubmit={handleSubmitApiKey}>
-						<Box display="flex" flexDirection="row">
-							<TextField
-								id="api-key"
-								label="API KEY"
-								variant="standard"
-								onChange={handleApiKeyChange}
-								value={apiKey}
-							/>
-							<Button
-								type="submit"
-								variant="outlined"
-								color="primary"
-								size="large"
-								fullWidth={true}
-								style={{ margin: "20px" }}
-							>
-								Submit
-							</Button>
-						</Box>
-					</form>
-				</Grid>
-				<Grid item xs={6}></Grid>
-				<Grid item xs>
-					<h1>Valid Api Key: {validApiKey ? "true" : "false"}</h1>
-				</Grid>
-			</Grid>
-		</Box>
+		<div>
+			<Form
+				id="api_key_form"
+				name="api_key"
+				labelCol={{ span: 8 }}
+				wrapperCol={{ span: 16 }}
+				style={{ maxWidth: 600 }}
+				initialValues={{ remember: true }}
+				onFinishFailed={onFinishFailed}
+				onSubmitCapture={handleSubmit}
+				autoComplete="on"
+			>
+				<Form.Item<FieldType> label="API Key" name="apiKey">
+					<Input onChange={(e) => setApiKey(e.target.value)} />
+				</Form.Item>
+
+				<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+					<Button type="primary" htmlType="submit" form="api_key_form" key="submit">
+						Submit
+					</Button>
+				</Form.Item>
+			</Form>
+
+			<h1>Valid Api Key: {validApiKey ? "true" : "false"}</h1>
+		</div>
 	);
 };
