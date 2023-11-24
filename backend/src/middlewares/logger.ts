@@ -22,7 +22,7 @@ const logger = (req, res, next) => {
 
 		console.log(logInput);
 
-		await send(logInput);
+		//await send(logInput);
 	});
 
 	next();

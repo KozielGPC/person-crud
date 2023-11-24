@@ -13,6 +13,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
+import { Container } from "@mui/material";
 
 function Row(props: { row: ILog }) {
 	const { row } = props;
@@ -105,7 +106,7 @@ const LogsTable = () => {
 	}, [validApiKey]);
 
 	return validApiKey ? (
-		<>
+		<Container style={{ marginTop: "20px", width: "100%" }}>
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -125,7 +126,7 @@ const LogsTable = () => {
 					))}
 				</TableBody>
 			</Table>
-		</>
+		</Container>
 	) : (
 		<h1>Acesso não autorizado</h1>
 	);
