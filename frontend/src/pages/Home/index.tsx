@@ -1,56 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, {  useContext } from "react";
 import SubmitButton from "../../components/SubmitButton";
 import UserTable from "../../components/UsersTable";
 import LogsTable from "../../components/LogsTable";
 import axios from "axios";
-import { IUser } from "../../interfaces/user";
-import { ILog } from "../../interfaces/log";
+import { ApiKeyContext } from "../../context/ApiKeyContext";
 
 const UsersPage = () => {
-	const [apiKey, setApiKey] = useState("");
-	const [users, setUsers] = useState<IUser[] | []>([]);
-	const [logs, setLogs] = useState<ILog[] | []>([]);
-	const [validApiKey, setValidApiKey] = useState(false);
-
-	useEffect(() => {
-		if (validApiKey) {
-			axios
-				.get("http://localhost:3001/users", {
-					headers: {
-						"x-api-key": apiKey,
-					},
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						setUsers(response.data.data);
-					} else {
-						setUsers([]);
-					}
-				});
-		} else {
-			setUsers([]);
-		}
-	}, [validApiKey]);
-
-	useEffect(() => {
-		if (validApiKey) {
-			axios
-				.get("http://localhost:3001/logs", {
-					headers: {
-						"x-api-key": apiKey,
-					},
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						setLogs(response.data.data);
-					} else {
-						setLogs([]);
-					}
-				});
-		} else {
-			setLogs([]);
-		}
-	}, [validApiKey]);
+	const { apiKey, setApiKey, validApiKey, setValidApiKey } =
+		useContext(ApiKeyContext);
 
 	const handleApiKeyChange = (event: any) => {
 		setApiKey(event.target.value);
@@ -85,11 +42,9 @@ const UsersPage = () => {
 
 			<h1>Valid Api Key: {validApiKey ? "true" : "false"}</h1>
 
-			<UserTable users={users} />
+			<UserTable />
 
-			<LogsTable
-				logs={logs}
-			/>
+			<LogsTable />
 		</div>
 	);
 };

@@ -1,7 +1,32 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ILog } from "../../interfaces/log";
+import { ApiKeyContext } from "../../context/ApiKeyContext";
+import axios from "axios";
 
-const LogsTable = ({ logs }: { logs: ILog[] }) => {
+const LogsTable = () => {
+	const [logs, setLogs] = useState<ILog[] | []>([]);
+	const { apiKey, validApiKey } = useContext(ApiKeyContext);
+
+	useEffect(() => {
+		if (validApiKey) {
+			axios
+				.get("http://localhost:3001/logs", {
+					headers: {
+						"x-api-key": apiKey,
+					},
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						setLogs(response.data.data);
+					} else {
+						setLogs([]);
+					}
+				});
+		} else {
+			setLogs([]);
+		}
+	}, [validApiKey]);
+
 	return (
 		<table>
 			<thead>

@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IUser } from "../../interfaces/user";
+import { ApiKeyContext } from "../../context/ApiKeyContext";
+import axios from "axios";
 
-const UserTable = ({ users }: { users: IUser[] }) => {
+const UserTable = () => {
+	const { apiKey, validApiKey } = useContext(ApiKeyContext);
+
+	const [users, setUsers] = useState<IUser[] | []>([]);
+
+	useEffect(() => {
+		if (validApiKey) {
+			axios
+				.get("http://localhost:3001/users", {
+					headers: {
+						"x-api-key": apiKey,
+					},
+				})
+				.then((response) => {
+					if (response.status === 200) {
+						setUsers(response.data.data);
+					} else {
+						setUsers([]);
+					}
+				});
+		} else {
+			setUsers([]);
+		}
+	}, [validApiKey]);
+
 	return (
 		<table>
 			<thead>

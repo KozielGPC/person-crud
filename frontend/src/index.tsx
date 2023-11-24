@@ -2,16 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { UserProvider } from "./context/UserContext";
+import { ApiKeyProvider } from "./context/ApiKeyContext";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
 );
 root.render(
 	<React.StrictMode>
-		<UserProvider>
+		<ApiKeyProvider>
 			<App />
-		</UserProvider>
+		</ApiKeyProvider>
 	</React.StrictMode>
 );
 
