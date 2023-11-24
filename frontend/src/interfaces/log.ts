@@ -7,6 +7,6 @@ export interface ILog {
 	statusCode: number;
 	userAgent: string;
 	body: any;
-	params: Object;
+	params: Record<string, any>;
 	query: Object;
 }

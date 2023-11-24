@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApiKeyProvider } from "./context/ApiKeyContext";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -10,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
 	<React.StrictMode>
 		<ApiKeyProvider>
-			<App />
+			<ThemeProvider theme={theme}>
+				<App />
+			</ThemeProvider>
 		</ApiKeyProvider>
 	</React.StrictMode>
 );

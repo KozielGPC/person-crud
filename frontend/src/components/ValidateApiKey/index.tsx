@@ -2,11 +2,13 @@ import { useContext } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import SubmitButton from "../SubmitButton";
 import axios from "axios";
+import TextField from "@mui/material/TextField";
 
 export const ApiKeyValidatorContainer = () => {
-    const { apiKey, setApiKey, validApiKey, setValidApiKey } = useContext(ApiKeyContext);
+	const { apiKey, setApiKey, validApiKey, setValidApiKey } =
+		useContext(ApiKeyContext);
 
-    const handleApiKeyChange = (event: any) => {
+	const handleApiKeyChange = (event: any) => {
 		setApiKey(event.target.value);
 	};
 
@@ -27,13 +29,16 @@ export const ApiKeyValidatorContainer = () => {
 		}
 	};
 
-    
-    
 	return (
 		<div>
 			<form onSubmit={handleSubmitApiKey}>
-				<label>API Key</label>
-				<input type="text" value={apiKey} onChange={handleApiKeyChange} />
+				<TextField
+					id="api-key"
+					label="API KEY"
+					variant="standard"
+					onChange={handleApiKeyChange}
+					value={apiKey}
+				/>
 				<SubmitButton label={"Submit"} />
 			</form>
 

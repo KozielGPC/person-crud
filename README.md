@@ -20,6 +20,7 @@
 - [x] Adicionar autenticação nas rotas (gerar API-KEY para validar requisições)
 - [x] Adicionar error e success handlers personalizados
 - [x] Adicionar documentação de rotas com swagger
+- [ ] Adicionar paginação
 - [ ] Criar configuração de container docker e configurar docker-compose
 - [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
@@ -27,12 +28,16 @@
 - [ ] Criar service de websocket
 
 ### Frontend
-- [ ] Criar setup inicial
-- [ ] Criar componente de botão de submit
-- [ ] Criar componente de input de texto
+- [x] Criar setup inicial
+- [x] Criar componente de botão de submit
+- [x] Criar componente de input de texto
 - [ ] Criar componente de linha da tabela com botão para deletar e atualizar
-- [ ] Unir componentes para criar tabela de listagem
+- [x] Unir componentes para criar tabela de listagem
 - [ ] Unir componentes para criar formulario de criação
-- [ ] Criar conexão com o backend
-- [ ] Adicionar requisições para rotas
+- [x] Criar conexão com o backend
+- [x] Adicionar requisições para rotas
+- [ ] Adicionar loading com skeleton
+- [ ] Adicionar validadores de erros
+- [ ] Adicionar dark/light mode
+- [ ] Adicionar tradução pt-BR / en-US
 - [ ] Adicionar conexão com socket
