@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(logger);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use("/users", authenticateKey, userRoutes);
-app.use("/logs", logRoutes);
+app.use("/logs", authenticateKey, logRoutes);
 app.use("/validate-api-key", apiKeyValidationRoutes);
 app.all("*", function (req: Request, res: Response) {
 	return responseHandler.notFoundResponse(res, "Page not found");
