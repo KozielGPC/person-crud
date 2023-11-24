@@ -27,7 +27,7 @@ const LogsTable = () => {
 		}
 	}, [validApiKey]);
 
-	return (
+	return validApiKey ? (
 		<table>
 			<thead>
 				<tr>
@@ -60,6 +60,8 @@ const LogsTable = () => {
 				))}
 			</tbody>
 		</table>
+	) : (
+		<h1>Acesso não autorizado</h1>
 	);
 };
 

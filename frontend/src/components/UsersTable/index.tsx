@@ -28,7 +28,7 @@ const UserTable = () => {
 		}
 	}, [validApiKey]);
 
-	return (
+	return validApiKey ? (
 		<table>
 			<thead>
 				<tr>
@@ -51,6 +51,8 @@ const UserTable = () => {
 				))}
 			</tbody>
 		</table>
+	) : (
+		<h1>Acesso não autorizado</h1>
 	);
 };
 
