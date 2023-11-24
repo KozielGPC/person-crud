@@ -7,9 +7,7 @@ export class LogController {
 	async findMany(req: Request, res: Response) {
 		try {
 			await connectDB();
-			const allLogs = await logModel.find(null, null, {
-				limit: 5,
-			});
+			const allLogs = await logModel.find();
 			return responseHandler.successResponseWithData(
 				res,
 				"Logs found",

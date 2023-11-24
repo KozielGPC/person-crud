@@ -1,6 +1,6 @@
 import React from "react";
-import UserTable from "../../components/UsersTable";
-import LogsTable from "../../components/LogsTable";
+import {UserTable} from "../../components/UsersTable";
+import {LogTable} from "../../components/LogsTable";
 import { ApiKeyValidatorContainer } from "../../components/ValidateApiKey";
 import { Container, Divider } from "@mui/material";
 
@@ -21,7 +21,7 @@ const Home = () => {
 			<UserTable />
 			<Divider />
 			<h2>Logs</h2>
-			<LogsTable />
+			<LogTable />
 		</Container>
 	);
 };

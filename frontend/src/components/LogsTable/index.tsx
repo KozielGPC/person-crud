@@ -1,87 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
 import { ILog } from "../../interfaces/log";
-import { ApiKeyContext } from "../../context/ApiKeyContext";
+import { Table, Divider } from "antd";
 import axios from "axios";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import { Container } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import { ApiKeyContext } from "../../context/ApiKeyContext";
 
-function Row(props: { row: ILog }) {
-	const { row } = props;
-	const [open, setOpen] = useState(false);
-
-	return (
-		<React.Fragment>
-			<TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-				<TableCell>
-					<IconButton
-						aria-label="expand row"
-						size="small"
-						onClick={() => setOpen(!open)}
-					>
-						{open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-					</IconButton>
-				</TableCell>
-				<TableCell component="th" scope="row">
-					{row._id}
-				</TableCell>
-				<TableCell align="right">{row.method}</TableCell>
-				<TableCell align="right">{row.url}</TableCell>
-				<TableCell align="right">{row.statusCode}</TableCell>
-				<TableCell align="right">{row.userAgent}</TableCell>
-				<TableCell align="right">{row.requestTime}</TableCell>
-				<TableCell align="right">{row.responseTime}</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-					<Collapse in={open} timeout="auto" unmountOnExit>
-						<Box sx={{ margin: 1 }}>
-							<Typography variant="h6" gutterBottom component="div">
-								Body
-							</Typography>
-							<TableCell>{JSON.stringify(row.body)}</TableCell>
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-					<Collapse in={open} timeout="auto" unmountOnExit>
-						<Box sx={{ margin: 1 }}>
-							<Typography variant="h6" gutterBottom component="div">
-								Params
-							</Typography>
-							<TableCell>{JSON.stringify(row.params)}</TableCell>
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
-					<Collapse in={open} timeout="auto" unmountOnExit>
-						<Box sx={{ margin: 1 }}>
-							<Typography variant="h6" gutterBottom component="div">
-								Query
-							</Typography>
-							<TableCell>{JSON.stringify(row.query)}</TableCell>
-						</Box>
-					</Collapse>
-				</TableCell>
-			</TableRow>
-		</React.Fragment>
-	);
-}
-
-const LogsTable = () => {
+export function LogTable() {
 	const [logs, setLogs] = useState<ILog[] | []>([]);
 	const { apiKey, validApiKey } = useContext(ApiKeyContext);
 
@@ -105,31 +28,39 @@ const LogsTable = () => {
 		}
 	}, [validApiKey]);
 
-	return validApiKey ? (
-		<Container style={{ marginTop: "20px", width: "100%" }}>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell />
-						<TableCell>ID</TableCell>
-						<TableCell align="right">method</TableCell>
-						<TableCell align="right">url</TableCell>
-						<TableCell align="right">statusCode</TableCell>
-						<TableCell align="right">userAgent</TableCell>
-						<TableCell align="right">requestTime</TableCell>
-						<TableCell align="right">responseTime</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{logs.map((log) => (
-						<Row key={log._id} row={log} />
-					))}
-				</TableBody>
-			</Table>
-		</Container>
-	) : (
-		<h1>Acesso não autorizado</h1>
-	);
-};
+	// export interface ILog {
+	// 	_id: string;
+	// 	requestTime: string;
+	// 	responseTime: string;
+	// 	method: string;
+	// 	url: string;
+	// 	statusCode: number;
+	// 	userAgent: string;
+	// 	body: any;
+	// 	params: Record<string, any>;
+	// 	query: Object;
+	// }
+	const columns = [
+		{ title: "ID", dataIndex: "_id", key: "id" },
+		{ title: "Method", dataIndex: "method", key: "method" },
+		{ title: "URL", dataIndex: "url", key: "url" },
+		{ title: "User Agent", dataIndex: "userAgent", key: "userAgent" },
+		{ title: "Status Code", dataIndex: "statusCode", key: "statusCode" },
+		{ title: "Request Time", dataIndex: "requestTime", key: "requestTime" },
+		{ title: "Response Time", dataIndex: "responseTime", key: "responseTime" },
+		{ title: "Body", dataIndex: "body", key: "body" },
+		{ title: "Params", dataIndex: "params", key: "params" },
+		{ title: "Query", dataIndex: "query", key: "query" },
+		{ title: "Action", key: "operation", render: () => <a>Publish</a> },
+	];
 
-export default LogsTable;
+	return (
+		<Table
+			scroll={{ x: 1300 }}
+			className="components-table-demo-nested"
+			columns={columns}
+			// expandable={{ expandedRowRender }}
+			dataSource={logs}
+		/>
+	);
+}

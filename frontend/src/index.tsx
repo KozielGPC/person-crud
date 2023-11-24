@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ApiKeyProvider } from "./context/ApiKeyContext";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme";
+import "./global.css";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
