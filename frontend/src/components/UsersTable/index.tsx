@@ -6,11 +6,18 @@ import {
 	Typography,
 	Popconfirm,
 	notification,
+	Button,
 } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+	CheckCircleOutlined,
+	CheckOutlined,
+	DeleteOutlined,
+	EditOutlined,
+	StopOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { IUser } from "../../interfaces/user";
+import { IPhoneNumber, IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import CreateUserModal from "../CreateUserModal";
 import moment, { Moment } from "moment";
@@ -78,11 +85,12 @@ export function UserTable() {
 	const [users, setUsers] = useState<IUser[] | []>([]);
 
 	const [editingKey, setEditingKey] = useState("");
-
-	const [data, setData] = useState<IUser | null>(null);
+	const [editingPhoneNumberKey, setEditingPhoneNumberKey] = useState("");
 
 	const [form] = Form.useForm();
 	const isEditing = (record: IUser) => record._id === editingKey;
+	const isEditingPhoneNumber = (record: IPhoneNumber) =>
+		record.number === editingPhoneNumberKey;
 
 	const [api, contextHolder] = notification.useNotification();
 
@@ -110,6 +118,10 @@ export function UserTable() {
 		setEditingKey("");
 	};
 
+	const cancelPhoneNumber = () => {
+		setEditingPhoneNumberKey("");
+	};
+
 	const edit = (record: Partial<IUser>) => {
 		const { dateOfBirth, email, documentNumber, firstName, lastName } = record;
 		console.log(dateOfBirth);
@@ -122,6 +134,12 @@ export function UserTable() {
 			lastName: lastName || "",
 		});
 		setEditingKey(record._id ?? "");
+	};
+
+	const editPhoneNumber = (record: Partial<IPhoneNumber>) => {
+		const { number, type } = record;
+		console.log(record);
+		setEditingPhoneNumberKey(record.number ?? "");
 	};
 
 	const save = async (key: string) => {
@@ -162,21 +180,114 @@ export function UserTable() {
 	};
 
 	const expandedRowRender = (row: IUser) => {
+		const savePhoneNumber = async (key: string) => {
+			try {
+				// const updatedUser = [...users];
+				// const index = updatedUser.findIndex((item) => row._id === item._id);
+
+				// if (index > -1) {
+				// 	const item = updatedUser[index];
+				// 	updatedUser.splice(index, 1, {
+				// 		...item,
+				// 		phoneNumbers: [...item.phoneNumbers, newPhoneNumber],
+				// 	});
+				// 	setUsers(updatedUser);
+				// }
+
+				setEditingPhoneNumberKey("");
+
+				openNotificationWithIcon(
+					api,
+					"success",
+					"Phone number edited successfully",
+					"Phone number successfully"
+				);
+			} catch (errInfo) {
+				openNotificationWithIcon(
+					api,
+					"error",
+					"Error editing Phone number",
+					"Something wrong occurred on editing Phone number"
+				);
+			}
+		};
+
+		const addPhoneNumber = () => {
+			const newPhoneNumber: IPhoneNumber = {
+				number: Math.random().toString(),
+				type: "",
+			};
+			const updatedUser = [...users];
+			const index = updatedUser.findIndex((item) => row._id === item._id);
+
+			if (index > -1) {
+				const item = updatedUser[index];
+				updatedUser.splice(index, 1, {
+					...item,
+					phoneNumbers: [...item.phoneNumbers, newPhoneNumber],
+				});
+				setUsers(updatedUser);
+				setEditingPhoneNumberKey(newPhoneNumber.number);
+			}
+		};
+
 		const columnsPhoneNumber = [
-			{ title: "Number", dataIndex: "number", key: "number" },
-			{ title: "Type", dataIndex: "type", key: "type" },
+			{ title: "Number", dataIndex: "number", key: "number", editable: true },
+			{ title: "Type", dataIndex: "type", key: "type", editable: true },
 			{
 				title: "Action",
-				dataIndex: "operation",
 				key: "operation",
-				render: () => (
-					<span className="table-operation">
-						<a>Pause</a>
-						<a>Stop</a>
-					</span>
-				),
+				render: (_: any, record: IPhoneNumber) => {
+					const editable = isEditingPhoneNumber(record);
+					return editable ? (
+						<span>
+							<Popconfirm title="Sure to cancel?" onConfirm={cancelPhoneNumber}>
+								<StopOutlined style={{ marginRight: 8 }} />
+							</Popconfirm>
+
+							<Typography.Link onClick={() => savePhoneNumber(record.number)}>
+								<CheckOutlined />
+							</Typography.Link>
+						</span>
+					) : (
+						<span>
+							<Typography.Link
+								disabled={editingPhoneNumberKey !== ""}
+								onClick={() => editPhoneNumber(record)}
+								style={{ marginRight: 8 }}
+							>
+								<EditOutlined />
+							</Typography.Link>
+
+							<Typography.Link
+								disabled={editingPhoneNumberKey !== ""}
+								onClick={() => deleteUser(record.number)}
+							>
+								<DeleteOutlined />
+							</Typography.Link>
+						</span>
+					);
+				},
 			},
 		];
+
+		const mergedPhoneNumberColumns = columnsPhoneNumber.map((col) => {
+			console.log(col);
+
+			if (!col.editable) {
+				return col;
+			}
+			return {
+				...col,
+				onCell: (record: IPhoneNumber) => ({
+					record,
+					inputType: "text",
+					dataIndex: col.dataIndex,
+					title: col.title,
+					editing: isEditingPhoneNumber(record),
+				}),
+			};
+		});
 
 		const columnsAddress = [
 			{ title: "Street", dataIndex: "street", key: "street" },
@@ -203,17 +314,45 @@ export function UserTable() {
 		return (
 			<div style={{ padding: "0px 40px 20px 40px" }}>
 				<Table
+					components={{
+						body: {
+							cell: EditableCell,
+						},
+					}}
 					title={() => <h1>Phone Numbers</h1>}
-					columns={columnsPhoneNumber}
+					footer={() => (
+						<Button
+							type="primary"
+							style={{ marginBottom: 16 }}
+							onClick={addPhoneNumber}
+						>
+							Add Row
+						</Button>
+					)}
+					columns={mergedPhoneNumberColumns}
 					dataSource={dataPhoneNumbers}
 					pagination={false}
 				/>
 				<Divider />
 				<Table
+					components={{
+						body: {
+							cell: EditableCell,
+						},
+					}}
 					title={() => <h1>Addresses</h1>}
 					columns={columnsAddress}
 					dataSource={dataAddresses}
 					pagination={false}
+					footer={() => (
+						<Button
+							type="primary"
+							style={{ marginBottom: 16 }}
+							onClick={addPhoneNumber}
+						>
+							Add Row
+						</Button>
+					)}
 				/>
 			</div>
 		);
@@ -248,7 +387,8 @@ export function UserTable() {
 							}
 						});
 				}
-			}).catch((error) => {
+			})
+			.catch((error) => {
 				openNotificationWithIcon(
 					api,
 					"error",
@@ -292,15 +432,13 @@ export function UserTable() {
 				const editable = isEditing(record);
 				return editable ? (
 					<span>
-						<Typography.Link
-							onClick={() => save(record._id)}
-							style={{ marginRight: 8 }}
-						>
-							Save
-						</Typography.Link>
 						<Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-							<a>Cancel</a>
+							<StopOutlined style={{ marginRight: 8 }} />
 						</Popconfirm>
+
+						<Typography.Link onClick={() => save(record._id)}>
+							<CheckOutlined />
+						</Typography.Link>
 					</span>
 				) : (
 					<span>

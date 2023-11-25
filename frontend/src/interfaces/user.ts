@@ -1,11 +1,11 @@
-interface IAddress {
+export interface IAddress {
 	street: string;
 	city: string;
 	state: string;
 	zipCode: string;
 }
 
-interface IPhoneNumber {
+export interface IPhoneNumber {
 	number: string;
 	type: string;
 }
