@@ -20,11 +20,12 @@
 - [x] Adicionar autenticação nas rotas (gerar API-KEY para validar requisições)
 - [x] Adicionar error e success handlers personalizados
 - [x] Adicionar documentação de rotas com swagger
+- [x] Implementar fila com RabbitMQ
 - [ ] Adicionar paginação
+- [ ] Adicionar códigos de erro personalizados
 - [ ] Criar configuração de container docker e configurar docker-compose
 - [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
-- [x] Implementar fila com RabbitMQ
 - [ ] Criar service de websocket
 
 ### Frontend
@@ -37,6 +38,8 @@
 - [x] Criar conexão com o backend
 - [x] Adicionar requisições para rotas
 - [x] Adicionar validador de input nos formulários
+- [ ] Adicionar requisição para API de CEPs
+- [ ] Adicionar códigos de erro personalizados
 - [ ] Adicionar loading com skeleton
 - [ ] Adicionar validadores de erros
 - [ ] Adicionar dark/light mode

@@ -52,6 +52,14 @@ class ApiResponseHandler {
 		return res.status(400).json(resData);
 	}
 
+	validationErrorResponse(res: Response, msg: string) {
+		var resData = {
+			status: 0,
+			message: msg,
+		};
+		return res.status(400).json(resData);
+	}
+
 	unauthorizedResponse(res: Response, msg: string) {
 		var data = {
 			status: 0,

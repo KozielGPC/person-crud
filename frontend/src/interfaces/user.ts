@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export interface IAddress {
 	street: string;
 	city: string;
@@ -6,6 +8,7 @@ export interface IAddress {
 }
 
 export interface IPhoneNumber {
+	_id: mongoose.Types.ObjectId;
 	number: string;
 	type: string;
 }

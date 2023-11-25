@@ -37,7 +37,7 @@ userRoutes.get("/", userController.findMany);
 
 /**
  * @swagger
- * /users/{id}: 
+ * /users/{id}:
  *   get:
  *     tags: [User]
  *     summary: Get a user by ID
@@ -164,7 +164,7 @@ userRoutes.put("/:id", userController.update);
 /**
  * @swagger
  * /users/{id}:
- *   
+ *
  *   delete:
  *     tags: [User]
  *     summary: Delete a user by ID
@@ -200,5 +200,7 @@ userRoutes.put("/:id", userController.update);
  *         description: User not found.
  */
 userRoutes.delete("/:id", userController.delete);
+
+userRoutes.put("/:id/phoneNumbers", userController.updatePhoneNumbers);
 
 export default userRoutes;

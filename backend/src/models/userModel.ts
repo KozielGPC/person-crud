@@ -29,7 +29,7 @@ const addressSchema: Schema = new Schema({
 	zipCode: { type: String, required: true },
 });
 
-const phoneNumberSchema: Schema = new Schema({
+export const phoneNumberSchema: Schema = new Schema({
 	number: { type: String, required: true },
 	type: { type: String, required: true },
 });
@@ -44,6 +44,5 @@ const userSchema: Schema = new Schema({
 	phoneNumbers: [phoneNumberSchema],
 });
 
-const UserModel = mongoose.model<IUser>("User", userSchema);
+export const UserModel = mongoose.model<IUser>("User", userSchema);
 
-export default UserModel;

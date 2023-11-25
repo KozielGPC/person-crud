@@ -9,7 +9,6 @@ import {
 	Button,
 } from "antd";
 import {
-	CheckCircleOutlined,
 	CheckOutlined,
 	DeleteOutlined,
 	EditOutlined,
@@ -23,10 +22,19 @@ import CreateUserModal from "../CreateUserModal";
 import moment, { Moment } from "moment";
 import MyDatePicker from "../DatePicker";
 import { openNotificationWithIcon } from "../../tools/showNotification";
+import { Rule } from "antd/es/form";
+import {
+	validateDocumentNumberInput,
+	validateEmailInput,
+	validatePhoneNumberInput,
+	validateZipCodeInput,
+} from "../../tools/formValidators";
+import { PhoneNumberTable } from "../PhoneNumbersTable";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
 	dataIndex: string;
+	rules: Rule[];
 	title: any;
 	inputType: "text" | "date";
 	record: IUser;
@@ -45,33 +53,16 @@ const EditableCell: React.FC<EditableCellProps> = ({
 	record,
 	index,
 	children,
+	rules,
 	...restProps
 }) => {
 	const inputNode =
 		inputType === "text" ? (
-			<Form.Item
-				style={{ margin: 0 }}
-				name={dataIndex}
-				rules={[
-					{
-						required: true,
-						message: `Please Input ${title}!`,
-					},
-				]}
-			>
+			<Form.Item style={{ margin: 0 }} name={dataIndex} rules={rules}>
 				<Input />
 			</Form.Item>
 		) : (
-			<Form.Item
-				style={{ margin: 0 }}
-				name={dataIndex}
-				rules={[
-					{
-						required: true,
-						message: `Please Input ${title}!`,
-					},
-				]}
-			>
+			<Form.Item style={{ margin: 0 }} name={dataIndex} rules={rules}>
 				<MyDatePicker disabledDate={disabledDate} />
 			</Form.Item>
 		);
@@ -88,6 +79,9 @@ export function UserTable() {
 	const [editingPhoneNumberKey, setEditingPhoneNumberKey] = useState("");
 
 	const [form] = Form.useForm();
+
+	const [formPhoneNumber] = Form.useForm();
+
 	const isEditing = (record: IUser) => record._id === editingKey;
 	const isEditingPhoneNumber = (record: IPhoneNumber) =>
 		record.number === editingPhoneNumberKey;
@@ -123,20 +117,39 @@ export function UserTable() {
 	};
 
 	const edit = (record: Partial<IUser>) => {
-		const { dateOfBirth, email, documentNumber, firstName, lastName } = record;
+		const {
+			dateOfBirth,
+			email,
+			documentNumber,
+			firstName,
+			lastName,
+			addresses,
+			phoneNumbers,
+		} = record;
 
 		form.setFieldsValue({
 			dateOfBirth: dateOfBirth ? moment(dateOfBirth) : "",
-			email: email || "",
-			documentNumber: documentNumber || "",
+			email: email?.trim() || "",
+			documentNumber: documentNumber?.trim() || "",
 			firstName: firstName || "",
 			lastName: lastName || "",
+			addresses: addresses || [],
+			phoneNumbers: phoneNumbers || [],
 		});
 		setEditingKey(record._id ?? "");
 	};
 
 	const editPhoneNumber = (record: Partial<IPhoneNumber>) => {
 		const { number, type } = record;
+		formPhoneNumber.setFieldsValue({
+			number: number?.trim() || "",
+			type: type || "",
+		});
+
+		console.log("form phone number");
+
+		console.log(formPhoneNumber.getFieldsValue());
+
 		setEditingPhoneNumberKey(record.number ?? "");
 	};
 
@@ -145,43 +158,48 @@ export function UserTable() {
 			const row = (await form.validateFields()) as IUser;
 			row["dateOfBirth"] = moment(row.dateOfBirth).toISOString();
 
-			axios.put(`http://localhost:3001/users/${key}`, row, {
-				headers: {
-					"x-api-key": apiKey,
-				},
-			}).then((response) => {
-				if (response.status === 200) {
-					openNotificationWithIcon(
-						api,
-						"success",
-						"User edited successfully",
-						"User edited successfully"
-					);
-				} else {
-					openNotificationWithIcon(
-						api,
-						"error",
-						"Error editing user",
-						"Something wrong occurred on editing user"
-					);
-				}
+			console.log(form.getFieldsValue());
+
+			form.validateFields().then(() => {
+				axios
+					.put(`http://localhost:3001/users/${key}`, row, {
+						headers: {
+							"x-api-key": apiKey,
+						},
+					})
+					.then(() => {
+						const updatedUser = [...users];
+						const index = updatedUser.findIndex((item) => key === item._id);
+						if (index > -1) {
+							const item = updatedUser[index];
+							updatedUser.splice(index, 1, {
+								...item,
+								...row,
+							});
+							setUsers(updatedUser);
+						} else {
+							updatedUser.push(row);
+							setUsers(updatedUser);
+						}
+						openNotificationWithIcon(
+							api,
+							"success",
+							"User edited successfully",
+							"User edited successfully"
+						);
+					})
+					.catch((error) => {
+						openNotificationWithIcon(
+							api,
+							"error",
+							"Error editing user",
+							error?.response?.data?.message ??
+								"Something wrong occurred on editing user"
+						);
+					});
 			});
 
-			const updatedUser = [...users];
-			const index = updatedUser.findIndex((item) => key === item._id);
-			if (index > -1) {
-				const item = updatedUser[index];
-				updatedUser.splice(index, 1, {
-					...item,
-					...row,
-				});
-				setUsers(updatedUser);
-				setEditingKey("");
-			} else {
-				updatedUser.push(row);
-				setUsers(updatedUser);
-				setEditingKey("");
-			}
+			setEditingKey("");
 		} catch (errInfo) {
 			openNotificationWithIcon(
 				api,
@@ -213,28 +231,36 @@ export function UserTable() {
 			}
 		};
 
-		const addPhoneNumber = () => {
-			const newPhoneNumber: IPhoneNumber = {
-				number: Math.random().toString(),
-				type: "",
-			};
-			const updatedUser = [...users];
-			const index = updatedUser.findIndex((item) => row._id === item._id);
-
-			if (index > -1) {
-				const item = updatedUser[index];
-				updatedUser.splice(index, 1, {
-					...item,
-					phoneNumbers: [...item.phoneNumbers, newPhoneNumber],
-				});
-				setUsers(updatedUser);
-				setEditingPhoneNumberKey(newPhoneNumber.number);
-			}
-		};
 
 		const columnsPhoneNumber = [
-			{ title: "Number", dataIndex: "number", key: "number", editable: true },
-			{ title: "Type", dataIndex: "type", key: "type", editable: true },
+			{
+				title: "Number",
+				dataIndex: "number",
+				key: "number",
+				editable: true,
+				rules: [
+					{
+						required: true,
+						message: "Please input the phone number!",
+					},
+					{
+						validator: validatePhoneNumberInput,
+						message: "Invalid phone number input",
+					},
+				],
+			},
+			{
+				title: "Type",
+				dataIndex: "type",
+				key: "type",
+				editable: true,
+				rules: [
+					{
+						required: true,
+						message: "Please select the phone number type!",
+					},
+				],
+			},
 			{
 				title: "Action",
 				key: "operation",
@@ -289,10 +315,43 @@ export function UserTable() {
 		});
 
 		const columnsAddress = [
-			{ title: "Street", dataIndex: "street", key: "street" },
-			{ title: "City", dataIndex: "city", key: "city" },
-			{ title: "State", dataIndex: "state", key: "state" },
-			{ title: "Zip Code", dataIndex: "zipCode", key: "zipCode" },
+			{
+				title: "Street",
+				dataIndex: "street",
+				key: "street",
+				editable: true,
+				rules: [{ required: true, message: "Please input the street!" }],
+			},
+			{
+				title: "City",
+				dataIndex: "city",
+				key: "city",
+				editable: true,
+				rules: [{ required: true, message: "Please input the city!" }],
+			},
+			{
+				title: "State",
+				dataIndex: "state",
+				key: "state",
+				editable: true,
+				rules: [{ required: true, message: "Please input the State!" }],
+			},
+			{
+				title: "Zip Code",
+				dataIndex: "zipCode",
+				key: "zipCode",
+				editable: true,
+				rules: [
+					{
+						required: true,
+						message: "Please input the zipCode!",
+					},
+					{
+						validator: validateZipCodeInput,
+						message: "Invalid CEP input",
+					},
+				],
+			},
 			{
 				title: "Action",
 				dataIndex: "operation",
@@ -306,32 +365,53 @@ export function UserTable() {
 			},
 		];
 
+		const mergedAddressesColumns = columnsAddress.map((col) => {
+			if (!col.editable) {
+				return col;
+			}
+			return {
+				...col,
+				onCell: (record: IPhoneNumber) => ({
+					record,
+					inputType: "text",
+					dataIndex: col.dataIndex,
+					title: col.title,
+					editing: isEditingPhoneNumber(record),
+				}),
+			};
+		});
+
 		const dataAddresses = row.addresses;
 
 		const dataPhoneNumbers = row.phoneNumbers;
 
+		console.log("phone numbers >>> ", dataPhoneNumbers);
+
 		return (
 			<div style={{ padding: "0px 40px 20px 40px" }}>
-				<Table
-					components={{
-						body: {
-							cell: EditableCell,
-						},
-					}}
-					title={() => <h1>Phone Numbers</h1>}
-					footer={() => (
-						<Button
-							type="primary"
-							style={{ marginBottom: 16 }}
-							onClick={addPhoneNumber}
-						>
-							Add Row
-						</Button>
-					)}
-					columns={mergedPhoneNumberColumns}
-					dataSource={dataPhoneNumbers}
-					pagination={false}
-				/>
+				<PhoneNumberTable phoneNumbers={dataPhoneNumbers} userId={row._id}/>
+				{/* <Form form={formPhoneNumber} component={false}>
+					<Table
+						components={{
+							body: {
+								cell: EditableCell,
+							},
+						}}
+						title={() => <h1>Phone Numbers</h1>}
+						footer={() => (
+							<Button
+								type="primary"
+								style={{ marginBottom: 16 }}
+								onClick={addPhoneNumber}
+							>
+								Add Row
+							</Button>
+						)}
+						columns={mergedPhoneNumberColumns}
+						dataSource={dataPhoneNumbers}
+						pagination={false}
+					/>
+				</Form> */}
 				<Divider />
 				<Table
 					components={{
@@ -343,15 +423,6 @@ export function UserTable() {
 					columns={columnsAddress}
 					dataSource={dataAddresses}
 					pagination={false}
-					footer={() => (
-						<Button
-							type="primary"
-							style={{ marginBottom: 16 }}
-							onClick={addPhoneNumber}
-						>
-							Add Row
-						</Button>
-					)}
 				/>
 			</div>
 		);
@@ -404,25 +475,58 @@ export function UserTable() {
 			dataIndex: "firstName",
 			key: "firstName",
 			editable: true,
+			rules: [
+				{ required: true, message: "Please input the first name!" },
+				{ max: 50, message: "Max 50 characters" },
+			],
 		},
 		{
 			title: "Last Name",
 			dataIndex: "lastName",
 			key: "lastName",
 			editable: true,
+			rules: [
+				{
+					required: true,
+					message: "Please input the last name!",
+					max: 50,
+				},
+				{ max: 50, message: "Max 50 characters" },
+			],
 		},
 		{
 			title: "Date of Birth",
 			dataIndex: "dateOfBirth",
 			key: "dateOfBirth",
 			editable: true,
+			rules: [{ required: true, message: "Please select the date of birth!" }],
 		},
-		{ title: "Email", dataIndex: "email", key: "email", editable: true },
+		{
+			title: "Email",
+			dataIndex: "email",
+			key: "email",
+			editable: true,
+			rules: [
+				{ required: true, message: "Please input the email!" },
+				{
+					validator: validateEmailInput,
+					message: "Invalid email input",
+				},
+			],
+		},
 		{
 			title: "Document Number",
 			dataIndex: "documentNumber",
 			key: "documentNumber",
 			editable: true,
+
+			rules: [
+				{ required: true, message: "Please input the document number!" },
+				{
+					validator: validateDocumentNumberInput,
+					message: "Invalid document number input",
+				},
+			],
 		},
 		{
 			title: "Action",
@@ -465,6 +569,7 @@ export function UserTable() {
 		if (!col.editable) {
 			return col;
 		}
+
 		return {
 			...col,
 			onCell: (record: IUser) => ({
@@ -473,6 +578,7 @@ export function UserTable() {
 				dataIndex: col.dataIndex,
 				title: col.title,
 				editing: isEditing(record),
+				rules: col.rules,
 			}),
 		};
 	});

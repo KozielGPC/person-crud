@@ -12,14 +12,9 @@ import axios from "axios";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import moment from "moment";
 import type { RangePickerProps } from "antd/es/date-picker";
-import {
-	validateCEP,
-	validateCPF,
-	validateEmail,
-	validatePhoneNumber,
-} from "../../tools/utils";
 import { IUser } from "../../interfaces/user";
 import { openNotificationWithIcon } from "../../tools/showNotification";
+import { validateDocumentNumberInput, validateEmailInput, validatePhoneNumberInput, validateZipCodeInput } from "../../tools/formValidators";
 
 const { Option } = Select;
 
@@ -37,34 +32,6 @@ const CreateUserModal = (props: props) => {
 	const [form] = Form.useForm();
 
 	const [api, contextHolder] = notification.useNotification();
-	
-	const validateEmailInput = (rule: any, value: string) => {
-		if (!validateEmail(value)) {
-			return Promise.reject("Invalid email input");
-		}
-		return Promise.resolve();
-	};
-
-	const validatePhoneNumberInput = (rule: any, value: string) => {
-		if (!validatePhoneNumber(value)) {
-			return Promise.reject("Invalid phone number input");
-		}
-		return Promise.resolve();
-	};
-
-	const validateZipCodeInput = (rule: any, value: string) => {
-		if (!validateCEP(value)) {
-			return Promise.reject("Invalid zip code input");
-		}
-		return Promise.resolve();
-	};
-
-	const validateDocumentNumberInput = (rule: any, value: string) => {
-		if (!validateCPF(value)) {
-			return Promise.reject("Invalid document number input");
-		}
-		return Promise.resolve();
-	};
 
 	const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 		return current && current > moment().endOf("day");

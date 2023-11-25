@@ -20,7 +20,7 @@ const logger = (req, res, next) => {
 			query: req.query,
 		};
 
-		console.log(logInput);
+		// console.log(logInput);
 
 		//await send(logInput);
 	});
