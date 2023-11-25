@@ -12,13 +12,24 @@ import axios from "axios";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import moment from "moment";
 import type { RangePickerProps } from "antd/es/date-picker";
-import { validateCEP, validateCPF, validateEmail, validatePhoneNumber } from "../../tools/utils";
+import {
+	validateCEP,
+	validateCPF,
+	validateEmail,
+	validatePhoneNumber,
+} from "../../tools/utils";
+import { IUser } from "../../interfaces/user";
 
 const { Option } = Select;
 
 type NotificationType = "success" | "error";
 
-const CreateUserModal = () => {
+interface props {
+	setUsers: (users: IUser[]) => void;
+	users: IUser[];
+}
+
+const CreateUserModal = (props: props) => {
 	const [open, setOpen] = useState(false);
 	const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -46,21 +57,21 @@ const CreateUserModal = () => {
 		return Promise.resolve();
 	};
 
-    const validatePhoneNumberInput = (rule: any, value: string) => {
+	const validatePhoneNumberInput = (rule: any, value: string) => {
 		if (!validatePhoneNumber(value)) {
 			return Promise.reject("Invalid phone number input");
 		}
 		return Promise.resolve();
 	};
 
-    const validateZipCodeInput = (rule: any, value: string) => {
+	const validateZipCodeInput = (rule: any, value: string) => {
 		if (!validateCEP(value)) {
 			return Promise.reject("Invalid zip code input");
 		}
 		return Promise.resolve();
 	};
-    
-    const validateDocumentNumberInput = (rule: any, value: string) => {
+
+	const validateDocumentNumberInput = (rule: any, value: string) => {
 		if (!validateCPF(value)) {
 			return Promise.reject("Invalid document number input");
 		}
@@ -88,7 +99,6 @@ const CreateUserModal = () => {
 						},
 					})
 					.then(() => {
-						alert("Usuario Criado com sucesso!");
 						setConfirmLoading(false);
 						setOpen(false);
 						form.resetFields();
@@ -97,13 +107,32 @@ const CreateUserModal = () => {
 							"User created successfully",
 							"User created successfully"
 						);
+						axios
+							.get("http://localhost:3001/users", {
+								headers: {
+									"x-api-key": apiKey,
+								},
+							})
+							.then((response) => {
+								if (response.status === 200) {
+									props.setUsers(response.data.data);
+								} else {
+									openNotificationWithIcon(
+										"error",
+										"Error fetching users",
+										"Something wrong occurred on fetching users"
+									);
+								}
+							});
 					})
-					.catch(() => {
+					.catch((error) => {
+						console.log(error);
+
 						setConfirmLoading(false);
 						openNotificationWithIcon(
 							"error",
 							"Error on creating user",
-							"Something wrong occurred on creating user"
+							JSON.stringify(error.response.data)
 						);
 					});
 			})
@@ -147,7 +176,7 @@ const CreateUserModal = () => {
 							{ max: 50, message: "Max 50 characters" },
 						]}
 					>
-						<Input placeholder="John"/>
+						<Input placeholder="John" />
 					</Form.Item>
 
 					<Form.Item
@@ -186,7 +215,7 @@ const CreateUserModal = () => {
 							},
 						]}
 					>
-						<Input type="email" placeholder="example@example.com"/>
+						<Input type="email" placeholder="example@example.com" />
 					</Form.Item>
 
 					<Form.Item
@@ -194,13 +223,13 @@ const CreateUserModal = () => {
 						name="documentNumber"
 						rules={[
 							{ required: true, message: "Please input the document number!" },
-                            {
-                                validator: validateDocumentNumberInput,
-                                message: "Invalid document number input",
-                            },
+							{
+								validator: validateDocumentNumberInput,
+								message: "Invalid document number input",
+							},
 						]}
 					>
-						<Input placeholder="828.541.870-75"/>
+						<Input placeholder="828.541.870-75" />
 					</Form.Item>
 
 					<Form.List name="addresses">
@@ -227,13 +256,13 @@ const CreateUserModal = () => {
 												{ required: true, message: "Please input the city!" },
 											]}
 										>
-											<Input placeholder="São José do Rio Preto"/>
+											<Input placeholder="São José do Rio Preto" />
 										</Form.Item>
 
 										<Form.Item
 											{...restField}
 											label="State"
-											name={[name, "State"]}
+											name={[name, "state"]}
 											rules={[
 												{ required: true, message: "Please input the State!" },
 											]}
@@ -244,19 +273,19 @@ const CreateUserModal = () => {
 										<Form.Item
 											{...restField}
 											label="ZipCode"
-											name={[name, "ZipCode"]}
+											name={[name, "zipCode"]}
 											rules={[
 												{
 													required: true,
 													message: "Please input the zipCode!",
 												},
-                                                {
-                                                    validator: validateZipCodeInput,
-                                                    message: "Invalid CEP input",
-                                                }
+												{
+													validator: validateZipCodeInput,
+													message: "Invalid CEP input",
+												},
 											]}
 										>
-											<Input placeholder="89451-010"/>
+											<Input placeholder="89451-010" />
 										</Form.Item>
 
 										<Button type="link" onClick={() => remove(name)}>
@@ -291,10 +320,10 @@ const CreateUserModal = () => {
 													required: true,
 													message: "Please input the phone number!",
 												},
-                                                {
-                                                    validator: validatePhoneNumberInput,
-                                                    message: "Invalid phone number input",
-                                                }
+												{
+													validator: validatePhoneNumberInput,
+													message: "Invalid phone number input",
+												},
 											]}
 										>
 											<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />

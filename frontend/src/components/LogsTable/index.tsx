@@ -62,6 +62,10 @@ export function LogTable() {
 			columns={columns}
 			expandable={{ expandedRowRender }}
 			dataSource={logs}
+			bordered
+			rowClassName={(record, index) =>
+				index % 2 === 0 ? "table-row-light" : "table-row-dark"
+			}
 		/>
 	);
 }

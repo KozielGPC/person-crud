@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f0f0f5;
+    -webkit-font-smoothing: antialiased;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-row-light {
+    background-color: #f5f5f5;
+}
+.table-row-dark {
+    background-color: #d5d5d5;
+}

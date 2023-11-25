@@ -6,14 +6,10 @@ import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import CreateUserModal from "../CreateUserModal";
 
-
-
 export function UserTable() {
 	const { apiKey, validApiKey } = useContext(ApiKeyContext);
 
 	const [users, setUsers] = useState<IUser[] | []>([]);
-
-	
 
 	useEffect(() => {
 		if (validApiKey) {
@@ -75,9 +71,7 @@ export function UserTable() {
 		const dataPhoneNumbers = row.phoneNumbers;
 
 		return (
-			<div
-				style={{ padding: "0px 40px 20px 40px", backgroundColor: "#aba9a9" }}
-			>
+			<div style={{ padding: "0px 40px 20px 40px" }}>
 				<Table
 					title={() => <h1>Phone Numbers</h1>}
 					columns={columnsPhoneNumber}
@@ -152,7 +146,8 @@ export function UserTable() {
 		<Table
 			title={() => (
 				<div>
-					<h1>Users</h1> <CreateUserModal />
+					<h1>Users</h1>{" "}
+					<CreateUserModal setUsers={setUsers} users={users} key={apiKey} />
 				</div>
 			)}
 			rowKey={(record) => record._id}
@@ -161,6 +156,8 @@ export function UserTable() {
 			columns={columns}
 			expandable={{ expandedRowRender }}
 			dataSource={users}
+			bordered
+			rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' :  'table-row-dark'}
 		/>
 	);
 }
