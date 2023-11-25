@@ -124,7 +124,6 @@ export function UserTable() {
 
 	const edit = (record: Partial<IUser>) => {
 		const { dateOfBirth, email, documentNumber, firstName, lastName } = record;
-		console.log(dateOfBirth);
 
 		form.setFieldsValue({
 			dateOfBirth: dateOfBirth ? moment(dateOfBirth) : "",
@@ -138,7 +137,6 @@ export function UserTable() {
 
 	const editPhoneNumber = (record: Partial<IPhoneNumber>) => {
 		const { number, type } = record;
-		console.log(record);
 		setEditingPhoneNumberKey(record.number ?? "");
 	};
 
@@ -146,6 +144,28 @@ export function UserTable() {
 		try {
 			const row = (await form.validateFields()) as IUser;
 			row["dateOfBirth"] = moment(row.dateOfBirth).toISOString();
+
+			axios.put(`http://localhost:3001/users/${key}`, row, {
+				headers: {
+					"x-api-key": apiKey,
+				},
+			}).then((response) => {
+				if (response.status === 200) {
+					openNotificationWithIcon(
+						api,
+						"success",
+						"User edited successfully",
+						"User edited successfully"
+					);
+				} else {
+					openNotificationWithIcon(
+						api,
+						"error",
+						"Error editing user",
+						"Something wrong occurred on editing user"
+					);
+				}
+			});
 
 			const updatedUser = [...users];
 			const index = updatedUser.findIndex((item) => key === item._id);
@@ -162,13 +182,6 @@ export function UserTable() {
 				setUsers(updatedUser);
 				setEditingKey("");
 			}
-
-			openNotificationWithIcon(
-				api,
-				"success",
-				"User edited successfully",
-				"User edited successfully"
-			);
 		} catch (errInfo) {
 			openNotificationWithIcon(
 				api,
@@ -182,18 +195,6 @@ export function UserTable() {
 	const expandedRowRender = (row: IUser) => {
 		const savePhoneNumber = async (key: string) => {
 			try {
-				// const updatedUser = [...users];
-				// const index = updatedUser.findIndex((item) => row._id === item._id);
-
-				// if (index > -1) {
-				// 	const item = updatedUser[index];
-				// 	updatedUser.splice(index, 1, {
-				// 		...item,
-				// 		phoneNumbers: [...item.phoneNumbers, newPhoneNumber],
-				// 	});
-				// 	setUsers(updatedUser);
-				// }
-
 				setEditingPhoneNumberKey("");
 
 				openNotificationWithIcon(
@@ -272,8 +273,6 @@ export function UserTable() {
 		];
 
 		const mergedPhoneNumberColumns = columnsPhoneNumber.map((col) => {
-			console.log(col);
-
 			if (!col.editable) {
 				return col;
 			}

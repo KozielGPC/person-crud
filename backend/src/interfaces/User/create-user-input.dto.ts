@@ -1,15 +1,5 @@
-class IAddress {
-	street: string;
-	city: string;
-	state: string;
-	zipCode: string;
-}
-
-class IPhoneNumber {
-	number: string;
-	type: string;
-}
-
+import { IAddress } from "./address.dto";
+import { IPhoneNumber } from "./phone-number.dto";
 export class CreateUserDto {
 	firstName: string;
 	lastName: string;

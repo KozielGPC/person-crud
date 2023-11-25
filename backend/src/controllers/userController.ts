@@ -4,6 +4,7 @@ import { CreateUserDto } from "../interfaces/User/create-user-input.dto";
 import userModel, { IUser } from "../models/userModel";
 import responseHandler from "../tools/apiResponseHandler";
 import { Request, Response } from "express";
+import { UpdateUserDto } from "../interfaces/User/update-user-input.dto";
 
 export class UserController {
 	async create(req: Request, res: Response) {
@@ -63,9 +64,10 @@ export class UserController {
 	async update(req: Request, res: Response) {
 		try {
 			await connectDB();
+			const input: UpdateUserDto = req.body;
 			const updatedUser = await userModel.findByIdAndUpdate(
 				req.params.id,
-				{ $set: { age: 332 } },
+				{ $set: input },
 				{ new: true }
 			);
 			return responseHandler.successResponseWithData(
