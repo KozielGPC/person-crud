@@ -9,10 +9,8 @@ const Home = () => {
 		<>
 			<ApiKeyValidatorContainer />
 			<Divider />
-			<h2>Users</h2>
 			<UserTable />
 			<Divider />
-			<h2>Logs</h2>
 			<LogTable />
 		</>
 	);

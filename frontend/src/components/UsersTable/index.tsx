@@ -1,9 +1,11 @@
 import { Table, Divider } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
+import { Flex } from "antd";
+import CreateUserModal from "../CreateUserModal";
 
 export function UserTable() {
 	const { apiKey, validApiKey } = useContext(ApiKeyContext);
@@ -70,21 +72,22 @@ export function UserTable() {
 		const dataPhoneNumbers = row.phoneNumbers;
 
 		return (
-			<div>
-				<h1>Phone Numbers</h1>
+			<div
+				style={{ padding: "0px 40px 20px 40px", backgroundColor: "#aba9a9" }}
+			>
 				<Table
+					title={() => <h1>Phone Numbers</h1>}
 					columns={columnsPhoneNumber}
 					dataSource={dataPhoneNumbers}
 					pagination={false}
 				/>
 				<Divider />
-				<h1>Addresses</h1>
 				<Table
+					title={() => <h1>Addresses</h1>}
 					columns={columnsAddress}
 					dataSource={dataAddresses}
 					pagination={false}
 				/>
-				;
 			</div>
 		);
 	};
@@ -100,11 +103,30 @@ export function UserTable() {
 			dataIndex: "documentNumber",
 			key: "documentNumber",
 		},
-		{ title: "Action", key: "operation", render: () => <a>Publish</a> },
+		{
+			title: "Action",
+			key: "operation",
+			render: () => (
+				<div>
+					<a>
+						<EditOutlined />
+					</a>{" "}
+					<a style={{ marginLeft: 12 }}>
+						<DeleteOutlined />
+					</a>{" "}
+				</div>
+			),
+		},
 	];
 
 	return (
 		<Table
+			title={() => (
+				<div>
+					<h1>Users</h1> <CreateUserModal />
+				</div>
+			)}
+			rowKey={(record) => record._id}
 			scroll={{ x: 1300 }}
 			className="components-table-demo-nested"
 			columns={columns}

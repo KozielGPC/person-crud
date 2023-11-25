@@ -28,18 +28,20 @@ export function LogTable() {
 		}
 	}, [validApiKey]);
 
-	// export interface ILog {
-	// 	_id: string;
-	// 	requestTime: string;
-	// 	responseTime: string;
-	// 	method: string;
-	// 	url: string;
-	// 	statusCode: number;
-	// 	userAgent: string;
-	// 	body: any;
-	// 	params: Record<string, any>;
-	// 	query: Object;
-	// }
+	const expandedRowRender = (row: ILog) => {
+		return (
+			<div>
+				<h1>Body</h1>
+				<p>{JSON.stringify(row.body)}</p>
+				<Divider />
+				<h1>params</h1>
+				<p>{JSON.stringify(row.params)}</p>
+				<Divider />
+				<h1>query</h1>
+				<p>{JSON.stringify(row.query)}</p>
+			</div>
+		);
+	};
 	const columns = [
 		{ title: "ID", dataIndex: "_id", key: "id" },
 		{ title: "Method", dataIndex: "method", key: "method" },
@@ -48,18 +50,17 @@ export function LogTable() {
 		{ title: "Status Code", dataIndex: "statusCode", key: "statusCode" },
 		{ title: "Request Time", dataIndex: "requestTime", key: "requestTime" },
 		{ title: "Response Time", dataIndex: "responseTime", key: "responseTime" },
-		{ title: "Body", dataIndex: "body", key: "body" },
-		{ title: "Params", dataIndex: "params", key: "params" },
-		{ title: "Query", dataIndex: "query", key: "query" },
 		{ title: "Action", key: "operation", render: () => <a>Publish</a> },
 	];
 
 	return (
 		<Table
+			title={() => <h1>Logs</h1>}
+			rowKey={(record) => record._id}
 			scroll={{ x: 1300 }}
 			className="components-table-demo-nested"
 			columns={columns}
-			// expandable={{ expandedRowRender }}
+			expandable={{ expandedRowRender }}
 			dataSource={logs}
 		/>
 	);
