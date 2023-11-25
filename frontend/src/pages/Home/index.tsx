@@ -1,18 +1,24 @@
 import React from "react";
-import {UserTable} from "../../components/UsersTable";
-import {LogTable} from "../../components/LogsTable";
+import { UserTable } from "../../components/UsersTable";
+import { LogTable } from "../../components/LogsTable";
 import { ApiKeyValidatorContainer } from "../../components/ValidateApiKey";
-import { Divider } from "antd";
+import { Divider, Flex, Row } from "antd";
 
 const Home = () => {
 	return (
-		<>
-			<ApiKeyValidatorContainer />
-			<Divider />
+		<Flex style={{ flexDirection: "column", padding: "10px 50px" }}>
+			<Row>
+				<ApiKeyValidatorContainer />
+			</Row>
+			<Row>
+			<Divider style={{ height: "1px", backgroundColor: "black" }} />
 			<UserTable />
-			<Divider />
+			</Row>
+			<Row>
+			<Divider style={{ height: "1px", backgroundColor: "black" }} />
 			<LogTable />
-		</>
+			</Row>
+		</Flex>
 	);
 };
 

@@ -6,10 +6,14 @@ import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import CreateUserModal from "../CreateUserModal";
 
+
+
 export function UserTable() {
 	const { apiKey, validApiKey } = useContext(ApiKeyContext);
 
 	const [users, setUsers] = useState<IUser[] | []>([]);
+
+	
 
 	useEffect(() => {
 		if (validApiKey) {
@@ -91,6 +95,32 @@ export function UserTable() {
 		);
 	};
 
+	const deleteUser = (id: string) => {
+		axios
+			.delete(`http://localhost:3001/users/${id}`, {
+				headers: {
+					"x-api-key": apiKey,
+				},
+			})
+			.then((response) => {
+				if (response.status === 200) {
+					axios
+						.get("http://localhost:3001/users", {
+							headers: {
+								"x-api-key": apiKey,
+							},
+						})
+						.then((response) => {
+							if (response.status === 200) {
+								setUsers(response.data.data);
+							} else {
+								setUsers([]);
+							}
+						});
+				}
+			});
+	};
+
 	const columns = [
 		{ title: "ID", dataIndex: "_id", key: "id" },
 		{ title: "First Name", dataIndex: "firstName", key: "firstName" },
@@ -105,13 +135,13 @@ export function UserTable() {
 		{
 			title: "Action",
 			key: "operation",
-			render: () => (
+			render: (row: IUser) => (
 				<div>
 					<a>
 						<EditOutlined />
 					</a>{" "}
 					<a style={{ marginLeft: 12 }}>
-						<DeleteOutlined />
+						<DeleteOutlined onClick={() => deleteUser(row._id)} />
 					</a>{" "}
 				</div>
 			),

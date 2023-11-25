@@ -33,9 +33,10 @@
 - [x] Criar componente de input de texto
 - [ ] Criar componente de linha da tabela com botão para deletar e atualizar
 - [x] Unir componentes para criar tabela de listagem
-- [ ] Unir componentes para criar formulario de criação
+- [x] Unir componentes para criar formulario de criação
 - [x] Criar conexão com o backend
 - [x] Adicionar requisições para rotas
+- [x] Adicionar validador de input nos formulários
 - [ ] Adicionar loading com skeleton
 - [ ] Adicionar validadores de erros
 - [ ] Adicionar dark/light mode

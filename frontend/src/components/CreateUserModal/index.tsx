@@ -1,9 +1,22 @@
 import React, { useContext, useState } from "react";
-import { Form, Input, Button, DatePicker, Select, Modal } from "antd";
+import {
+	Form,
+	Input,
+	Button,
+	DatePicker,
+	Select,
+	Modal,
+	notification,
+} from "antd";
 import axios from "axios";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
+import moment from "moment";
+import type { RangePickerProps } from "antd/es/date-picker";
+import { validateCEP, validateCPF, validateEmail, validatePhoneNumber } from "../../tools/utils";
 
 const { Option } = Select;
+
+type NotificationType = "success" | "error";
 
 const CreateUserModal = () => {
 	const [open, setOpen] = useState(false);
@@ -12,6 +25,51 @@ const CreateUserModal = () => {
 	const { apiKey, validApiKey } = useContext(ApiKeyContext);
 
 	const [form] = Form.useForm();
+
+	const [api, contextHolder] = notification.useNotification();
+
+	const openNotificationWithIcon = (
+		type: NotificationType,
+		message?: string,
+		description?: string
+	) => {
+		api[type]({
+			message: message,
+			description: description,
+		});
+	};
+
+	const validateEmailInput = (rule: any, value: string) => {
+		if (!validateEmail(value)) {
+			return Promise.reject("Invalid email input");
+		}
+		return Promise.resolve();
+	};
+
+    const validatePhoneNumberInput = (rule: any, value: string) => {
+		if (!validatePhoneNumber(value)) {
+			return Promise.reject("Invalid phone number input");
+		}
+		return Promise.resolve();
+	};
+
+    const validateZipCodeInput = (rule: any, value: string) => {
+		if (!validateCEP(value)) {
+			return Promise.reject("Invalid zip code input");
+		}
+		return Promise.resolve();
+	};
+    
+    const validateDocumentNumberInput = (rule: any, value: string) => {
+		if (!validateCPF(value)) {
+			return Promise.reject("Invalid document number input");
+		}
+		return Promise.resolve();
+	};
+
+	const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+		return current && current > moment().endOf("day");
+	};
 
 	const showModal = () => {
 		setOpen(true);
@@ -34,13 +92,22 @@ const CreateUserModal = () => {
 						setConfirmLoading(false);
 						setOpen(false);
 						form.resetFields();
+						openNotificationWithIcon(
+							"success",
+							"User created successfully",
+							"User created successfully"
+						);
 					})
 					.catch(() => {
-						alert("Erro ao criar o usuario");
+						setConfirmLoading(false);
+						openNotificationWithIcon(
+							"error",
+							"Error on creating user",
+							"Something wrong occurred on creating user"
+						);
 					});
 			})
 			.catch((info) => {
-				console.log("Validate Failed:", info);
 				setConfirmLoading(false);
 			});
 	};
@@ -52,6 +119,7 @@ const CreateUserModal = () => {
 
 	return (
 		<>
+			{contextHolder}
 			<Button type="primary" onClick={showModal} disabled={!validApiKey}>
 				Create User
 			</Button>
@@ -76,17 +144,25 @@ const CreateUserModal = () => {
 						name="firstName"
 						rules={[
 							{ required: true, message: "Please input the first name!" },
+							{ max: 50, message: "Max 50 characters" },
 						]}
 					>
-						<Input />
+						<Input placeholder="John"/>
 					</Form.Item>
 
 					<Form.Item
 						label="Last Name"
 						name="lastName"
-						rules={[{ required: true, message: "Please input the last name!" }]}
+						rules={[
+							{
+								required: true,
+								message: "Please input the last name!",
+								max: 50,
+							},
+							{ max: 50, message: "Max 50 characters" },
+						]}
 					>
-						<Input />
+						<Input placeholder="Doe" />
 					</Form.Item>
 
 					<Form.Item
@@ -96,15 +172,21 @@ const CreateUserModal = () => {
 							{ required: true, message: "Please select the date of birth!" },
 						]}
 					>
-						<DatePicker style={{ width: "100%" }} />
+						<DatePicker format="DD/MM/YYYY" disabledDate={disabledDate} />
 					</Form.Item>
 
 					<Form.Item
 						label="Email"
 						name="email"
-						rules={[{ required: true, message: "Please input the email!" }]}
+						rules={[
+							{ required: true, message: "Please input the email!" },
+							{
+								validator: validateEmailInput,
+								message: "Invalid email input",
+							},
+						]}
 					>
-						<Input type="email" />
+						<Input type="email" placeholder="example@example.com"/>
 					</Form.Item>
 
 					<Form.Item
@@ -112,9 +194,13 @@ const CreateUserModal = () => {
 						name="documentNumber"
 						rules={[
 							{ required: true, message: "Please input the document number!" },
+                            {
+                                validator: validateDocumentNumberInput,
+                                message: "Invalid document number input",
+                            },
 						]}
 					>
-						<Input />
+						<Input placeholder="828.541.870-75"/>
 					</Form.Item>
 
 					<Form.List name="addresses">
@@ -130,7 +216,7 @@ const CreateUserModal = () => {
 												{ required: true, message: "Please input the street!" },
 											]}
 										>
-											<Input />
+											<Input placeholder="Rua São Luíz" />
 										</Form.Item>
 
 										<Form.Item
@@ -141,7 +227,7 @@ const CreateUserModal = () => {
 												{ required: true, message: "Please input the city!" },
 											]}
 										>
-											<Input />
+											<Input placeholder="São José do Rio Preto"/>
 										</Form.Item>
 
 										<Form.Item
@@ -152,7 +238,7 @@ const CreateUserModal = () => {
 												{ required: true, message: "Please input the State!" },
 											]}
 										>
-											<Input />
+											<Input placeholder="São Paulo" />
 										</Form.Item>
 
 										<Form.Item
@@ -164,9 +250,13 @@ const CreateUserModal = () => {
 													required: true,
 													message: "Please input the zipCode!",
 												},
+                                                {
+                                                    validator: validateZipCodeInput,
+                                                    message: "Invalid CEP input",
+                                                }
 											]}
 										>
-											<Input />
+											<Input placeholder="89451-010"/>
 										</Form.Item>
 
 										<Button type="link" onClick={() => remove(name)}>
@@ -201,9 +291,13 @@ const CreateUserModal = () => {
 													required: true,
 													message: "Please input the phone number!",
 												},
+                                                {
+                                                    validator: validatePhoneNumberInput,
+                                                    message: "Invalid phone number input",
+                                                }
 											]}
 										>
-											<Input />
+											<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
 										</Form.Item>
 
 										<Form.Item
@@ -220,7 +314,6 @@ const CreateUserModal = () => {
 											<Select>
 												<Option value="home">Home</Option>
 												<Option value="work">Work</Option>
-												{/* Add other phone number types as needed */}
 											</Select>
 										</Form.Item>
 

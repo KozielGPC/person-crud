@@ -17,6 +17,8 @@ export class UserController {
 
 			const input: CreateUserDto = req.body;
 
+			console.log(input);
+			
 			const newUser = new userModel(input);
 
 			const savedUser = await newUser.save();
