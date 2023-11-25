@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import { Flex } from "antd";
 import CreateUserModal from "../CreateUserModal";
 
 export function UserTable() {

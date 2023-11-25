@@ -10,7 +10,6 @@ export class UserController {
 		try {
 			await connectDB();
 			const errors = validationResult(req);
-			console.log(errors);
 
 			if (!errors.isEmpty()) {
 				return res.status(400).json({ errors: errors.array() });
@@ -21,14 +20,12 @@ export class UserController {
 			const newUser = new userModel(input);
 
 			const savedUser = await newUser.save();
-			return responseHandler.successResponseWithData(
+			return responseHandler.successCreateResponseWithData(
 				res,
 				"User created successfully",
 				savedUser
 			);
 		} catch (error) {
-			console.log(error);
-
 			return responseHandler.internalErrorResponse(res, "Error creating user");
 		}
 	}

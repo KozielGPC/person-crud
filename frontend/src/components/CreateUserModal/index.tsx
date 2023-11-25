@@ -1,13 +1,7 @@
-import React, { useState } from "react";
-import {
-	Form,
-	Input,
-	Button,
-	DatePicker,
-	Select,
-	InputNumber,
-	Modal,
-} from "antd";
+import React, { useContext, useState } from "react";
+import { Form, Input, Button, DatePicker, Select, Modal } from "antd";
+import axios from "axios";
+import { ApiKeyContext } from "../../context/ApiKeyContext";
 
 const { Option } = Select;
 
@@ -15,31 +9,50 @@ const CreateUserModal = () => {
 	const [open, setOpen] = useState(false);
 	const [confirmLoading, setConfirmLoading] = useState(false);
 
+	const { apiKey, validApiKey } = useContext(ApiKeyContext);
+
+	const [form] = Form.useForm();
+
 	const showModal = () => {
 		setOpen(true);
 	};
 
 	const handleOk = () => {
 		setConfirmLoading(true);
-		setTimeout(() => {
-			setOpen(false);
-			setConfirmLoading(false);
-		}, 2000);
-	};
 
-	const onFinish = (values: any) => {
-		// Handle form submission here
-		console.log("Received values:", values);
+		form
+			.validateFields()
+			.then((values) => {
+				axios
+					.post("http://localhost:3001/users", values, {
+						headers: {
+							"x-api-key": apiKey,
+						},
+					})
+					.then(() => {
+						alert("Usuario Criado com sucesso!");
+						setConfirmLoading(false);
+						setOpen(false);
+						form.resetFields();
+					})
+					.catch(() => {
+						alert("Erro ao criar o usuario");
+					});
+			})
+			.catch((info) => {
+				console.log("Validate Failed:", info);
+				setConfirmLoading(false);
+			});
 	};
 
 	const handleCancel = () => {
-		console.log("Clicked cancel button");
+		form.resetFields();
 		setOpen(false);
 	};
 
 	return (
 		<>
-			<Button type="primary" onClick={showModal}>
+			<Button type="primary" onClick={showModal} disabled={!validApiKey}>
 				Create User
 			</Button>
 			<Modal
@@ -48,25 +61,14 @@ const CreateUserModal = () => {
 				onOk={handleOk}
 				confirmLoading={confirmLoading}
 				onCancel={handleCancel}
-                width={1000}
-                footer={[
-                    <Button key="back" onClick={handleCancel}>
-                        Cancel
-                    </Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        loading={confirmLoading}
-                        onClick={handleOk}
-                    >
-                        Submit
-                    </Button>,
-                ]}
+				width={1000}
+				cancelText="Cancel"
+				okText="Create"
 			>
 				<Form
+					form={form}
 					labelCol={{ span: 4 }}
 					wrapperCol={{ span: 14 }}
-					onFinish={onFinish}
 					initialValues={{ addresses: [], phoneNumbers: [] }}
 				>
 					<Form.Item
@@ -142,7 +144,7 @@ const CreateUserModal = () => {
 											<Input />
 										</Form.Item>
 
-                                        <Form.Item
+										<Form.Item
 											{...restField}
 											label="State"
 											name={[name, "State"]}
@@ -153,18 +155,19 @@ const CreateUserModal = () => {
 											<Input />
 										</Form.Item>
 
-                                        <Form.Item
+										<Form.Item
 											{...restField}
 											label="ZipCode"
 											name={[name, "ZipCode"]}
 											rules={[
-												{ required: true, message: "Please input the zipCode!" },
+												{
+													required: true,
+													message: "Please input the zipCode!",
+												},
 											]}
 										>
 											<Input />
 										</Form.Item>
-
-										{/* Add similar Form.Item components for state and zipCode */}
 
 										<Button type="link" onClick={() => remove(name)}>
 											Remove Address
