@@ -17,3 +17,9 @@ body {
 .table-row-dark {
     background-color: #d5d5d5;
 }
+
+.editable-row .ant-form-item-explain {
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
+}

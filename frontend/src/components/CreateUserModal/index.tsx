@@ -19,10 +19,9 @@ import {
 	validatePhoneNumber,
 } from "../../tools/utils";
 import { IUser } from "../../interfaces/user";
+import { openNotificationWithIcon } from "../../tools/showNotification";
 
 const { Option } = Select;
-
-type NotificationType = "success" | "error";
 
 interface props {
 	setUsers: (users: IUser[]) => void;
@@ -38,18 +37,7 @@ const CreateUserModal = (props: props) => {
 	const [form] = Form.useForm();
 
 	const [api, contextHolder] = notification.useNotification();
-
-	const openNotificationWithIcon = (
-		type: NotificationType,
-		message?: string,
-		description?: string
-	) => {
-		api[type]({
-			message: message,
-			description: description,
-		});
-	};
-
+	
 	const validateEmailInput = (rule: any, value: string) => {
 		if (!validateEmail(value)) {
 			return Promise.reject("Invalid email input");
@@ -103,6 +91,7 @@ const CreateUserModal = (props: props) => {
 						setOpen(false);
 						form.resetFields();
 						openNotificationWithIcon(
+							api,
 							"success",
 							"User created successfully",
 							"User created successfully"
@@ -118,6 +107,7 @@ const CreateUserModal = (props: props) => {
 									props.setUsers(response.data.data);
 								} else {
 									openNotificationWithIcon(
+										api,
 										"error",
 										"Error fetching users",
 										"Something wrong occurred on fetching users"
@@ -130,6 +120,7 @@ const CreateUserModal = (props: props) => {
 
 						setConfirmLoading(false);
 						openNotificationWithIcon(
+							api,
 							"error",
 							"Error on creating user",
 							JSON.stringify(error.response.data)
