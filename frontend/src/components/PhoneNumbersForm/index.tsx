@@ -15,116 +15,7 @@ import { IPhoneNumber } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validatePhoneNumberInput } from "../../tools/formValidators";
-
-const FieldComponent = ({
-	index,
-	name,
-	remove,
-	field,
-	setHasInputsChanged,
-	disabled = false,
-}: {
-	index?: number;
-	name?: string;
-	remove?: (index: number) => void | undefined;
-	setHasInputsChanged: (e: boolean) => void | undefined;
-	phoneNumbers?: IPhoneNumber[];
-	field?: IPhoneNumber;
-	disabled?: boolean;
-}) => {
-	const typeOptions = [
-		{
-			label: "home",
-			value: "home",
-		},
-		{
-			label: "work",
-			value: "work",
-		},
-		{
-			label: "personal",
-			value: "personal",
-		},
-	];
-
-	const formItemName = {
-		number:
-			index !== undefined
-				? [`${index}`, "number"]
-				: name
-				? [name, "number"]
-				: "number",
-		type:
-			index !== undefined
-				? [`${index}`, "type"]
-				: name
-				? [name, "type"]
-				: "type",
-	};
-
-	const formItemRules = {
-		type: [
-			{
-				required: true,
-				message: "Please select the phone type!",
-			},
-		],
-		number: [
-			{
-				required: true,
-				message: "Please input the phone number!",
-			},
-			{
-				validator: validatePhoneNumberInput,
-				message: "Invalid phone number input",
-			},
-		],
-	};
-	console.log("index: ", index);
-	console.log("name: ", name);
-
-	console.log("field: ", field);
-
-	return (
-		<Space key={index} align="baseline">
-			<div>
-				<Form.Item
-					preserve={false}
-					label="type"
-					initialValue={field?.type ?? "home"}
-					name={formItemName["type"]}
-					rules={formItemRules["type"]}
-				>
-					<Select
-						style={{ width: 220 }}
-						options={typeOptions}
-						disabled={disabled}
-					/>
-				</Form.Item>
-				<Form.Item
-					preserve={false}
-					label="number"
-					initialValue={field?.number ?? undefined}
-					name={formItemName["number"]}
-					rules={formItemRules["number"]}
-				>
-					<Input disabled={disabled} placeholder="(44) 1234-1234" />
-				</Form.Item>
-			</div>
-			{remove && index !== undefined ? (
-				<MinusCircleOutlined
-					style={{ color: "#E34444" }}
-					onClick={() => {
-						remove(index);
-						setHasInputsChanged(true);
-					}}
-				/>
-			) : (
-				<></>
-			)}
-		</Space>
-	);
-};
+const { Option } = Select;
 
 export const PhoneNumbersForm = (props: {
 	phoneNumbers: IPhoneNumber[];
@@ -135,34 +26,7 @@ export const PhoneNumbersForm = (props: {
 
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
-	const [dynamicFields, setDynamicFields] = useState<
-		{
-			index: number;
-			field?: IPhoneNumber | undefined;
-		}[]
-	>([]);
-
-	useEffect(() => {
-		setDynamicFields(
-			props.phoneNumbers.map((field, index) => ({
-				index: index + 1,
-				field
-			})) ?? []
-		);
-	}, [props.phoneNumbers]);
-
-	const add = () =>
-		setDynamicFields((prev) => [
-			...prev,
-			prev.length >= 1
-				? { index: prev[prev.length - 1].index + 1 }
-				: { index: prev.length + 1 },
-		]);
-
-	const remove = (index: number) => {
-		setDynamicFields((prev) => prev.filter((num) => num.index !== index));
-	};
-
+	
 	const onFinish = (values: { phoneNumbers: Record<string, IPhoneNumber> }) => {
 		const input: IPhoneNumber[] = Object.entries(values.phoneNumbers)
 			.filter((e) => e[1]?.number)
@@ -233,35 +97,69 @@ export const PhoneNumbersForm = (props: {
 							onFieldsChange={() => {
 								setHasInputsChanged(true);
 							}}
+							initialValues={{
+								phoneNumbers: props.phoneNumbers,
+							}}
 							preserve={false}
 						>
 							<Form.List name="phoneNumbers">
-								{() =>
-									dynamicFields.map((field) => (
-										<FieldComponent
-											key={field.index}
-											index={field.index}
-											field={field.field}
-											remove={remove}
-											setHasInputsChanged={setHasInputsChanged}
-											phoneNumbers={props.phoneNumbers}
-										/>
-									))
-								}
+								{(fields, { add, remove }) => (
+									<>
+										{fields.map(({ key, name, ...restField }) => (
+											<div key={key}>
+												<Form.Item
+													{...restField}
+													label="Number"
+													name={[name, "number"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the phone number!",
+														},
+														{
+															validator: validatePhoneNumberInput,
+															message: "Invalid phone number input",
+														},
+													]}
+												>
+													<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
+												</Form.Item>
+
+												<Form.Item
+													{...restField}
+													label="Type"
+													name={[name, "type"]}
+													rules={[
+														{
+															required: true,
+															message: "Please select the phone number type!",
+														},
+													]}
+												>
+													<Select>
+														<Option value="home">Home</Option>
+														<Option value="work">Work</Option>
+														<Option value="personal">Personal</Option>
+													</Select>
+												</Form.Item>
+
+												<Button type="link" onClick={() => remove(name)}>
+													Remove Phone Number
+												</Button>
+											</div>
+										))}
+										<Form.Item>
+											<Button
+												type="dashed"
+												onClick={() => add()}
+												style={{ width: "100%" }}
+											>
+												Add Phone Number
+											</Button>
+										</Form.Item>
+									</>
+								)}
 							</Form.List>
-							<Form.Item>
-								<Button
-									type="dashed"
-									onClick={() => {
-										add();
-										setHasInputsChanged(true);
-									}}
-									block
-									icon={<PlusOutlined />}
-								>
-									New Phone Number
-								</Button>
-							</Form.Item>
 						</Form>
 					</Card>
 				</Layout>
