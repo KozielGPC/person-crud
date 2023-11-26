@@ -248,6 +248,7 @@ export function UserTable() {
 			key: "dateOfBirth",
 			editable: true,
 			rules: [{ required: true, message: "Please select the date of birth!" }],
+			render: (text: string) => moment(text).format("YYYY/MM/DD"),
 		},
 		{
 			title: "Email",

@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
+import moment from "moment";
 
 export function LogTable() {
 	const [logs, setLogs] = useState<ILog[] | []>([]);
@@ -72,14 +73,25 @@ export function LogTable() {
 			</div>
 		);
 	};
+
 	const columns = [
 		{ title: "ID", dataIndex: "_id", key: "id" },
 		{ title: "Method", dataIndex: "method", key: "method" },
 		{ title: "URL", dataIndex: "url", key: "url" },
 		{ title: "User Agent", dataIndex: "userAgent", key: "userAgent" },
 		{ title: "Status Code", dataIndex: "statusCode", key: "statusCode" },
-		{ title: "Request Time", dataIndex: "requestTime", key: "requestTime" },
-		{ title: "Response Time", dataIndex: "responseTime", key: "responseTime" },
+		{
+			title: "Request Time",
+			dataIndex: "requestTime",
+			key: "requestTime",
+			render: (text: string) => moment(text).format("YYYY/MM/DD HH:mm:ss"),
+		},
+		{
+			title: "Response Time",
+			dataIndex: "responseTime",
+			key: "responseTime",
+			render: (text: string) => moment(text).format("YYYY/MM/DD HH:mm:ss"),
+		},
 		{ title: "Action", key: "operation", render: () => <a>Publish</a> },
 	];
 
