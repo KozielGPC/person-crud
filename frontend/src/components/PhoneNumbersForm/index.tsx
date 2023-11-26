@@ -80,11 +80,16 @@ const FieldComponent = ({
 			},
 		],
 	};
+	console.log("index: ", index);
+	console.log("name: ", name);
+
+	console.log("field: ", field);
+
 	return (
 		<Space key={index} align="baseline">
 			<div>
 				<Form.Item
-					preserve={true}
+					preserve={false}
 					label="type"
 					initialValue={field?.type ?? "home"}
 					name={formItemName["type"]}
@@ -97,16 +102,13 @@ const FieldComponent = ({
 					/>
 				</Form.Item>
 				<Form.Item
-					preserve={true}
+					preserve={false}
 					label="number"
-					initialValue={field?.number ?? ""}
+					initialValue={field?.number ?? undefined}
 					name={formItemName["number"]}
 					rules={formItemRules["number"]}
 				>
-					<Input
-						disabled={disabled}
-						placeholder="(44) 1234-1234 or (44) 91234-1234"
-					/>
+					<Input disabled={disabled} placeholder="(44) 1234-1234" />
 				</Form.Item>
 			</div>
 			{remove && index !== undefined ? (
@@ -144,7 +146,7 @@ export const PhoneNumbersForm = (props: {
 		setDynamicFields(
 			props.phoneNumbers.map((field, index) => ({
 				index: index + 1,
-				field,
+				field
 			})) ?? []
 		);
 	}, [props.phoneNumbers]);
@@ -157,13 +159,23 @@ export const PhoneNumbersForm = (props: {
 				: { index: prev.length + 1 },
 		]);
 
-	const remove = (index: number) =>
+	const remove = (index: number) => {
 		setDynamicFields((prev) => prev.filter((num) => num.index !== index));
+	};
 
-	const onFinish = (values: { phoneNumbers: IPhoneNumber[] }) => {
-		const input = Object.values(values.phoneNumbers).filter(
-			(value) => value.number != "" && value.type != ""
-		);
+	const onFinish = (values: { phoneNumbers: Record<string, IPhoneNumber> }) => {
+		const input: IPhoneNumber[] = Object.entries(values.phoneNumbers)
+			.filter((e) => e[1]?.number)
+			.map((value) => {
+				return {
+					_id: value[1]._id,
+					number: value[1].number,
+					type: value[1].type,
+				};
+			});
+
+		console.log("input", input);
+
 		try {
 			axios
 				.put(

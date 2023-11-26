@@ -8,9 +8,9 @@ export interface IAddress {
 }
 
 export interface IPhoneNumber {
-	_id: mongoose.Types.ObjectId;
-	number: string;
-	type: string;
+	_id?: mongoose.Types.ObjectId;
+	number?: string;
+	type?: string;
 }
 
 export interface IUser {
