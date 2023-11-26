@@ -3,6 +3,8 @@ import { Table, Divider } from "antd";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
+import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
+import "react-json-view-lite/dist/index.css";
 
 export function LogTable() {
 	const [logs, setLogs] = useState<ILog[] | []>([]);
@@ -22,6 +24,9 @@ export function LogTable() {
 					} else {
 						setLogs([]);
 					}
+				})
+				.catch((error) => {
+					setLogs([]);
 				});
 		} else {
 			setLogs([]);
@@ -32,13 +37,38 @@ export function LogTable() {
 		return (
 			<div>
 				<h1>Body</h1>
-				<p>{JSON.stringify(row.body)}</p>
+				{row.body ? (
+					<JsonView
+						data={row.body}
+						shouldExpandNode={allExpanded}
+						style={defaultStyles}
+					/>
+				) : (
+					<p>No body</p>
+				)}
+
 				<Divider />
-				<h1>params</h1>
-				<p>{JSON.stringify(row.params)}</p>
+				<h1>Params</h1>
+				{row.params ? (
+					<JsonView
+						data={row.params}
+						shouldExpandNode={allExpanded}
+						style={defaultStyles}
+					/>
+				) : (
+					<p>No params</p>
+				)}
 				<Divider />
-				<h1>query</h1>
-				<p>{JSON.stringify(row.query)}</p>
+				<h1>Query</h1>
+				{row.query ? (
+					<JsonView
+						data={row.query}
+						shouldExpandNode={allExpanded}
+						style={defaultStyles}
+					/>
+				) : (
+					<p>No query</p>
+				)}
 			</div>
 		);
 	};

@@ -1,11 +1,4 @@
-import {
-	Form,
-	Input,
-	notification,
-	Button,
-	Layout,
-	Card,
-} from "antd";
+import { Form, Input, notification, Button, Layout, Card } from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { IAddress } from "../../interfaces/user";
@@ -28,7 +21,7 @@ export const AddressesForm = (props: {
 			.filter((e) => e[1]?.city)
 			.map((value) => {
 				return {
-					// _id: value[1]._id,
+					_id: value[1]._id,
 					state: value[1].state,
 					city: value[1].city,
 					street: value[1].street,
