@@ -21,10 +21,10 @@
 - [x] Adicionar error e success handlers personalizados
 - [x] Adicionar documentação de rotas com swagger
 - [x] Implementar fila com RabbitMQ
+- [x] Implementar cache com Redis
 - [ ] Adicionar paginação
 - [ ] Adicionar códigos de erro personalizados
 - [ ] Criar configuração de container docker e configurar docker-compose
-- [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
 - [ ] Criar service de websocket
 

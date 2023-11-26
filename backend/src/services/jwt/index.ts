@@ -1,13 +1,10 @@
 import jwt from "jsonwebtoken";
 import { config } from "../../config/config";
-import { v4 as uuid } from "uuid";
-import { responseHandler } from "../../tools/apiResponseHandler";
-import { Response } from "express";
 
 export class JwtService {
-	static generateToken(): string {
+	static generateToken(apiKey: string): string {
 		const data = {
-			id: uuid(),
+			apiKey,
 		};
 		return jwt.sign(data, config.JWT_SECRET, {
 			expiresIn: config.JWT_EXPIRATION_TIME,
