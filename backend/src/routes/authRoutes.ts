@@ -5,6 +5,6 @@ const authRoutes = Router();
 
 const authController = new AuthController();
 
-authRoutes.get("/validate", authController.validate);
+authRoutes.post("/validate", authController.validate);
 
 export { authRoutes };

@@ -28,6 +28,7 @@ import {
 import { PhoneNumbersForm } from "../PhoneNumbersForm";
 import { AddressesForm } from "../AddressesForm";
 import api from "../../providers/api";
+import { errorHandler } from "../../tools/errorHandler";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -152,24 +153,26 @@ export function UserTable() {
 						);
 					})
 					.catch((error) => {
-						openNotificationWithIcon(
-							notificationApi,
-							"error",
-							"Error editing user",
-							error?.response?.data?.message ??
-								"Something wrong occurred on editing user"
-						);
+						errorHandler(error, notificationApi);
+						// openNotificationWithIcon(
+						// 	notificationApi,
+						// 	"error",
+						// 	"Error editing user",
+						// 	error?.response?.data?.message ??
+						// 		"Something wrong occurred on editing user"
+						// );
 					});
 			});
 
 			setEditingKey("");
-		} catch (errInfo) {
-			openNotificationWithIcon(
-				notificationApi,
-				"error",
-				"Error editing user",
-				"Something wrong occurred on editing user"
-			);
+		} catch (error) {
+			errorHandler(error, notificationApi);
+			// openNotificationWithIcon(
+			// 	notificationApi,
+			// 	"error",
+			// 	"Error editing user",
+			// 	"Something wrong occurred on editing user"
+			// );
 		}
 	};
 
@@ -207,12 +210,7 @@ export function UserTable() {
 				}
 			})
 			.catch((error) => {
-				openNotificationWithIcon(
-					notificationApi,
-					"error",
-					"Error on deleting user",
-					"Something wrong occurred on deleting user"
-				);
+				errorHandler(error, notificationApi);
 			});
 	};
 

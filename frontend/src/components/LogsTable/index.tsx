@@ -1,24 +1,23 @@
 import { ILog } from "../../interfaces/log";
-import { Table, Divider } from "antd";
-import axios from "axios";
+import { Table, Divider, notification } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import moment from "moment";
+import { errorHandler } from "../../tools/errorHandler";
+import api from "../../providers/api";
 
 export function LogTable() {
 	const [logs, setLogs] = useState<ILog[] | []>([]);
-	const { apiKey, validApiKey } = useContext(ApiKeyContext);
+	const { validApiKey } = useContext(ApiKeyContext);
+
+	const [notificationApi, contextHolder] = notification.useNotification();
 
 	useEffect(() => {
 		if (validApiKey) {
-			axios
-				.get("http://localhost:3001/logs", {
-					headers: {
-						"x-api-key": apiKey,
-					},
-				})
+			api
+				.get("/logs")
 				.then((response) => {
 					if (response.status === 200) {
 						setLogs(response.data.data);
@@ -27,6 +26,7 @@ export function LogTable() {
 					}
 				})
 				.catch((error) => {
+					errorHandler(error, notificationApi);
 					setLogs([]);
 				});
 		} else {
@@ -96,18 +96,21 @@ export function LogTable() {
 	];
 
 	return (
-		<Table
-			title={() => <h1>Logs</h1>}
-			rowKey={(record) => record._id}
-			scroll={{ x: 1000 }}
-			className="components-table-demo-nested"
-			columns={columns}
-			expandable={{ expandedRowRender }}
-			dataSource={logs}
-			bordered
-			rowClassName={(record, index) =>
-				index % 2 === 0 ? "table-row-light" : "table-row-dark"
-			}
-		/>
+		<>
+			{contextHolder}
+			<Table
+				title={() => <h1>Logs</h1>}
+				rowKey={(record) => record._id}
+				scroll={{ x: 1000 }}
+				className="components-table-demo-nested"
+				columns={columns}
+				expandable={{ expandedRowRender }}
+				dataSource={logs}
+				bordered
+				rowClassName={(record, index) =>
+					index % 2 === 0 ? "table-row-light" : "table-row-dark"
+				}
+			/>
+		</>
 	);
 }

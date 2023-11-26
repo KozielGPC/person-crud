@@ -14,6 +14,7 @@ import { IPhoneNumber } from "../../interfaces/user";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validatePhoneNumberInput } from "../../tools/formValidators";
 import api from "../../providers/api";
+import { errorHandler } from "../../tools/errorHandler";
 const { Option } = Select;
 
 export const PhoneNumbersForm = (props: {
@@ -55,21 +56,23 @@ export const PhoneNumbersForm = (props: {
 					setHasInputsChanged(false);
 				})
 				.catch((error) => {
-					openNotificationWithIcon(
-						notificationApi,
-						"error",
-						"Error updating user phone numbers",
-						error?.response?.data?.message ??
-							"Something wrong occurred on updating user phone numbers"
-					);
+					errorHandler(error, notificationApi);
+					// openNotificationWithIcon(
+					// 	notificationApi,
+					// 	"error",
+					// 	"Error updating user phone numbers",
+					// 	error?.response?.data?.message ??
+					// 		"Something wrong occurred on updating user phone numbers"
+					// );
 				});
-		} catch (errInfo) {
-			openNotificationWithIcon(
-				notificationApi,
-				"error",
-				"Error editing user",
-				"Something wrong occurred on updating user phone numbers"
-			);
+		} catch (error) {
+			errorHandler(error, notificationApi);
+			// openNotificationWithIcon(
+			// 	notificationApi,
+			// 	"error",
+			// 	"Error editing user",
+			// 	"Something wrong occurred on updating user phone numbers"
+			// );
 		}
 	};
 

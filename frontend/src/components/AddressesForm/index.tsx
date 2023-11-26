@@ -13,6 +13,7 @@ import { IAddress } from "../../interfaces/user";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validateZipCodeInput } from "../../tools/formValidators";
 import api from "../../providers/api";
+import { errorHandler } from "../../tools/errorHandler";
 
 export const AddressesForm = (props: {
 	addresses: IAddress[];
@@ -36,8 +37,6 @@ export const AddressesForm = (props: {
 				};
 			});
 
-		console.log("input", input);
-
 		try {
 			api
 				.put(`/users/${props.userId}/addresses`, { addresses: input })
@@ -55,21 +54,23 @@ export const AddressesForm = (props: {
 					setHasInputsChanged(false);
 				})
 				.catch((error) => {
-					openNotificationWithIcon(
-						notificationApi,
-						"error",
-						"Error updating user addresses",
-						error?.response?.data?.message ??
-							"Something wrong occurred on updating user addresses"
-					);
+					errorHandler(error, notificationApi);
+					// openNotificationWithIcon(
+					// 	notificationApi,
+					// 	"error",
+					// 	"Error updating user addresses",
+					// 	error?.response?.data?.message ??
+					// 		"Something wrong occurred on updating user addresses"
+					// );
 				});
-		} catch (errInfo) {
-			openNotificationWithIcon(
-				notificationApi,
-				"error",
-				"Error updating user addresses",
-				"Something wrong occurred on updating user addresses"
-			);
+		} catch (error) {
+			errorHandler(error, notificationApi);
+			// openNotificationWithIcon(
+			// 	notificationApi,
+			// 	"error",
+			// 	"Error updating user addresses",
+			// 	"Something wrong occurred on updating user addresses"
+			// );
 		}
 	};
 

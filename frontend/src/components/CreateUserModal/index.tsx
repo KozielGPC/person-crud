@@ -24,6 +24,7 @@ import {
 	validateZipCodeInput,
 } from "../../tools/formValidators";
 import api from "../../providers/api";
+import { errorHandler } from "../../tools/errorHandler";
 
 const { Option } = Select;
 
@@ -72,13 +73,6 @@ const CreateUserModal = (props: props) => {
 						api.get("/users").then((response) => {
 							if (response.status === 200) {
 								props.setUsers(response.data.data);
-							} else {
-								openNotificationWithIcon(
-									notificationApi,
-									"error",
-									"Error fetching users",
-									"Something wrong occurred on fetching users"
-								);
 							}
 						});
 					})
@@ -86,12 +80,13 @@ const CreateUserModal = (props: props) => {
 						console.log(error);
 
 						setConfirmLoading(false);
-						openNotificationWithIcon(
-							notificationApi,
-							"error",
-							"Error on creating user",
-							JSON.stringify(error.response.data)
-						);
+						errorHandler(error, notificationApi);
+						// openNotificationWithIcon(
+						// 	notificationApi,
+						// 	"error",
+						// 	"Error on creating user",
+						// 	JSON.stringify(error.response.data)
+						// );
 					});
 			})
 			.catch((info) => {

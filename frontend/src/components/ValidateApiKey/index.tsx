@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import { Form, Input, Button, Typography, Tag } from "antd";
+import { Form, Input, Button, Typography, Tag, notification } from "antd";
 import { Col, Row } from "antd";
 import api from "../../providers/api";
+import { openNotificationWithIcon } from "../../tools/showNotification";
 
 type FieldType = {
 	apiKey?: string;
@@ -12,21 +13,29 @@ export const ApiKeyValidatorContainer = () => {
 	const { apiKey, setApiKey, validApiKey, setValidApiKey } =
 		useContext(ApiKeyContext);
 
+	const [notificationApi, contextHolder] = notification.useNotification();
 	const handleSubmit = async () => {
-		const { data, status } = await api.get("/validate-api-key", {
-			params: {
-				apiKey: apiKey,
-			},
+		const { data, status } = await api.post("/auth/validate", {
+			apiKey: apiKey,
 		});
 		if (status === 200 && data.data.isValid) {
+			api.defaults.headers.common["token"] = data.data.token;
 			setValidApiKey(true);
 		} else {
 			setValidApiKey(false);
+			delete api.defaults.headers.common["token"];
 		}
 	};
 
-	const onFinishFailed = (errorInfo: any) => {
-		console.log("Failed:", errorInfo);
+	const onFinishFailed = () => {
+		setValidApiKey(false);
+		delete api.defaults.headers.common["token"];
+		openNotificationWithIcon(
+			notificationApi,
+			"error",
+			"Unexpected exception on validating api key",
+			"Something wrong occurred on validating api key"
+		);
 	};
 
 	return (
