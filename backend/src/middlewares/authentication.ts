@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { JwtService } from "../services/jwt";
 import { responseHandler } from "../tools/apiResponseHandler";
 import { redisClient } from "../services/redis/service";
 import { config } from "../config/config";
