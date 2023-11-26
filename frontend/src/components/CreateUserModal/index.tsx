@@ -7,13 +7,11 @@ import {
 	Select,
 	Modal,
 	notification,
-	Divider,
 	Row,
 	Col,
 	Card,
 	Typography,
 } from "antd";
-import axios from "axios";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import moment from "moment";
 import type { RangePickerProps } from "antd/es/date-picker";
@@ -25,6 +23,7 @@ import {
 	validatePhoneNumberInput,
 	validateZipCodeInput,
 } from "../../tools/formValidators";
+import api from "../../providers/api";
 
 const { Option } = Select;
 
@@ -37,11 +36,11 @@ const CreateUserModal = (props: props) => {
 	const [open, setOpen] = useState(false);
 	const [confirmLoading, setConfirmLoading] = useState(false);
 
-	const { apiKey, validApiKey } = useContext(ApiKeyContext);
+	const { validApiKey } = useContext(ApiKeyContext);
 
 	const [form] = Form.useForm();
 
-	const [api, contextHolder] = notification.useNotification();
+	const [notificationApi, contextHolder] = notification.useNotification();
 
 	const disabledDate: RangePickerProps["disabledDate"] = (current) => {
 		return current && current > moment().endOf("day");
@@ -57,47 +56,38 @@ const CreateUserModal = (props: props) => {
 		form
 			.validateFields()
 			.then((values) => {
-				axios
-					.post("http://localhost:3001/users", values, {
-						headers: {
-							"x-api-key": apiKey,
-						},
-					})
+				api
+					.post("/users", values)
 					.then(() => {
 						setConfirmLoading(false);
 						setOpen(false);
 						form.resetFields();
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"success",
 							"User created successfully",
 							"User created successfully"
 						);
-						axios
-							.get("http://localhost:3001/users", {
-								headers: {
-									"x-api-key": apiKey,
-								},
-							})
-							.then((response) => {
-								if (response.status === 200) {
-									props.setUsers(response.data.data);
-								} else {
-									openNotificationWithIcon(
-										api,
-										"error",
-										"Error fetching users",
-										"Something wrong occurred on fetching users"
-									);
-								}
-							});
+
+						api.get("/users").then((response) => {
+							if (response.status === 200) {
+								props.setUsers(response.data.data);
+							} else {
+								openNotificationWithIcon(
+									notificationApi,
+									"error",
+									"Error fetching users",
+									"Something wrong occurred on fetching users"
+								);
+							}
+						});
 					})
 					.catch((error) => {
 						console.log(error);
 
 						setConfirmLoading(false);
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"error",
 							"Error on creating user",
 							JSON.stringify(error.response.data)

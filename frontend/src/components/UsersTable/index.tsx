@@ -13,7 +13,6 @@ import {
 	EditOutlined,
 	StopOutlined,
 } from "@ant-design/icons";
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
@@ -28,6 +27,7 @@ import {
 } from "../../tools/formValidators";
 import { PhoneNumbersForm } from "../PhoneNumbersForm";
 import { AddressesForm } from "../AddressesForm";
+import api from "../../providers/api";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -80,23 +80,17 @@ export function UserTable() {
 
 	const isEditing = (record: IUser) => record._id === editingKey;
 
-	const [api, contextHolder] = notification.useNotification();
+	const [notificationApi, contextHolder] = notification.useNotification();
 
 	useEffect(() => {
 		if (validApiKey) {
-			axios
-				.get("http://localhost:3001/users", {
-					headers: {
-						"x-api-key": apiKey,
-					},
-				})
-				.then((response) => {
-					if (response.status === 200) {
-						setUsers(response.data.data);
-					} else {
-						setUsers([]);
-					}
-				});
+			api.get("/users").then((response) => {
+				if (response.status === 200) {
+					setUsers(response.data.data);
+				} else {
+					setUsers([]);
+				}
+			});
 		} else {
 			setUsers([]);
 		}
@@ -134,12 +128,8 @@ export function UserTable() {
 			row["dateOfBirth"] = moment(row.dateOfBirth).toISOString();
 
 			form.validateFields().then(() => {
-				axios
-					.put(`http://localhost:3001/users/${key}`, row, {
-						headers: {
-							"x-api-key": apiKey,
-						},
-					})
+				api
+					.put(`/users/${key}`, row)
 					.then(() => {
 						const updatedUser = [...users];
 						const index = updatedUser.findIndex((item) => key === item._id);
@@ -155,7 +145,7 @@ export function UserTable() {
 							setUsers(updatedUser);
 						}
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"success",
 							"User edited successfully",
 							"User edited successfully"
@@ -163,7 +153,7 @@ export function UserTable() {
 					})
 					.catch((error) => {
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"error",
 							"Error editing user",
 							error?.response?.data?.message ??
@@ -175,7 +165,7 @@ export function UserTable() {
 			setEditingKey("");
 		} catch (errInfo) {
 			openNotificationWithIcon(
-				api,
+				notificationApi,
 				"error",
 				"Error editing user",
 				"Something wrong occurred on editing user"
@@ -197,38 +187,28 @@ export function UserTable() {
 	};
 
 	const deleteUser = (id: string) => {
-		axios
-			.delete(`http://localhost:3001/users/${id}`, {
-				headers: {
-					"x-api-key": apiKey,
-				},
-			})
+		api
+			.delete(`/users/${id}`)
 			.then((response) => {
 				if (response.status === 200) {
 					openNotificationWithIcon(
-						api,
+						notificationApi,
 						"success",
 						"User deleted successfully",
 						"User deleted successfully"
 					);
-					axios
-						.get("http://localhost:3001/users", {
-							headers: {
-								"x-api-key": apiKey,
-							},
-						})
-						.then((response) => {
-							if (response.status === 200) {
-								setUsers(response.data.data);
-							} else {
-								setUsers([]);
-							}
-						});
+					api.get("/users").then((response) => {
+						if (response.status === 200) {
+							setUsers(response.data.data);
+						} else {
+							setUsers([]);
+						}
+					});
 				}
 			})
 			.catch((error) => {
 				openNotificationWithIcon(
-					api,
+					notificationApi,
 					"error",
 					"Error on deleting user",
 					"Something wrong occurred on deleting user"

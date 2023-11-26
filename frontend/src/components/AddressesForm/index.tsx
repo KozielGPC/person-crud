@@ -8,19 +8,17 @@ import {
 	Row,
 	Col,
 } from "antd";
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { IAddress } from "../../interfaces/user";
-import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validateZipCodeInput } from "../../tools/formValidators";
+import api from "../../providers/api";
 
 export const AddressesForm = (props: {
 	addresses: IAddress[];
 	userId: string;
 }) => {
-	const { apiKey } = useContext(ApiKeyContext);
-	const [api, contextHolder] = notification.useNotification();
+	const [notificationApi, contextHolder] = notification.useNotification();
 
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
@@ -41,20 +39,12 @@ export const AddressesForm = (props: {
 		console.log("input", input);
 
 		try {
-			axios
-				.put(
-					`http://localhost:3001/users/${props.userId}/addresses`,
-					{ addresses: input },
-					{
-						headers: {
-							"x-api-key": apiKey,
-						},
-					}
-				)
+			api
+				.put(`/users/${props.userId}/addresses`, { addresses: input })
 				.then((response) => {
 					if (response.status === 200) {
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"success",
 							"User addresses updated successfully",
 							"User addresses updated successfully"
@@ -66,7 +56,7 @@ export const AddressesForm = (props: {
 				})
 				.catch((error) => {
 					openNotificationWithIcon(
-						api,
+						notificationApi,
 						"error",
 						"Error updating user addresses",
 						error?.response?.data?.message ??
@@ -75,7 +65,7 @@ export const AddressesForm = (props: {
 				});
 		} catch (errInfo) {
 			openNotificationWithIcon(
-				api,
+				notificationApi,
 				"error",
 				"Error updating user addresses",
 				"Something wrong occurred on updating user addresses"

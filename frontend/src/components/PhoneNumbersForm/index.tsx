@@ -9,20 +9,18 @@ import {
 	Row,
 	Col,
 } from "antd";
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { IPhoneNumber } from "../../interfaces/user";
-import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validatePhoneNumberInput } from "../../tools/formValidators";
+import api from "../../providers/api";
 const { Option } = Select;
 
 export const PhoneNumbersForm = (props: {
 	phoneNumbers: IPhoneNumber[];
 	userId: string;
 }) => {
-	const { apiKey } = useContext(ApiKeyContext);
-	const [api, contextHolder] = notification.useNotification();
+	const [notificationApi, contextHolder] = notification.useNotification();
 
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
@@ -38,23 +36,15 @@ export const PhoneNumbersForm = (props: {
 				};
 			});
 
-		console.log("input", input);
-
 		try {
-			axios
-				.put(
-					`http://localhost:3001/users/${props.userId}/phoneNumbers`,
-					{ phoneNumbers: input },
-					{
-						headers: {
-							"x-api-key": apiKey,
-						},
-					}
-				)
+			api
+				.put(`/users/${props.userId}/phoneNumbers`, {
+					phoneNumbers: input,
+				})
 				.then((response) => {
 					if (response.status === 200) {
 						openNotificationWithIcon(
-							api,
+							notificationApi,
 							"success",
 							"User phone numbers updated successfully",
 							"User phone numbers updated successfully"
@@ -66,7 +56,7 @@ export const PhoneNumbersForm = (props: {
 				})
 				.catch((error) => {
 					openNotificationWithIcon(
-						api,
+						notificationApi,
 						"error",
 						"Error updating user phone numbers",
 						error?.response?.data?.message ??
@@ -75,7 +65,7 @@ export const PhoneNumbersForm = (props: {
 				});
 		} catch (errInfo) {
 			openNotificationWithIcon(
-				api,
+				notificationApi,
 				"error",
 				"Error editing user",
 				"Something wrong occurred on updating user phone numbers"
