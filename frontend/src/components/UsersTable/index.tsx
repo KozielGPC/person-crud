@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { IPhoneNumber, IUser } from "../../interfaces/user";
+import { IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import CreateUserModal from "../CreateUserModal";
 import moment, { Moment } from "moment";
@@ -25,9 +25,9 @@ import { Rule } from "antd/es/form";
 import {
 	validateDocumentNumberInput,
 	validateEmailInput,
-	validateZipCodeInput,
 } from "../../tools/formValidators";
 import { PhoneNumbersForm } from "../PhoneNumbersForm";
+import { AddressesForm } from "../AddressesForm";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -185,72 +185,6 @@ export function UserTable() {
 	};
 
 	const expandedRowRender = (row: IUser) => {
-		const columnsAddress = [
-			{
-				title: "Street",
-				dataIndex: "street",
-				key: "street",
-				editable: true,
-				rules: [{ required: true, message: "Please input the street!" }],
-			},
-			{
-				title: "City",
-				dataIndex: "city",
-				key: "city",
-				editable: true,
-				rules: [{ required: true, message: "Please input the city!" }],
-			},
-			{
-				title: "State",
-				dataIndex: "state",
-				key: "state",
-				editable: true,
-				rules: [{ required: true, message: "Please input the State!" }],
-			},
-			{
-				title: "Zip Code",
-				dataIndex: "zipCode",
-				key: "zipCode",
-				editable: true,
-				rules: [
-					{
-						required: true,
-						message: "Please input the zipCode!",
-					},
-					{
-						validator: validateZipCodeInput,
-						message: "Invalid CEP input",
-					},
-				],
-			},
-			{
-				title: "Action",
-				dataIndex: "operation",
-				key: "operation",
-				render: () => (
-					<span className="table-operation">
-						<a>Pause</a>
-						<a>Stop</a>
-					</span>
-				),
-			},
-		];
-
-		const mergedAddressesColumns = columnsAddress.map((col) => {
-			if (!col.editable) {
-				return col;
-			}
-			return {
-				...col,
-				onCell: (record: IPhoneNumber) => ({
-					record,
-					inputType: "text",
-					dataIndex: col.dataIndex,
-					title: col.title,
-				}),
-			};
-		});
-
 		const dataAddresses = row.addresses;
 
 		const dataPhoneNumbers = row.phoneNumbers;
@@ -258,17 +192,7 @@ export function UserTable() {
 			<div style={{ padding: "0px 40px 20px 40px" }}>
 				<PhoneNumbersForm phoneNumbers={dataPhoneNumbers} userId={row._id} />
 				<Divider />
-				<Table
-					components={{
-						body: {
-							cell: EditableCell,
-						},
-					}}
-					title={() => <h1>Addresses</h1>}
-					columns={columnsAddress}
-					dataSource={dataAddresses}
-					pagination={false}
-				/>
+				<AddressesForm addresses={dataAddresses} userId={row._id}/>
 			</div>
 		);
 	};
