@@ -1,4 +1,4 @@
-import { Form, Input, notification, Button, Layout, Card } from "antd";
+import { Form, Input, notification, Button, Layout, Card, Row, Col } from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { IAddress } from "../../interfaces/user";
@@ -95,84 +95,90 @@ export const AddressesForm = (props: {
 						>
 							<Form.List name="addresses">
 								{(fields, { add, remove }) => (
-									<>
+									<Row gutter={16}>
 										{fields.map(({ key, name, ...restField }) => (
-											<div key={key}>
-												<Form.Item
-													{...restField}
-													label="Street"
-													name={[name, "street"]}
-													rules={[
-														{
-															required: true,
-															message: "Please input the street!",
-														},
-													]}
-												>
-													<Input placeholder="Rua São Luíz" />
-												</Form.Item>
+											<Col xs={24} sm={12} md={8} lg={6} key={key}>
+												<Card title={`Address ${key + 1}`} style={{ marginBottom: "16px" }}>
+													<div key={key}>
+														<Form.Item
+															{...restField}
+															label="Street"
+															name={[name, "street"]}
+															rules={[
+																{
+																	required: true,
+																	message: "Please input the street!",
+																},
+															]}
+														>
+															<Input placeholder="Rua São Luíz" />
+														</Form.Item>
 
-												<Form.Item
-													{...restField}
-													label="City"
-													name={[name, "city"]}
-													rules={[
-														{
-															required: true,
-															message: "Please input the city!",
-														},
-													]}
-												>
-													<Input placeholder="São José do Rio Preto" />
-												</Form.Item>
+														<Form.Item
+															{...restField}
+															label="City"
+															name={[name, "city"]}
+															rules={[
+																{
+																	required: true,
+																	message: "Please input the city!",
+																},
+															]}
+														>
+															<Input placeholder="São José do Rio Preto" />
+														</Form.Item>
 
-												<Form.Item
-													{...restField}
-													label="State"
-													name={[name, "state"]}
-													rules={[
-														{
-															required: true,
-															message: "Please input the State!",
-														},
-													]}
-												>
-													<Input placeholder="São Paulo" />
-												</Form.Item>
+														<Form.Item
+															{...restField}
+															label="State"
+															name={[name, "state"]}
+															rules={[
+																{
+																	required: true,
+																	message: "Please input the State!",
+																},
+															]}
+														>
+															<Input placeholder="São Paulo" />
+														</Form.Item>
 
-												<Form.Item
-													{...restField}
-													label="ZipCode"
-													name={[name, "zipCode"]}
-													rules={[
-														{
-															required: true,
-															message: "Please input the zipCode!",
-														},
-														{
-															validator: validateZipCodeInput,
-															message: "Invalid CEP input",
-														},
-													]}
-												>
-													<Input placeholder="89451-010" />
-												</Form.Item>
+														<Form.Item
+															{...restField}
+															label="ZipCode"
+															name={[name, "zipCode"]}
+															rules={[
+																{
+																	required: true,
+																	message: "Please input the zipCode!",
+																},
+																{
+																	validator: validateZipCodeInput,
+																	message: "Invalid CEP input",
+																},
+															]}
+														>
+															<Input placeholder="89451-010" />
+														</Form.Item>
 
-												<Button type="link" onClick={() => remove(name)}>
-													Remove Address
-												</Button>
-											</div>
+														<Button type="link" onClick={() => remove(name)}>
+															Remove Address
+														</Button>
+													</div>
+												</Card>
+											</Col>
 										))}
-										<Form.Item>
-											<Button
-												type="dashed"
-												onClick={() => add()}
-												style={{ width: "100%" }}
-											>
-												Add Address
-											</Button>
-										</Form.Item>
-									</>
+										<Col xs={24} sm={12} md={8} lg={6}>
+											<Form.Item>
+												<Button
+													type="dashed"
+													onClick={() => add()}
+													style={{ width: "100%" }}
+												>
+													Add Address
+												</Button>
+											</Form.Item>
+										</Col>
+									</Row>
 								)}
 							</Form.List>
 						</Form>

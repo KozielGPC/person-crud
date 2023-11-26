@@ -2,30 +2,19 @@ import React from "react";
 import { UserTable } from "../../components/UsersTable";
 import { LogTable } from "../../components/LogsTable";
 import { ApiKeyValidatorContainer } from "../../components/ValidateApiKey";
-import { Divider, Flex, Row } from "antd";
+import { Divider, Row, Col } from "antd";
 
 const Home = () => {
 	return (
-		<Flex
-			style={{
-				flexDirection: "column",
-				padding: "10px 50px",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<Row>
+		<Row justify="center" align="middle">
+			<Col xs={24} sm={22} md={20} lg={18} xl={16} xxl={14}>
 				<ApiKeyValidatorContainer />
-			</Row>
-			<Row>
 				<Divider style={{ height: "1px", backgroundColor: "black" }} />
 				<UserTable />
-			</Row>
-			<Row>
 				<Divider style={{ height: "1px", backgroundColor: "black" }} />
 				<LogTable />
-			</Row>
-		</Flex>
+			</Col>
+		</Row>
 	);
 };
 

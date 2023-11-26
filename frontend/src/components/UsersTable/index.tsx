@@ -43,6 +43,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 const disabledDate = (current: Moment) => {
 	return current && current > moment().endOf("day");
 };
+
 const EditableCell: React.FC<EditableCellProps> = ({
 	editing,
 	dataIndex,
@@ -132,8 +133,6 @@ export function UserTable() {
 			const row = (await form.validateFields()) as IUser;
 			row["dateOfBirth"] = moment(row.dateOfBirth).toISOString();
 
-			console.log(form.getFieldsValue());
-
 			form.validateFields().then(() => {
 				axios
 					.put(`http://localhost:3001/users/${key}`, row, {
@@ -192,7 +191,7 @@ export function UserTable() {
 			<div style={{ padding: "0px 40px 20px 40px" }}>
 				<PhoneNumbersForm phoneNumbers={dataPhoneNumbers} userId={row._id} />
 				<Divider />
-				<AddressesForm addresses={dataAddresses} userId={row._id}/>
+				<AddressesForm addresses={dataAddresses} userId={row._id} />
 			</div>
 		);
 	};
@@ -368,8 +367,8 @@ export function UserTable() {
 							<CreateUserModal setUsers={setUsers} users={users} key={apiKey} />
 						</div>
 					)}
-					rowKey={(record) => record._id}
 					scroll={{ x: 1300 }}
+					rowKey={(record) => record._id}
 					className="components-table-demo-nested"
 					columns={mergedColumns}
 					expandable={{ expandedRowRender }}

@@ -7,6 +7,11 @@ import {
 	Select,
 	Modal,
 	notification,
+	Divider,
+	Row,
+	Col,
+	Card,
+	Typography,
 } from "antd";
 import axios from "axios";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
@@ -14,7 +19,12 @@ import moment from "moment";
 import type { RangePickerProps } from "antd/es/date-picker";
 import { IUser } from "../../interfaces/user";
 import { openNotificationWithIcon } from "../../tools/showNotification";
-import { validateDocumentNumberInput, validateEmailInput, validatePhoneNumberInput, validateZipCodeInput } from "../../tools/formValidators";
+import {
+	validateDocumentNumberInput,
+	validateEmailInput,
+	validatePhoneNumberInput,
+	validateZipCodeInput,
+} from "../../tools/formValidators";
 
 const { Option } = Select;
 
@@ -190,136 +200,166 @@ const CreateUserModal = (props: props) => {
 						<Input placeholder="828.541.870-75" />
 					</Form.Item>
 
+					<Typography.Title level={4}>Addresses</Typography.Title>
+
 					<Form.List name="addresses">
 						{(fields, { add, remove }) => (
-							<>
-								{fields.map(({ key, name, ...restField }) => (									
-									<div key={key}>
-										<Form.Item
-											{...restField}
-											label="Street"
-											name={[name, "street"]}
-											rules={[
-												{ required: true, message: "Please input the street!" },
-											]}
+							<Row gutter={16}>
+								{fields.map(({ key, name, ...restField }) => (
+									<Col xs={24} sm={12} md={8} lg={6} key={key}>
+										<Card
+											title={`Address ${key + 1}`}
+											style={{ marginBottom: "16px" }}
 										>
-											<Input placeholder="Rua São Luíz" />
-										</Form.Item>
+											<div key={key}>
+												<Form.Item
+													{...restField}
+													label="Street"
+													name={[name, "street"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the street!",
+														},
+													]}
+												>
+													<Input placeholder="Rua São Luíz" />
+												</Form.Item>
 
-										<Form.Item
-											{...restField}
-											label="City"
-											name={[name, "city"]}
-											rules={[
-												{ required: true, message: "Please input the city!" },
-											]}
-										>
-											<Input placeholder="São José do Rio Preto" />
-										</Form.Item>
+												<Form.Item
+													{...restField}
+													label="City"
+													name={[name, "city"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the city!",
+														},
+													]}
+												>
+													<Input placeholder="São José do Rio Preto" />
+												</Form.Item>
 
-										<Form.Item
-											{...restField}
-											label="State"
-											name={[name, "state"]}
-											rules={[
-												{ required: true, message: "Please input the State!" },
-											]}
-										>
-											<Input placeholder="São Paulo" />
-										</Form.Item>
+												<Form.Item
+													{...restField}
+													label="State"
+													name={[name, "state"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the State!",
+														},
+													]}
+												>
+													<Input placeholder="São Paulo" />
+												</Form.Item>
 
-										<Form.Item
-											{...restField}
-											label="ZipCode"
-											name={[name, "zipCode"]}
-											rules={[
-												{
-													required: true,
-													message: "Please input the zipCode!",
-												},
-												{
-													validator: validateZipCodeInput,
-													message: "Invalid CEP input",
-												},
-											]}
-										>
-											<Input placeholder="89451-010" />
-										</Form.Item>
+												<Form.Item
+													{...restField}
+													label="ZipCode"
+													name={[name, "zipCode"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the zipCode!",
+														},
+														{
+															validator: validateZipCodeInput,
+															message: "Invalid CEP input",
+														},
+													]}
+												>
+													<Input placeholder="89451-010" />
+												</Form.Item>
 
-										<Button type="link" onClick={() => remove(name)}>
-											Remove Address
-										</Button>
-									</div>
+												<Button type="link" onClick={() => remove(name)}>
+													Remove Address
+												</Button>
+											</div>
+										</Card>
+									</Col>
 								))}
-								<Form.Item>
-									<Button
-										type="dashed"
-										onClick={() => add()}
-										style={{ width: "100%" }}
-									>
-										Add Address
-									</Button>
-								</Form.Item>
-							</>
+								<Col xs={24} sm={12} md={8} lg={6}>
+									<Form.Item>
+										<Button
+											type="dashed"
+											onClick={() => add()}
+											style={{ width: "100%" }}
+										>
+											Add Address
+										</Button>
+									</Form.Item>
+								</Col>
+							</Row>
 						)}
 					</Form.List>
 
+					<Typography.Title level={4}>Phone Numbers</Typography.Title>
 					<Form.List name="phoneNumbers">
 						{(fields, { add, remove }) => (
-							<>
+							<Row gutter={16}>
 								{fields.map(({ key, name, ...restField }) => (
-									<div key={key}>
-										<Form.Item
-											{...restField}
-											label="Number"
-											name={[name, "number"]}
-											rules={[
-												{
-													required: true,
-													message: "Please input the phone number!",
-												},
-												{
-													validator: validatePhoneNumberInput,
-													message: "Invalid phone number input",
-												},
-											]}
+									<Col xs={24} sm={12} md={8} lg={6} key={key}>
+										<Card
+											title={`Phone Number ${key + 1}`}
+											style={{ marginBottom: "16px" }}
 										>
-											<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
-										</Form.Item>
+											<div>
+												<Form.Item
+													{...restField}
+													label="Number"
+													name={[name, "number"]}
+													rules={[
+														{
+															required: true,
+															message: "Please input the phone number!",
+														},
+														{
+															validator: validatePhoneNumberInput,
+															message: "Invalid phone number input",
+														},
+													]}
+												>
+													<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
+												</Form.Item>
 
-										<Form.Item
-											{...restField}
-											label="Type"
-											name={[name, "type"]}
-											rules={[
-												{
-													required: true,
-													message: "Please select the phone number type!",
-												},
-											]}
-										>
-											<Select>
-												<Option value="home">Home</Option>
-												<Option value="work">Work</Option>
-												<Option value="personal">Personal</Option>
-											</Select>
-										</Form.Item>
+												<Form.Item
+													{...restField}
+													label="Type"
+													name={[name, "type"]}
+													rules={[
+														{
+															required: true,
+															message: "Please select the phone number type!",
+														},
+													]}
+												>
+													<Select>
+														<Option value="home">Home</Option>
+														<Option value="work">Work</Option>
+														<Option value="personal">Personal</Option>
+													</Select>
+												</Form.Item>
 
-										<Button type="link" onClick={() => remove(name)}>
-											Remove Phone Number
-										</Button>
-									</div>
+												<Button type="link" onClick={() => remove(name)}>
+													Remove Phone Number
+												</Button>
+											</div>
+										</Card>
+									</Col>
 								))}
-								<Form.Item>
-									<Button
-										type="dashed"
-										onClick={() => add()}
-										style={{ width: "100%" }}
-									>
-										Add Phone Number
-									</Button>
-								</Form.Item>
-							</>
+								<Col xs={24} sm={12} md={8} lg={6}>
+									<Form.Item>
+										<Button
+											type="dashed"
+											onClick={() => add()}
+											style={{ width: "100%" }}
+										>
+											Add Phone Number
+										</Button>
+									</Form.Item>
+								</Col>
+							</Row>
 						)}
 					</Form.List>
 				</Form>

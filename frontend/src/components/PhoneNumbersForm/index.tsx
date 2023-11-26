@@ -6,6 +6,8 @@ import {
 	Select,
 	Layout,
 	Card,
+	Row,
+	Col,
 } from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
@@ -102,60 +104,70 @@ export const PhoneNumbersForm = (props: {
 						>
 							<Form.List name="phoneNumbers">
 								{(fields, { add, remove }) => (
-									<>
+									<Row gutter={16}>
 										{fields.map(({ key, name, ...restField }) => (
-											<div key={key}>
-												<Form.Item
-													{...restField}
-													label="Number"
-													name={[name, "number"]}
-													rules={[
-														{
-															required: true,
-															message: "Please input the phone number!",
-														},
-														{
-															validator: validatePhoneNumberInput,
-															message: "Invalid phone number input",
-														},
-													]}
+											<Col xs={24} sm={12} md={8} lg={6} key={key}>
+												<Card
+													title={`Phone Number ${key + 1}`}
+													style={{ marginBottom: "16px" }}
 												>
-													<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
-												</Form.Item>
+													<div>
+														<Form.Item
+															{...restField}
+															label="Number"
+															name={[name, "number"]}
+															rules={[
+																{
+																	required: true,
+																	message: "Please input the phone number!",
+																},
+																{
+																	validator: validatePhoneNumberInput,
+																	message: "Invalid phone number input",
+																},
+															]}
+														>
+															<Input placeholder="(44) 1234-1234 or (44) 91234-1234" />
+														</Form.Item>
 
-												<Form.Item
-													{...restField}
-													label="Type"
-													name={[name, "type"]}
-													rules={[
-														{
-															required: true,
-															message: "Please select the phone number type!",
-														},
-													]}
-												>
-													<Select>
-														<Option value="home">Home</Option>
-														<Option value="work">Work</Option>
-														<Option value="personal">Personal</Option>
-													</Select>
-												</Form.Item>
+														<Form.Item
+															{...restField}
+															label="Type"
+															name={[name, "type"]}
+															rules={[
+																{
+																	required: true,
+																	message:
+																		"Please select the phone number type!",
+																},
+															]}
+														>
+															<Select>
+																<Option value="home">Home</Option>
+																<Option value="work">Work</Option>
+																<Option value="personal">Personal</Option>
+															</Select>
+														</Form.Item>
 
-												<Button type="link" onClick={() => remove(name)}>
-													Remove Phone Number
-												</Button>
-											</div>
+														<Button type="link" onClick={() => remove(name)}>
+															Remove Phone Number
+														</Button>
+													</div>
+												</Card>
+											</Col>
 										))}
-										<Form.Item>
-											<Button
-												type="dashed"
-												onClick={() => add()}
-												style={{ width: "100%" }}
-											>
-												Add Phone Number
-											</Button>
-										</Form.Item>
-									</>
+										<Col xs={24} sm={12} md={8} lg={6}>
+											<Form.Item>
+												<Button
+													type="dashed"
+													onClick={() => add()}
+													style={{ width: "100%" }}
+												>
+													Add Phone Number
+												</Button>
+											</Form.Item>
+										</Col>
+									</Row>
 								)}
 							</Form.List>
 						</Form>
