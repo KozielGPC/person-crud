@@ -129,8 +129,7 @@ export class UserController {
 					? phoneNumber._id
 					: new mongoose.Types.ObjectId();
 			});
-
-			console.dir(input, { depth: null });
+			
 			return await UserModel.findByIdAndUpdate(
 				req.params.id,
 				{

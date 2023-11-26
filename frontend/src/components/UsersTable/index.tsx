@@ -27,7 +27,7 @@ import {
 	validateEmailInput,
 	validateZipCodeInput,
 } from "../../tools/formValidators";
-import { PhoneNumberTable } from "../PhoneNumbersTable";
+import { PhoneNumbersForm } from "../PhoneNumbersForm";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -256,7 +256,7 @@ export function UserTable() {
 		const dataPhoneNumbers = row.phoneNumbers;
 		return (
 			<div style={{ padding: "0px 40px 20px 40px" }}>
-				<PhoneNumberTable phoneNumbers={dataPhoneNumbers} userId={row._id}/>
+				<PhoneNumbersForm phoneNumbers={dataPhoneNumbers} userId={row._id} />
 				<Divider />
 				<Table
 					components={{

@@ -193,7 +193,7 @@ const CreateUserModal = (props: props) => {
 					<Form.List name="addresses">
 						{(fields, { add, remove }) => (
 							<>
-								{fields.map(({ key, name, ...restField }) => (
+								{fields.map(({ key, name, ...restField }) => (									
 									<div key={key}>
 										<Form.Item
 											{...restField}
@@ -301,6 +301,7 @@ const CreateUserModal = (props: props) => {
 											<Select>
 												<Option value="home">Home</Option>
 												<Option value="work">Work</Option>
+												<Option value="personal">Personal</Option>
 											</Select>
 										</Form.Item>
 
