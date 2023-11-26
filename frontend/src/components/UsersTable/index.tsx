@@ -347,7 +347,7 @@ export function UserTable() {
 							<CreateUserModal setUsers={setUsers} users={users} key={apiKey} />
 						</div>
 					)}
-					scroll={{ x: 1300 }}
+					scroll={{ x: 1000 }}
 					rowKey={(record) => record._id}
 					className="components-table-demo-nested"
 					columns={mergedColumns}

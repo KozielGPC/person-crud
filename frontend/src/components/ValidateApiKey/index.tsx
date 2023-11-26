@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import axios from "axios";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Typography, Tag } from "antd";
 import { Col, Row } from "antd";
+import api from "../../providers/api";
 
 type FieldType = {
 	apiKey?: string;
@@ -13,14 +13,11 @@ export const ApiKeyValidatorContainer = () => {
 		useContext(ApiKeyContext);
 
 	const handleSubmit = async () => {
-		const { data, status } = await axios.get(
-			"http://localhost:3001/validate-api-key",
-			{
-				params: {
-					apiKey: apiKey,
-				},
-			}
-		);
+		const { data, status } = await api.get("/validate-api-key", {
+			params: {
+				apiKey: apiKey,
+			},
+		});
 		if (status === 200 && data.data.isValid) {
 			setValidApiKey(true);
 		} else {
@@ -35,23 +32,46 @@ export const ApiKeyValidatorContainer = () => {
 	return (
 		<div>
 			<Row>
-				<Col span={8}>
+				<Col
+					xs={20}
+					sm={12}
+					md={12}
+					lg={12}
+					xl={12}
+					xxl={12}
+					style={{
+						width: "100%",
+						padding: "10px",
+						alignItems: "center",
+						justifyContent: "center",
+					}}
+				>
+					<Col xs={24} sm={12} md={12} lg={8} xl={8}>
+						<Typography.Title level={3}>
+							<Tag color={validApiKey ? "green" : "red"}>
+								{validApiKey ? "Valid Api Key" : "Invalid Api Key"}
+							</Tag>
+						</Typography.Title>
+					</Col>
+
 					<Form
 						id="api_key_form"
 						name="api_key"
-						labelCol={{ span: 8 }}
-						wrapperCol={{ span: 16 }}
-						style={{ maxWidth: 600 }}
 						initialValues={{ remember: true }}
 						onFinishFailed={onFinishFailed}
 						onSubmitCapture={handleSubmit}
 						autoComplete="on"
 					>
-						<Form.Item<FieldType> label="API Key" name="apiKey">
+						<Form.Item<FieldType>
+							label="API Key"
+							name="apiKey"
+							labelCol={{ span: 24 }}
+							wrapperCol={{ span: 24 }}
+						>
 							<Input onChange={(e) => setApiKey(e.target.value)} />
 						</Form.Item>
 
-						<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+						<Form.Item>
 							<Button
 								type="primary"
 								htmlType="submit"
@@ -62,9 +82,6 @@ export const ApiKeyValidatorContainer = () => {
 							</Button>
 						</Form.Item>
 					</Form>
-				</Col>
-				<Col span={8} offset={8}>
-					<h1>Valid Api Key: {validApiKey ? "true" : "false"}</h1>
 				</Col>
 			</Row>
 		</div>

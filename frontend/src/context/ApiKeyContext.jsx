@@ -11,6 +11,9 @@ export const ApiKeyProvider = ({children}) => {
         if (validApiKey) {
             api.defaults.headers.common['x-api-key'] = apiKey;
         }
+        else{
+            delete api.defaults.headers.common['x-api-key'];
+        }
     }, [validApiKey]);
 
     return <ApiKeyContext.Provider value={{apiKey, setApiKey, validApiKey, setValidApiKey}}>

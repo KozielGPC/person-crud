@@ -87,7 +87,7 @@ export function LogTable() {
 		<Table
 			title={() => <h1>Logs</h1>}
 			rowKey={(record) => record._id}
-			scroll={{ x: 1300 }}
+			scroll={{ x: 1000 }}
 			className="components-table-demo-nested"
 			columns={columns}
 			expandable={{ expandedRowRender }}
