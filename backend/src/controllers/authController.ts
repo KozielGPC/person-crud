@@ -1,11 +1,12 @@
-import config from "../config/config";
-import responseHandler from "../tools/apiResponseHandler";
+import { config } from "../config/config";
+import { JwtService } from "../services/jwt";
+import { responseHandler } from "../tools/apiResponseHandler";
 import { Request, Response } from "express";
 
-export class ApiKeyValidationController {
+export class AuthController {
 	async validate(req: Request, res: Response) {
 		try {
-			const input = req.query as { apiKey: string };
+			const input = req.body as { apiKey: string };
 
 			const isValid = input?.apiKey === config.API_KEY;
 
@@ -15,14 +16,19 @@ export class ApiKeyValidationController {
 					"API KEY validation failed",
 					{
 						isValid: false,
+						token: "",
 					}
 				);
 			}
+
+			const token = JwtService.generateToken();
+
 			return responseHandler.successResponseWithData(
 				res,
 				"API KEY validation successful",
 				{
 					isValid: true,
+					token,
 				}
 			);
 		} catch (error) {

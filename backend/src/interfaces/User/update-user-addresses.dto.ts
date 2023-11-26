@@ -1,5 +1,5 @@
 import { IAddress } from "./address.dto";
 
-export class UpdateUserAddressesDto {
+export interface UpdateUserAddressesDto {
 	addresses: IAddress[];
 }

@@ -1,13 +1,13 @@
 import { validationResult } from "express-validator";
-import connectDB from "../config/database";
 import { CreateUserDto } from "../interfaces/User/create-user-input.dto";
 import { UserModel } from "../models/userModel";
-import responseHandler from "../tools/apiResponseHandler";
+import { responseHandler } from "../tools/apiResponseHandler";
 import { Request, Response } from "express";
 import { UpdateUserDto } from "../interfaces/User/update-user-input.dto";
 import { UpdateUserPhoneNumbersDto } from "../interfaces/User/update-user-phone-numbers.dto";
 import mongoose from "mongoose";
 import { UpdateUserAddressesDto } from "../interfaces/User/update-user-addresses.dto";
+import { connectDB } from "../services/database/database";
 
 export class UserController {
 	async create(req: Request, res: Response) {
@@ -130,7 +130,7 @@ export class UserController {
 					? phoneNumber._id
 					: new mongoose.Types.ObjectId();
 			});
-			
+
 			return await UserModel.findByIdAndUpdate(
 				req.params.id,
 				{
@@ -175,11 +175,9 @@ export class UserController {
 			}
 
 			input.addresses.forEach((address) => {
-				address._id = address._id
-					? address._id
-					: new mongoose.Types.ObjectId();
+				address._id = address._id ? address._id : new mongoose.Types.ObjectId();
 			});
-			
+
 			return await UserModel.findByIdAndUpdate(
 				req.params.id,
 				{

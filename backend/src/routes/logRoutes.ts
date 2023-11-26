@@ -30,4 +30,4 @@ const logController = new LogController();
  *               query: {}
  */
 logRoutes.get("/", logController.findMany);
-export default logRoutes;
+export { logRoutes };

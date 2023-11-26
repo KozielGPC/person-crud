@@ -1,4 +1,5 @@
-import { send } from "../config/producer";
+import { send } from "../services/rabbitmq/producer";
+
 const logger = (req, res, next) => {
 	req.timestamp = Date.now();
 
@@ -28,4 +29,4 @@ const logger = (req, res, next) => {
 	next();
 };
 
-export default logger;
+export { logger };

@@ -69,5 +69,4 @@ class ApiResponseHandler {
 	}
 }
 
-const responseHandler = new ApiResponseHandler();
-export default responseHandler;
+export const responseHandler = new ApiResponseHandler();

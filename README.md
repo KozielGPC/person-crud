@@ -17,7 +17,7 @@
     - [x] Delete
 - [x] Adicionar logs para escrita e leitura (loggar no console e também salvar em uma tabela no banco contendo ação, origem, timestamps, etc)
 - [x] Adicionar validação de input nas rotas
-- [x] Adicionar autenticação nas rotas (gerar API-KEY para validar requisições)
+- [x] Adicionar autenticação com jwt nas rotas (gerar API-KEY para validar requisições)
 - [x] Adicionar error e success handlers personalizados
 - [x] Adicionar documentação de rotas com swagger
 - [x] Implementar fila com RabbitMQ

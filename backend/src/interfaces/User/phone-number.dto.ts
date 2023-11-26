@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export class IPhoneNumber {
+export interface IPhoneNumber {
 	_id?: mongoose.Types.ObjectId;
 	number: string;
 	type: string;

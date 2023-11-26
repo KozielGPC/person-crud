@@ -1,14 +1,22 @@
-import config from "../config/config";
-import responseHandler from "../tools/apiResponseHandler";
+import { Request, Response } from "express";
+import { JwtService } from "../services/jwt";
+import { responseHandler } from "../tools/apiResponseHandler";
 
-const authenticateKey = (req, res, next) => {
-	let api_key = req.header("x-api-key");
+const authenticateKey = (req: Request, res: Response, next) => {
+	let token: string = req.header("token");
+	if (!token) {
+		return responseHandler.unauthorizedResponse(
+			res,
+			"Header 'token' not found"
+		);
+	}
 
-	if (api_key == config.API_KEY) {
+	try {
+		JwtService.verifyToken(token);
 		next();
-	} else {
+	} catch (error) {
 		return responseHandler.unauthorizedResponse(res, "Invalid API Key");
 	}
 };
 
-export default authenticateKey;
+export { authenticateKey };

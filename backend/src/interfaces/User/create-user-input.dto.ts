@@ -1,6 +1,6 @@
 import { IAddress } from "./address.dto";
 import { IPhoneNumber } from "./phone-number.dto";
-export class CreateUserDto {
+export interface CreateUserDto {
 	firstName: string;
 	lastName: string;
 	addresses: IAddress[];

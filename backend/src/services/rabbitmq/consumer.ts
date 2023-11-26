@@ -1,14 +1,11 @@
 import amqp from "amqplib";
-const rabbitMQConfig = {
-	connectionString: "amqp://username:password@localhost:5672",
-	queue: "save_log",
-};
-import LogModel from "../models/logModel";
-import connectDB from "../config/database";
+import { connectDB } from "../database/database";
+import { LogModel } from "../../models/logModel";
+import { config, rabbitMQConfig } from "../../config/config";
 
 export const listen = async () => {
 	try {
-		const connection = await amqp.connect(rabbitMQConfig.connectionString);
+		const connection = await amqp.connect(config.RABBIT_MQ_URL);
 		const channel = await connection.createChannel();
 
 		process.once("SIGINT", async () => {

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export class IAddress {
+export interface IAddress {
 	_id?: mongoose.Types.ObjectId;
 	street: string;
 	city: string;
