@@ -57,7 +57,10 @@ export const ApiKeyValidatorContainer = () => {
 				>
 					<Col xs={24} sm={12} md={12} lg={8} xl={8}>
 						<Typography.Title level={3}>
-							<Tag color={validApiKey ? "green" : "red"}>
+							<Tag
+								color={validApiKey ? "green" : "red"}
+								style={{ fontSize: "18px", padding: "10px" }}
+							>
 								{validApiKey ? "Valid Api Key" : "Invalid Api Key"}
 							</Tag>
 						</Typography.Title>
