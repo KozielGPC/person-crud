@@ -136,69 +136,98 @@ const CreateUserModal = (props: props) => {
 					wrapperCol={{ span: 14 }}
 					initialValues={{ addresses: [], phoneNumbers: [] }}
 				>
-					<Form.Item
-						label="First Name"
-						name="firstName"
-						rules={[
-							{ required: true, message: "Please input the first name!" },
-							{ max: 50, message: "Max 50 characters" },
-						]}
-					>
-						<Input placeholder="John" />
-					</Form.Item>
+					<Row gutter={24}>
+						<Col sm={24} lg={12}>
+							<Form.Item
+								label="First Name"
+								name="firstName"
+								labelCol={{ span: 24 }}
+								wrapperCol={{ span: 24 }}
+								rules={[
+									{ required: true, message: "Please input the first name!" },
+									{ max: 50, message: "Max 50 characters" },
+								]}
+							>
+								<Input placeholder="John" />
+							</Form.Item>
+						</Col>
+						<Col sm={24} lg={12}>
+							<Form.Item
+								label="Last Name"
+								labelCol={{ span: 24 }}
+								wrapperCol={{ span: 24 }}
+								name="lastName"
+								rules={[
+									{
+										required: true,
+										message: "Please input the last name!",
+										max: 50,
+									},
+									{ max: 50, message: "Max 50 characters" },
+								]}
+							>
+								<Input placeholder="Doe" />
+							</Form.Item>
+						</Col>
+						<Col sm={24} md={8} lg={8}>
+							<Form.Item
+								label="Date of Birth"
+								name="dateOfBirth"
+								labelCol={{ span: 24 }}
+								wrapperCol={{ span: 24 }}
+								rules={[
+									{
+										required: true,
+										message: "Please select the date of birth!",
+									},
+								]}
+							>
+								<DatePicker
+									format="DD/MM/YYYY"
+									disabledDate={disabledDate}
+									style={{ width: "100%" }}
+								/>
+							</Form.Item>
+						</Col>
+						<Col sm={24} md={8} lg={8}>
+							<Form.Item
+								label="Email"
+								name="email"
+								labelCol={{ span: 24 }}
+								wrapperCol={{ span: 24 }}
+								rules={[
+									{ required: true, message: "Please input the email!" },
+									{
+										validator: validateEmailInput,
+										message: "Invalid email input",
+									},
+								]}
+							>
+								<Input type="email" placeholder="example@example.com" />
+							</Form.Item>
+						</Col>
 
-					<Form.Item
-						label="Last Name"
-						name="lastName"
-						rules={[
-							{
-								required: true,
-								message: "Please input the last name!",
-								max: 50,
-							},
-							{ max: 50, message: "Max 50 characters" },
-						]}
-					>
-						<Input placeholder="Doe" />
-					</Form.Item>
-
-					<Form.Item
-						label="Date of Birth"
-						name="dateOfBirth"
-						rules={[
-							{ required: true, message: "Please select the date of birth!" },
-						]}
-					>
-						<DatePicker format="DD/MM/YYYY" disabledDate={disabledDate} />
-					</Form.Item>
-
-					<Form.Item
-						label="Email"
-						name="email"
-						rules={[
-							{ required: true, message: "Please input the email!" },
-							{
-								validator: validateEmailInput,
-								message: "Invalid email input",
-							},
-						]}
-					>
-						<Input type="email" placeholder="example@example.com" />
-					</Form.Item>
-
-					<Form.Item
-						label="Document Number"
-						name="documentNumber"
-						rules={[
-							{ required: true, message: "Please input the document number!" },
-							{
-								validator: validateDocumentNumberInput,
-								message: "Invalid document number input",
-							},
-						]}
-					>
-						<Input placeholder="828.541.870-75" />
-					</Form.Item>
+						<Col sm={24} md={8} lg={8}>
+							<Form.Item
+								label="Document Number"
+								name="documentNumber"
+								labelCol={{ span: 24 }}
+								wrapperCol={{ span: 24 }}
+								rules={[
+									{
+										required: true,
+										message: "Please input the document number!",
+									},
+									{
+										validator: validateDocumentNumberInput,
+										message: "Invalid document number input",
+									},
+								]}
+							>
+								<Input placeholder="828.541.870-75" />
+							</Form.Item>
+						</Col>
+					</Row>
 
 					<Typography.Title level={4}>Addresses</Typography.Title>
 
@@ -206,7 +235,7 @@ const CreateUserModal = (props: props) => {
 						{(fields, { add, remove }) => (
 							<Row gutter={16}>
 								{fields.map(({ key, name, ...restField }) => (
-									<Col xs={24} sm={12} md={8} lg={6} key={key}>
+									<Col xs={24} sm={12} md={12} lg={8} key={key}>
 										<Card
 											title={`Address ${key + 1}`}
 											style={{ marginBottom: "16px" }}
@@ -215,6 +244,8 @@ const CreateUserModal = (props: props) => {
 												<Form.Item
 													{...restField}
 													label="Street"
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													name={[name, "street"]}
 													rules={[
 														{
@@ -229,6 +260,8 @@ const CreateUserModal = (props: props) => {
 												<Form.Item
 													{...restField}
 													label="City"
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													name={[name, "city"]}
 													rules={[
 														{
@@ -243,6 +276,8 @@ const CreateUserModal = (props: props) => {
 												<Form.Item
 													{...restField}
 													label="State"
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													name={[name, "state"]}
 													rules={[
 														{
@@ -257,6 +292,8 @@ const CreateUserModal = (props: props) => {
 												<Form.Item
 													{...restField}
 													label="ZipCode"
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													name={[name, "zipCode"]}
 													rules={[
 														{
@@ -279,7 +316,7 @@ const CreateUserModal = (props: props) => {
 										</Card>
 									</Col>
 								))}
-								<Col xs={24} sm={12} md={8} lg={6}>
+								<Col xs={24} sm={12} md={12} lg={8}>
 									<Form.Item>
 										<Button
 											type="dashed"
@@ -299,16 +336,20 @@ const CreateUserModal = (props: props) => {
 						{(fields, { add, remove }) => (
 							<Row gutter={16}>
 								{fields.map(({ key, name, ...restField }) => (
-									<Col xs={24} sm={12} md={8} lg={6} key={key}>
+									<Col xs={24} sm={12} md={12} lg={8} key={key}>
 										<Card
 											title={`Phone Number ${key + 1}`}
-											style={{ marginBottom: "16px" }}
+											style={{
+												marginBottom: "16px",
+											}}
 										>
 											<div>
 												<Form.Item
 													{...restField}
 													label="Number"
 													name={[name, "number"]}
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													rules={[
 														{
 															required: true,
@@ -327,6 +368,8 @@ const CreateUserModal = (props: props) => {
 													{...restField}
 													label="Type"
 													name={[name, "type"]}
+													labelCol={{ span: 24 }}
+													wrapperCol={{ span: 24 }}
 													rules={[
 														{
 															required: true,
@@ -348,7 +391,7 @@ const CreateUserModal = (props: props) => {
 										</Card>
 									</Col>
 								))}
-								<Col xs={24} sm={12} md={8} lg={6}>
+								<Col xs={24} sm={12} md={12} lg={8}>
 									<Form.Item>
 										<Button
 											type="dashed"

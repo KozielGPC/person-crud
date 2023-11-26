@@ -38,6 +38,7 @@
 - [x] Criar conexão com o backend
 - [x] Adicionar requisições para rotas
 - [x] Adicionar validador de input nos formulários
+- [ ] Adicionar filtros e ordenação na tabela
 - [ ] Adicionar requisição para API de CEPs
 - [ ] Adicionar códigos de erro personalizados
 - [ ] Adicionar loading com skeleton
