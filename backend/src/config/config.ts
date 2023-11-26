@@ -7,6 +7,7 @@ export const config = {
 	RABBIT_MQ_URL: process.env.RABBIT_MQ_URL,
 	JWT_SECRET: process.env.JWT_SECRET,
 	JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
+	LOGGER: process.env.LOGGER,
 };
 
 Object.entries(config).forEach(([key, value]) => {

@@ -30,7 +30,22 @@ export class UserController {
 				savedUser
 			);
 		} catch (error) {
-			return responseHandler.internalErrorResponse(res, "Error creating user");
+			if (error.code === 11000 || error.code === 11001) {
+				return responseHandler.validationErrorResponse(
+					res,
+					"Duplicated email or document number"
+				);
+			} else if (error.name === "CastError") {
+				return responseHandler.validationErrorResponse(
+					res,
+					"Some of the fields are invalid"
+				);
+			} else {
+				return responseHandler.internalErrorResponse(
+					res,
+					"Error creating user"
+				);
+			}
 		}
 	}
 
@@ -100,10 +115,7 @@ export class UserController {
 							"Some of the fields are invalid"
 						);
 					} else {
-						return responseHandler.internalErrorResponse(
-							res,
-							"Error during user update"
-						);
+						throw error;
 					}
 				});
 		} catch (error) {
@@ -148,14 +160,9 @@ export class UserController {
 					);
 				})
 				.catch((error) => {
-					return responseHandler.internalErrorResponse(
-						res,
-						"Error updating user phone numbers"
-					);
+					throw error;
 				});
 		} catch (error) {
-			console.log(error);
-
 			return responseHandler.internalErrorResponse(
 				res,
 				"Error updating user phone numbers"
@@ -195,14 +202,9 @@ export class UserController {
 					);
 				})
 				.catch((error) => {
-					return responseHandler.internalErrorResponse(
-						res,
-						"Error updating user addresses"
-					);
+					throw error;
 				});
 		} catch (error) {
-			console.log(error);
-
 			return responseHandler.internalErrorResponse(
 				res,
 				"Error updating user addresses"

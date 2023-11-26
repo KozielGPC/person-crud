@@ -1,3 +1,4 @@
+import { config } from "../config/config";
 import { send } from "../services/rabbitmq/producer";
 
 const logger = (req, res, next) => {
@@ -21,9 +22,11 @@ const logger = (req, res, next) => {
 			query: req.query,
 		};
 
-		// console.log(logInput);
+		if (config.LOGGER== "ON") {
+			console.log(logInput);
 
-		// await send(logInput);
+			await send(logInput);
+		}
 	});
 
 	next();
