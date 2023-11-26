@@ -106,7 +106,7 @@ export const PhoneNumbersForm = (props: {
 								{(fields, { add, remove }) => (
 									<Row gutter={16}>
 										{fields.map(({ key, name, ...restField }) => (
-											<Col xs={24} sm={12} md={8} lg={6} key={key}>
+											<Col xs={8} sm={8} md={8} lg={6} key={key}>
 												<Card
 													title={`Phone Number ${key + 1}`}
 													style={{ marginBottom: "16px" }}
@@ -116,6 +116,8 @@ export const PhoneNumbersForm = (props: {
 															{...restField}
 															label="Number"
 															name={[name, "number"]}
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															rules={[
 																{
 																	required: true,
@@ -133,6 +135,8 @@ export const PhoneNumbersForm = (props: {
 														<Form.Item
 															{...restField}
 															label="Type"
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															name={[name, "type"]}
 															rules={[
 																{
@@ -156,7 +160,7 @@ export const PhoneNumbersForm = (props: {
 												</Card>
 											</Col>
 										))}
-										<Col xs={24} sm={12} md={8} lg={6}>
+										<Col xs={8} sm={8} md={8} lg={6}>
 											<Form.Item>
 												<Button
 													type="dashed"

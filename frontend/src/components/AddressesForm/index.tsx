@@ -1,4 +1,13 @@
-import { Form, Input, notification, Button, Layout, Card, Row, Col } from "antd";
+import {
+	Form,
+	Input,
+	notification,
+	Button,
+	Layout,
+	Card,
+	Row,
+	Col,
+} from "antd";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { IAddress } from "../../interfaces/user";
@@ -97,12 +106,17 @@ export const AddressesForm = (props: {
 								{(fields, { add, remove }) => (
 									<Row gutter={16}>
 										{fields.map(({ key, name, ...restField }) => (
-											<Col xs={24} sm={12} md={8} lg={6} key={key}>
-												<Card title={`Address ${key + 1}`} style={{ marginBottom: "16px" }}>
+											<Col xs={8} sm={8} md={8} lg={6} key={key}>
+												<Card
+													title={`Address ${key + 1}`}
+													style={{ marginBottom: "16px" }}
+												>
 													<div key={key}>
 														<Form.Item
 															{...restField}
 															label="Street"
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															name={[name, "street"]}
 															rules={[
 																{
@@ -117,6 +131,8 @@ export const AddressesForm = (props: {
 														<Form.Item
 															{...restField}
 															label="City"
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															name={[name, "city"]}
 															rules={[
 																{
@@ -131,6 +147,8 @@ export const AddressesForm = (props: {
 														<Form.Item
 															{...restField}
 															label="State"
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															name={[name, "state"]}
 															rules={[
 																{
@@ -145,6 +163,8 @@ export const AddressesForm = (props: {
 														<Form.Item
 															{...restField}
 															label="ZipCode"
+															labelCol={{ span: 24 }}
+															wrapperCol={{ span: 24 }}
 															name={[name, "zipCode"]}
 															rules={[
 																{
@@ -167,7 +187,7 @@ export const AddressesForm = (props: {
 												</Card>
 											</Col>
 										))}
-										<Col xs={24} sm={12} md={8} lg={6}>
+										<Col xs={8} sm={8} md={8} lg={6}>
 											<Form.Item>
 												<Button
 													type="dashed"

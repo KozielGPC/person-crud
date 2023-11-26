@@ -7,7 +7,15 @@ import { Divider, Row, Col } from "antd";
 const Home = () => {
 	return (
 		<Row justify="center" align="middle">
-			<Col xs={24} sm={22} md={22} lg={20} xl={22} xxl={20}>
+			<Col
+				style={{ width: "100%", padding: "10px" }}
+				xs={24}
+				sm={24}
+				md={24}
+				lg={24}
+				xl={22}
+				xxl={20}
+			>
 				<ApiKeyValidatorContainer />
 				<Divider style={{ height: "1px", backgroundColor: "black" }} />
 				<UserTable />
