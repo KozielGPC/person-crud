@@ -9,9 +9,9 @@
 - [x] Criar conexão com banco de dados
 - [x] Criar modelos do banco de dados
 - [ ] Criar migrações do banco de dados
-- [ ] Criar rotas
+- [x] Criar rotas
     - [x] Create
-    - [ ] Update
+    - [x] Update
     - [x] Read One
     - [x] Read Many
     - [x] Delete
@@ -32,7 +32,7 @@
 - [x] Criar setup inicial
 - [x] Criar componente de botão de submit
 - [x] Criar componente de input de texto
-- [ ] Criar componente de linha da tabela com botão para deletar e atualizar
+- [x] Criar componente de linha da tabela com botão para deletar e atualizar
 - [x] Unir componentes para criar tabela de listagem
 - [x] Unir componentes para criar formulario de criação
 - [x] Criar conexão com o backend

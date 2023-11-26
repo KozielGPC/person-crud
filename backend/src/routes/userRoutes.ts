@@ -203,4 +203,6 @@ userRoutes.delete("/:id", userController.delete);
 
 userRoutes.put("/:id/phoneNumbers", userController.updatePhoneNumbers);
 
+userRoutes.put("/:id/addresses", userController.updateAddresses);
+
 export default userRoutes;

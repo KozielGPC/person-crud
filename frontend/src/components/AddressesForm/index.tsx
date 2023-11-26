@@ -54,8 +54,8 @@ export const AddressesForm = (props: {
 						openNotificationWithIcon(
 							api,
 							"success",
-							"Phone Number added successfully",
-							"Phone Number added successfully"
+							"User addresses updated successfully",
+							"User addresses updated successfully"
 						);
 					}
 				})
@@ -66,17 +66,17 @@ export const AddressesForm = (props: {
 					openNotificationWithIcon(
 						api,
 						"error",
-						"Error editing user",
+						"Error updating user addresses",
 						error?.response?.data?.message ??
-							"Something wrong occurred on editing user"
+							"Something wrong occurred on updating user addresses"
 					);
 				});
 		} catch (errInfo) {
 			openNotificationWithIcon(
 				api,
 				"error",
-				"Error editing user",
-				"Something wrong occurred on editing user"
+				"Error updating user addresses",
+				"Something wrong occurred on updating user addresses"
 			);
 		}
 	};
@@ -89,14 +89,14 @@ export const AddressesForm = (props: {
 					<Card title="Addresses" style={{ marginBottom: "24px" }}>
 						<Form
 							form={form}
-							name="dynamic_form_phone_number"
+							name="dynamic_form_addresses"
 							onFinish={onFinish}
 							autoComplete="off"
 							onFieldsChange={() => {
 								setHasInputsChanged(true);
 							}}
 							initialValues={{
-								phoneNumbers: props.addresses,
+								addresses: props.addresses,
 							}}
 							preserve={false}
 						>

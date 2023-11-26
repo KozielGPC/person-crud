@@ -7,6 +7,7 @@ import { Request, Response } from "express";
 import { UpdateUserDto } from "../interfaces/User/update-user-input.dto";
 import { UpdateUserPhoneNumbersDto } from "../interfaces/User/update-user-phone-numbers.dto";
 import mongoose from "mongoose";
+import { UpdateUserAddressesDto } from "../interfaces/User/update-user-addresses.dto";
 
 export class UserController {
 	async create(req: Request, res: Response) {
@@ -158,6 +159,55 @@ export class UserController {
 			return responseHandler.internalErrorResponse(
 				res,
 				"Error updating user phone numbers"
+			);
+		}
+	}
+
+	async updateAddresses(req: Request, res: Response) {
+		try {
+			await connectDB();
+			const input: UpdateUserAddressesDto = req.body;
+
+			const user = await UserModel.findById(req.params.id);
+
+			if (!user) {
+				return responseHandler.notFoundResponse(res, "User not found");
+			}
+
+			input.addresses.forEach((address) => {
+				address._id = address._id
+					? address._id
+					: new mongoose.Types.ObjectId();
+			});
+			
+			return await UserModel.findByIdAndUpdate(
+				req.params.id,
+				{
+					$set: {
+						addresses: input.addresses,
+					},
+				},
+				{ new: true }
+			)
+				.then((data) => {
+					return responseHandler.successResponseWithData(
+						res,
+						"User addresses updated successfully",
+						data
+					);
+				})
+				.catch((error) => {
+					return responseHandler.internalErrorResponse(
+						res,
+						"Error updating user addresses"
+					);
+				});
+		} catch (error) {
+			console.log(error);
+
+			return responseHandler.internalErrorResponse(
+				res,
+				"Error updating user addresses"
 			);
 		}
 	}

@@ -26,7 +26,7 @@ export const PhoneNumbersForm = (props: {
 
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
-	
+
 	const onFinish = (values: { phoneNumbers: Record<string, IPhoneNumber> }) => {
 		const input: IPhoneNumber[] = Object.entries(values.phoneNumbers)
 			.filter((e) => e[1]?.number)
@@ -56,8 +56,8 @@ export const PhoneNumbersForm = (props: {
 						openNotificationWithIcon(
 							api,
 							"success",
-							"Phone Number added successfully",
-							"Phone Number added successfully"
+							"User phone numbers updated successfully",
+							"User phone numbers updated successfully"
 						);
 					}
 				})
@@ -68,9 +68,9 @@ export const PhoneNumbersForm = (props: {
 					openNotificationWithIcon(
 						api,
 						"error",
-						"Error editing user",
+						"Error updating user phone numbers",
 						error?.response?.data?.message ??
-							"Something wrong occurred on editing user"
+							"Something wrong occurred on updating user phone numbers"
 					);
 				});
 		} catch (errInfo) {
@@ -78,7 +78,7 @@ export const PhoneNumbersForm = (props: {
 				api,
 				"error",
 				"Error editing user",
-				"Something wrong occurred on editing user"
+				"Something wrong occurred on updating user phone numbers"
 			);
 		}
 	};
