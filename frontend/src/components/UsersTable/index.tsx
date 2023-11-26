@@ -6,7 +6,6 @@ import {
 	Typography,
 	Popconfirm,
 	notification,
-	Button,
 } from "antd";
 import {
 	CheckOutlined,
@@ -26,7 +25,6 @@ import { Rule } from "antd/es/form";
 import {
 	validateDocumentNumberInput,
 	validateEmailInput,
-	validatePhoneNumberInput,
 	validateZipCodeInput,
 } from "../../tools/formValidators";
 import { PhoneNumberTable } from "../PhoneNumbersTable";
@@ -76,15 +74,10 @@ export function UserTable() {
 	const [users, setUsers] = useState<IUser[] | []>([]);
 
 	const [editingKey, setEditingKey] = useState("");
-	const [editingPhoneNumberKey, setEditingPhoneNumberKey] = useState("");
 
 	const [form] = Form.useForm();
 
-	const [formPhoneNumber] = Form.useForm();
-
 	const isEditing = (record: IUser) => record._id === editingKey;
-	const isEditingPhoneNumber = (record: IPhoneNumber) =>
-		record.number === editingPhoneNumberKey;
 
 	const [api, contextHolder] = notification.useNotification();
 
@@ -111,11 +104,6 @@ export function UserTable() {
 	const cancel = () => {
 		setEditingKey("");
 	};
-
-	const cancelPhoneNumber = () => {
-		setEditingPhoneNumberKey("");
-	};
-
 	const edit = (record: Partial<IUser>) => {
 		const {
 			dateOfBirth,
@@ -137,20 +125,6 @@ export function UserTable() {
 			phoneNumbers: phoneNumbers || [],
 		});
 		setEditingKey(record._id ?? "");
-	};
-
-	const editPhoneNumber = (record: Partial<IPhoneNumber>) => {
-		const { number, type } = record;
-		formPhoneNumber.setFieldsValue({
-			number: number?.trim() || "",
-			type: type || "",
-		});
-
-		console.log("form phone number");
-
-		console.log(formPhoneNumber.getFieldsValue());
-
-		setEditingPhoneNumberKey(record.number ?? "");
 	};
 
 	const save = async (key: string) => {
@@ -211,109 +185,6 @@ export function UserTable() {
 	};
 
 	const expandedRowRender = (row: IUser) => {
-		const savePhoneNumber = async (key: string) => {
-			try {
-				setEditingPhoneNumberKey("");
-
-				openNotificationWithIcon(
-					api,
-					"success",
-					"Phone number edited successfully",
-					"Phone number successfully"
-				);
-			} catch (errInfo) {
-				openNotificationWithIcon(
-					api,
-					"error",
-					"Error editing Phone number",
-					"Something wrong occurred on editing Phone number"
-				);
-			}
-		};
-
-
-		const columnsPhoneNumber = [
-			{
-				title: "Number",
-				dataIndex: "number",
-				key: "number",
-				editable: true,
-				rules: [
-					{
-						required: true,
-						message: "Please input the phone number!",
-					},
-					{
-						validator: validatePhoneNumberInput,
-						message: "Invalid phone number input",
-					},
-				],
-			},
-			{
-				title: "Type",
-				dataIndex: "type",
-				key: "type",
-				editable: true,
-				rules: [
-					{
-						required: true,
-						message: "Please select the phone number type!",
-					},
-				],
-			},
-			{
-				title: "Action",
-				key: "operation",
-				render: (_: any, record: IPhoneNumber) => {
-					const editable = isEditingPhoneNumber(record);
-					return editable ? (
-						<span>
-							<Popconfirm title="Sure to cancel?" onConfirm={cancelPhoneNumber}>
-								<StopOutlined style={{ marginRight: 8 }} />
-							</Popconfirm>
-
-							<Typography.Link onClick={() => savePhoneNumber(record.number)}>
-								<CheckOutlined />
-							</Typography.Link>
-						</span>
-					) : (
-						<span>
-							<Typography.Link
-								disabled={editingPhoneNumberKey !== ""}
-								onClick={() => editPhoneNumber(record)}
-								style={{ marginRight: 8 }}
-							>
-								<EditOutlined />
-							</Typography.Link>
-
-							<Typography.Link
-								disabled={editingPhoneNumberKey !== ""}
-								onClick={() => deleteUser(record.number)}
-							>
-								<DeleteOutlined />
-							</Typography.Link>
-						</span>
-					);
-				},
-			},
-		];
-
-		const mergedPhoneNumberColumns = columnsPhoneNumber.map((col) => {
-			if (!col.editable) {
-				return col;
-			}
-			return {
-				...col,
-				onCell: (record: IPhoneNumber) => ({
-					record,
-					inputType: "text",
-					dataIndex: col.dataIndex,
-					title: col.title,
-					editing: isEditingPhoneNumber(record),
-				}),
-			};
-		});
-
 		const columnsAddress = [
 			{
 				title: "Street",
@@ -376,7 +247,6 @@ export function UserTable() {
 					inputType: "text",
 					dataIndex: col.dataIndex,
 					title: col.title,
-					editing: isEditingPhoneNumber(record),
 				}),
 			};
 		});
@@ -384,34 +254,9 @@ export function UserTable() {
 		const dataAddresses = row.addresses;
 
 		const dataPhoneNumbers = row.phoneNumbers;
-
-		console.log("phone numbers >>> ", dataPhoneNumbers);
-
 		return (
 			<div style={{ padding: "0px 40px 20px 40px" }}>
 				<PhoneNumberTable phoneNumbers={dataPhoneNumbers} userId={row._id}/>
-				{/* <Form form={formPhoneNumber} component={false}>
-					<Table
-						components={{
-							body: {
-								cell: EditableCell,
-							},
-						}}
-						title={() => <h1>Phone Numbers</h1>}
-						footer={() => (
-							<Button
-								type="primary"
-								style={{ marginBottom: 16 }}
-								onClick={addPhoneNumber}
-							>
-								Add Row
-							</Button>
-						)}
-						columns={mergedPhoneNumberColumns}
-						dataSource={dataPhoneNumbers}
-						pagination={false}
-					/>
-				</Form> */}
 				<Divider />
 				<Table
 					components={{

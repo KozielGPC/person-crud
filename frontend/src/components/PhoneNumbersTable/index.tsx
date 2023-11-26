@@ -15,19 +15,13 @@ import {
 	StopOutlined,
 } from "@ant-design/icons";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IPhoneNumber, IUser } from "../../interfaces/user";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import CreateUserModal from "../CreateUserModal";
-import moment, { Moment } from "moment";
-import MyDatePicker from "../DatePicker";
 import { openNotificationWithIcon } from "../../tools/showNotification";
 import { Rule } from "antd/es/form";
 import {
-	validateDocumentNumberInput,
-	validateEmailInput,
 	validatePhoneNumberInput,
-	validateZipCodeInput,
 } from "../../tools/formValidators";
 import mongoose from "mongoose";
 
@@ -37,7 +31,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	rules: Rule[];
 	title: any;
 	inputType: "text";
-	record: IUser;
+	record: IPhoneNumber;
 	index: number;
 	children: React.ReactNode;
 }
