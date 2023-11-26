@@ -1,6 +1,6 @@
 import { ILog } from "../../interfaces/log";
 import { Table, Divider, notification } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { Key, useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
@@ -74,25 +74,79 @@ export function LogTable() {
 		);
 	};
 
+	function getUniqueStatusCodes(logs: ILog[]) {
+		const uniqueStatusCodes: Set<number> = new Set();
+		logs.forEach((log) => {
+			if (log.statusCode !== undefined) {
+				uniqueStatusCodes.add(log.statusCode);
+			}
+		});
+		return Array.from(uniqueStatusCodes).map((value) => {
+			return { text: value, value: value };
+		});
+	}
+
+	function getUniqueMethods(logs: ILog[]) {
+		const uniqueMethods: Set<string> = new Set();
+		logs.forEach((log) => {
+			if (log.method !== undefined) {
+				uniqueMethods.add(log.method);
+			}
+		});
+		return Array.from(uniqueMethods).map((value) => {
+			return { text: value, value: value };
+		});
+	}
+
 	const columns = [
-		{ title: "ID", dataIndex: "_id", key: "id" },
-		{ title: "Method", dataIndex: "method", key: "method" },
-		{ title: "URL", dataIndex: "url", key: "url" },
+		{
+			title: "ID",
+			dataIndex: "_id",
+			key: "id",
+			filterSearch: true,
+			sorter: (a: ILog, b: ILog) =>
+				a._id.toString().localeCompare(b._id.toString()),
+		},
+		{
+			title: "Method",
+			dataIndex: "method",
+			key: "method",
+			filters: getUniqueMethods(logs),
+			filterSearch: true,
+			onFilter: (value: boolean | Key, record: ILog) => record.method == value,
+		},
+		{
+			title: "URL",
+			dataIndex: "url",
+			key: "url",
+			sorter: (a: ILog, b: ILog) => a.url.localeCompare(b.url),
+		},
 		{ title: "User Agent", dataIndex: "userAgent", key: "userAgent" },
-		{ title: "Status Code", dataIndex: "statusCode", key: "statusCode" },
+		{
+			title: "Status Code",
+			dataIndex: "statusCode",
+			key: "statusCode",
+			filters: getUniqueStatusCodes(logs),
+			filterSearch: true,
+			onFilter: (value: boolean | Key, record: ILog) =>
+				record.statusCode.toString() == value,
+		},
 		{
 			title: "Request Time",
 			dataIndex: "requestTime",
 			key: "requestTime",
 			render: (text: string) => moment(text).format("YYYY/MM/DD HH:mm:ss"),
+			sorter: (a: ILog, b: ILog) =>
+				moment(a.requestTime).valueOf() - moment(b.requestTime).valueOf(),
 		},
 		{
 			title: "Response Time",
 			dataIndex: "responseTime",
 			key: "responseTime",
 			render: (text: string) => moment(text).format("YYYY/MM/DD HH:mm:ss"),
+			sorter: (a: ILog, b: ILog) =>
+				moment(a.responseTime).valueOf() - moment(b.responseTime).valueOf(),
 		},
-		{ title: "Action", key: "operation", render: () => <a>Publish</a> },
 	];
 
 	return (

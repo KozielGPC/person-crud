@@ -22,10 +22,10 @@
 - [x] Adicionar documentação de rotas com swagger
 - [x] Implementar fila com RabbitMQ
 - [x] Implementar cache com Redis
+- [x] Adicionar testes unitarios
 - [ ] Adicionar paginação
 - [ ] Adicionar códigos de erro personalizados
 - [ ] Criar configuração de container docker e configurar docker-compose
-- [ ] Adicionar testes automatizados
 - [ ] Criar service de websocket
 
 ### Frontend
@@ -39,7 +39,7 @@
 - [x] Adicionar requisições para rotas
 - [x] Adicionar validador de input nos formulários
 - [x] Adicionar error handler
-- [ ] Adicionar filtros e ordenação na tabela
+- [x] Adicionar filtros e ordenação na tabela
 - [ ] Adicionar requisição para API de CEPs
 - [ ] Adicionar loading com skeleton
 - [ ] Adicionar validadores de erros

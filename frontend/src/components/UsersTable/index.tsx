@@ -215,7 +215,13 @@ export function UserTable() {
 	};
 
 	const columns = [
-		{ title: "ID", dataIndex: "_id", key: "id" },
+		{
+			title: "ID",
+			dataIndex: "_id",
+			key: "id",
+			sorter: (a: IUser, b: IUser) =>
+				a._id.toString().localeCompare(b._id.toString()),
+		},
 		{
 			title: "First Name",
 			dataIndex: "firstName",
@@ -225,6 +231,7 @@ export function UserTable() {
 				{ required: true, message: "Please input the first name!" },
 				{ max: 50, message: "Max 50 characters" },
 			],
+			sorter: (a: IUser, b: IUser) => a.firstName.localeCompare(b.firstName),
 		},
 		{
 			title: "Last Name",
@@ -239,6 +246,7 @@ export function UserTable() {
 				},
 				{ max: 50, message: "Max 50 characters" },
 			],
+			sorter: (a: IUser, b: IUser) => a.lastName.localeCompare(b.lastName),
 		},
 		{
 			title: "Date of Birth",
@@ -247,6 +255,8 @@ export function UserTable() {
 			editable: true,
 			rules: [{ required: true, message: "Please select the date of birth!" }],
 			render: (text: string) => moment(text).format("YYYY/MM/DD"),
+			sorter: (a: IUser, b: IUser) =>
+				moment(a.dateOfBirth).valueOf() - moment(b.dateOfBirth).valueOf(),
 		},
 		{
 			title: "Email",
@@ -260,13 +270,13 @@ export function UserTable() {
 					message: "Invalid email input",
 				},
 			],
+			sorter: (a: IUser, b: IUser) => a.email.localeCompare(b.email),
 		},
 		{
 			title: "Document Number",
 			dataIndex: "documentNumber",
 			key: "documentNumber",
 			editable: true,
-
 			rules: [
 				{ required: true, message: "Please input the document number!" },
 				{
@@ -274,6 +284,8 @@ export function UserTable() {
 					message: "Invalid document number input",
 				},
 			],
+			sorter: (a: IUser, b: IUser) =>
+				a.documentNumber.localeCompare(b.documentNumber),
 		},
 		{
 			title: "Action",
