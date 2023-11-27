@@ -26,7 +26,10 @@ export const PhoneNumbersForm = (props: {
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
 
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const onFinish = (values: { phoneNumbers: Record<string, IPhoneNumber> }) => {
+		setLoading(true);
 		const input: IPhoneNumber[] = Object.entries(values.phoneNumbers)
 			.filter((e) => e[1]?.number)
 			.map((value) => {
@@ -54,6 +57,7 @@ export const PhoneNumbersForm = (props: {
 				})
 				.finally(() => {
 					setHasInputsChanged(false);
+					setLoading(false);
 				})
 				.catch((error) => {
 					throw error;
@@ -161,6 +165,7 @@ export const PhoneNumbersForm = (props: {
 					type="primary"
 					disabled={!hasInputsChanged}
 					onClick={() => form.submit()}
+					loading={loading}
 				>
 					Save
 				</Button>

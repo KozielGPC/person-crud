@@ -53,12 +53,7 @@ export const ApiKeyValidatorContainer = () => {
 		);
 	};
 
-	return loading ? (
-		<div>
-		  <Skeleton active />
-		  <Skeleton active />
-		</div>
-	   ) :(
+	return (
 		<div>
 			{contextHolder}
 			<Row>
@@ -110,6 +105,7 @@ export const ApiKeyValidatorContainer = () => {
 								htmlType="submit"
 								form="api_key_form"
 								key="submit"
+								loading={loading}
 							>
 								Submit
 							</Button>

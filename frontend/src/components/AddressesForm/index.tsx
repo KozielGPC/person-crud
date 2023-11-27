@@ -24,7 +24,10 @@ export const AddressesForm = (props: {
 	const [hasInputsChanged, setHasInputsChanged] = useState<boolean>(false);
 	const [form] = Form.useForm();
 
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const onFinish = (values: { addresses: Record<string, IAddress> }) => {
+		setLoading(true);
 		const input: IAddress[] = Object.entries(values.addresses)
 			.filter((e) => e[1]?.city)
 			.map((value) => {
@@ -52,6 +55,7 @@ export const AddressesForm = (props: {
 				})
 				.finally(() => {
 					setHasInputsChanged(false);
+					setLoading(false);
 				})
 				.catch((error) => {
 					throw error;
@@ -186,6 +190,7 @@ export const AddressesForm = (props: {
 					type="primary"
 					disabled={!hasInputsChanged}
 					onClick={() => form.submit()}
+					loading={loading}
 				>
 					Save
 				</Button>
