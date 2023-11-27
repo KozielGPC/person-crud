@@ -54,23 +54,10 @@ export const AddressesForm = (props: {
 					setHasInputsChanged(false);
 				})
 				.catch((error) => {
-					errorHandler(error, notificationApi);
-					// openNotificationWithIcon(
-					// 	notificationApi,
-					// 	"error",
-					// 	"Error updating user addresses",
-					// 	error?.response?.data?.message ??
-					// 		"Something wrong occurred on updating user addresses"
-					// );
+					throw error;
 				});
 		} catch (error) {
 			errorHandler(error, notificationApi);
-			// openNotificationWithIcon(
-			// 	notificationApi,
-			// 	"error",
-			// 	"Error updating user addresses",
-			// 	"Something wrong occurred on updating user addresses"
-			// );
 		}
 	};
 

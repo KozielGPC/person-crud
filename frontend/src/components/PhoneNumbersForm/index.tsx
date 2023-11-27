@@ -56,23 +56,10 @@ export const PhoneNumbersForm = (props: {
 					setHasInputsChanged(false);
 				})
 				.catch((error) => {
-					errorHandler(error, notificationApi);
-					// openNotificationWithIcon(
-					// 	notificationApi,
-					// 	"error",
-					// 	"Error updating user phone numbers",
-					// 	error?.response?.data?.message ??
-					// 		"Something wrong occurred on updating user phone numbers"
-					// );
+					throw error;
 				});
 		} catch (error) {
 			errorHandler(error, notificationApi);
-			// openNotificationWithIcon(
-			// 	notificationApi,
-			// 	"error",
-			// 	"Error editing user",
-			// 	"Something wrong occurred on updating user phone numbers"
-			// );
 		}
 	};
 

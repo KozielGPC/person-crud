@@ -77,20 +77,13 @@ const CreateUserModal = (props: props) => {
 						});
 					})
 					.catch((error) => {
-						console.log(error);
-
-						setConfirmLoading(false);
-						errorHandler(error, notificationApi);
-						// openNotificationWithIcon(
-						// 	notificationApi,
-						// 	"error",
-						// 	"Error on creating user",
-						// 	JSON.stringify(error.response.data)
-						// );
+						throw error;
+						
 					});
 			})
-			.catch((info) => {
+			.catch((error) => {
 				setConfirmLoading(false);
+				errorHandler(error, notificationApi);
 			});
 	};
 

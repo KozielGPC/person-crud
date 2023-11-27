@@ -151,28 +151,15 @@ export function UserTable() {
 							"User edited successfully",
 							"User edited successfully"
 						);
+						setEditingKey("");
 					})
 					.catch((error) => {
-						errorHandler(error, notificationApi);
-						// openNotificationWithIcon(
-						// 	notificationApi,
-						// 	"error",
-						// 	"Error editing user",
-						// 	error?.response?.data?.message ??
-						// 		"Something wrong occurred on editing user"
-						// );
+						throw error;
 					});
 			});
-
-			setEditingKey("");
 		} catch (error) {
+			setEditingKey("");
 			errorHandler(error, notificationApi);
-			// openNotificationWithIcon(
-			// 	notificationApi,
-			// 	"error",
-			// 	"Error editing user",
-			// 	"Something wrong occurred on editing user"
-			// );
 		}
 	};
 
