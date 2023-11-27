@@ -4,9 +4,9 @@ import { config, rabbitMQConfig } from "../../config/config";
 import "../database/database";
 
 export const listen = async () => {
-	let connection;
+	// let connection;
 	try {
-		connection = await amqp.connect(config.RABBIT_MQ_URL);
+		const connection = await amqp.connect(config.RABBIT_MQ_URL);
 		const channel = await connection.createChannel();
 
 		process.once("SIGINT", async () => {
@@ -34,7 +34,8 @@ export const listen = async () => {
 		console.log(" [*] Waiting for messages. To exit press CTRL+C");
 	} catch (err) {
 		console.warn(err);
-	} finally {
-		if (connection) await connection.close();
 	}
+	// finally{
+	// 	// if (connection) await connection.close();
+	// }
 };
