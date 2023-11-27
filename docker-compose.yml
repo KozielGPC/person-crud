@@ -13,22 +13,6 @@ services:
     networks:
       - mongo-compose-network
 
-  mongo-express:
-    image: mongo-express:latest
-    restart: always
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=username
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
-      - ME_CONFIG_MONGODB_URL=mongodb://username:password@mongo:27017/
-    ports:
-      - 8081:8081
-    depends_on:
-      - mongodb
-    networks:
-      - mongo-compose-network
-    links:
-      - mongodb
-
   redis:
     image: redis:latest
     restart: always
