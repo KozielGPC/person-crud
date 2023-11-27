@@ -191,7 +191,7 @@ export function UserTable() {
 		api
 			.delete(`/users/${id}`)
 			.then((response) => {
-				if (response.status === 200) {
+				if (response.status === 204) {
 					openNotificationWithIcon(
 						notificationApi,
 						"success",

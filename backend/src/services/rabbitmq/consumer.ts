@@ -1,11 +1,12 @@
 import amqp from "amqplib";
-import { connectDB } from "../database/database";
 import { LogModel } from "../../models/logModel";
 import { config, rabbitMQConfig } from "../../config/config";
+import "../database/database";
 
 export const listen = async () => {
+	let connection;
 	try {
-		const connection = await amqp.connect(config.RABBIT_MQ_URL);
+		connection = await amqp.connect(config.RABBIT_MQ_URL);
 		const channel = await connection.createChannel();
 
 		process.once("SIGINT", async () => {
@@ -23,8 +24,6 @@ export const listen = async () => {
 						JSON.parse(message.content.toString())
 					);
 
-					await connectDB();
-
 					const log = new LogModel(JSON.parse(message.content.toString()));
 					await log.save();
 				}
@@ -35,5 +34,7 @@ export const listen = async () => {
 		console.log(" [*] Waiting for messages. To exit press CTRL+C");
 	} catch (err) {
 		console.warn(err);
+	} finally {
+		if (connection) await connection.close();
 	}
 };

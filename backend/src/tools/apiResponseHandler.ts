@@ -18,6 +18,10 @@ class ApiResponseHandler {
 		return res.status(200).json(resData);
 	}
 
+	noContentResponse(res: Response) {
+		return res.status(204).json();
+	}
+
 	successCreateResponseWithData(res: Response, msg: string, data: unknown) {
 		var resData = {
 			status: 1,

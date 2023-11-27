@@ -7,12 +7,11 @@ import { UpdateUserDto } from "../interfaces/User/update-user-input.dto";
 import { UpdateUserPhoneNumbersDto } from "../interfaces/User/update-user-phone-numbers.dto";
 import mongoose from "mongoose";
 import { UpdateUserAddressesDto } from "../interfaces/User/update-user-addresses.dto";
-import { connectDB } from "../services/database/database";
+import "../services/database/database";
 
 export class UserController {
 	async create(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const errors = validationResult(req);
 
 			if (!errors.isEmpty()) {
@@ -51,7 +50,6 @@ export class UserController {
 
 	async findMany(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const allUsers = await UserModel.find();
 			return responseHandler.successResponseWithData(
 				res,
@@ -65,7 +63,6 @@ export class UserController {
 
 	async findOne(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const user = await UserModel.findById(req.params.id);
 
 			if (!user) {
@@ -79,7 +76,6 @@ export class UserController {
 
 	async update(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const input: UpdateUserDto = req.body;
 			const user = await UserModel.findById(req.params.id);
 
@@ -128,7 +124,6 @@ export class UserController {
 
 	async updatePhoneNumbers(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const input: UpdateUserPhoneNumbersDto = req.body;
 
 			const user = await UserModel.findById(req.params.id);
@@ -172,7 +167,6 @@ export class UserController {
 
 	async updateAddresses(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const input: UpdateUserAddressesDto = req.body;
 
 			const user = await UserModel.findById(req.params.id);
@@ -214,16 +208,11 @@ export class UserController {
 
 	async delete(req: Request, res: Response) {
 		try {
-			await connectDB();
 			const deletedUser = await UserModel.findByIdAndDelete(req.params.id);
 			if (!deletedUser) {
 				return responseHandler.notFoundResponse(res, "User not found");
 			}
-			return responseHandler.successResponseWithData(
-				res,
-				"User deleted successfully",
-				deletedUser
-			);
+			return responseHandler.noContentResponse(res);
 		} catch (error) {
 			return responseHandler.internalErrorResponse(
 				res,
