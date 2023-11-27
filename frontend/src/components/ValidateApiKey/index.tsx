@@ -1,6 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
-import { Form, Input, Button, Typography, Tag, notification } from "antd";
+import {
+	Form,
+	Input,
+	Button,
+	Typography,
+	Tag,
+	notification,
+	Skeleton,
+	Space,
+	RadioChangeEvent,
+} from "antd";
 import { Col, Row } from "antd";
 import api from "../../providers/api";
 import { openNotificationWithIcon } from "../../tools/showNotification";
@@ -8,16 +18,21 @@ import { openNotificationWithIcon } from "../../tools/showNotification";
 type FieldType = {
 	apiKey?: string;
 };
-
 export const ApiKeyValidatorContainer = () => {
 	const { apiKey, setApiKey, validApiKey, setValidApiKey } =
 		useContext(ApiKeyContext);
 
 	const [notificationApi, contextHolder] = notification.useNotification();
+
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const handleSubmit = async () => {
+		setLoading(true);
 		const { data, status } = await api.post("/auth/validate", {
 			apiKey: apiKey,
 		});
+
+		setLoading(false);
 		if (status === 200 && data.data.isValid) {
 			api.defaults.headers.common["token"] = data.data.token;
 			setValidApiKey(true);
@@ -38,7 +53,12 @@ export const ApiKeyValidatorContainer = () => {
 		);
 	};
 
-	return (
+	return loading ? (
+		<div>
+		  <Skeleton active />
+		  <Skeleton active />
+		</div>
+	   ) :(
 		<div>
 			{contextHolder}
 			<Row>

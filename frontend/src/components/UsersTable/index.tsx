@@ -6,6 +6,8 @@ import {
 	Typography,
 	Popconfirm,
 	notification,
+	Skeleton,
+	Empty,
 } from "antd";
 import {
 	CheckOutlined,
@@ -79,18 +81,22 @@ export function UserTable() {
 
 	const [form] = Form.useForm();
 
+	const [loading, setLoading] = useState<boolean>(false);
+
 	const isEditing = (record: IUser) => record._id === editingKey;
 
 	const [notificationApi, contextHolder] = notification.useNotification();
 
 	useEffect(() => {
 		if (validApiKey) {
+			setLoading(true);
 			api.get("/users").then((response) => {
 				if (response.status === 200) {
 					setUsers(response.data.data);
 				} else {
 					setUsers([]);
 				}
+				setLoading(false);
 			});
 		} else {
 			setUsers([]);
@@ -125,6 +131,7 @@ export function UserTable() {
 
 	const save = async (key: string) => {
 		try {
+			setLoading(true);
 			const row = (await form.validateFields()) as IUser;
 			row["dateOfBirth"] = moment(row.dateOfBirth).toISOString();
 
@@ -155,6 +162,9 @@ export function UserTable() {
 					})
 					.catch((error) => {
 						throw error;
+					})
+					.finally(() => {
+						setLoading(false);
 					});
 			});
 		} catch (error) {
@@ -177,6 +187,7 @@ export function UserTable() {
 	};
 
 	const deleteUser = (id: string) => {
+		setLoading(true);
 		api
 			.delete(`/users/${id}`)
 			.then((response) => {
@@ -187,13 +198,21 @@ export function UserTable() {
 						"User deleted successfully",
 						"User deleted successfully"
 					);
-					api.get("/users").then((response) => {
-						if (response.status === 200) {
-							setUsers(response.data.data);
-						} else {
-							setUsers([]);
-						}
-					});
+					api
+						.get("/users")
+						.then((response) => {
+							if (response.status === 200) {
+								setUsers(response.data.data);
+							} else {
+								setUsers([]);
+							}
+						})
+						.finally(() => {
+							setLoading(false);
+						})
+						.catch((error) => {
+							throw error;
+						});
 				}
 			})
 			.catch((error) => {
@@ -350,7 +369,10 @@ export function UserTable() {
 					className="components-table-demo-nested"
 					columns={mergedColumns}
 					expandable={{ expandedRowRender }}
-					dataSource={users}
+					dataSource={loading ? [] : users}
+					locale={{
+						emptyText: loading ? <Skeleton active={true} /> : <Empty />,
+					}}
 					bordered
 					rowClassName={(record, index) =>
 						index % 2 === 0

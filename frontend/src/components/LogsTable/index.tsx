@@ -1,5 +1,5 @@
 import { ILog } from "../../interfaces/log";
-import { Table, Divider, notification } from "antd";
+import { Table, Divider, notification, Skeleton, Empty } from "antd";
 import React, { Key, useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
@@ -14,11 +14,15 @@ export function LogTable() {
 
 	const [notificationApi, contextHolder] = notification.useNotification();
 
+	const [loading, setLoading] = useState<boolean>(false);
+
 	useEffect(() => {
 		if (validApiKey) {
+			setLoading(true);
 			api
 				.get("/logs")
 				.then((response) => {
+					setLoading(false);
 					if (response.status === 200) {
 						setLogs(response.data.data);
 					} else {
@@ -159,7 +163,10 @@ export function LogTable() {
 				className="components-table-demo-nested"
 				columns={columns}
 				expandable={{ expandedRowRender }}
-				dataSource={logs}
+				dataSource={loading ? [] : logs}
+					locale={{
+						emptyText: loading ? <Skeleton active={true} /> : <Empty />,
+					}}
 				bordered
 				rowClassName={(record, index) =>
 					index % 2 === 0 ? "table-row-light" : "table-row-dark"
