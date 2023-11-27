@@ -18,10 +18,10 @@ const logSchema: Schema = new Schema({
 	method: { type: String, required: true },
 	url: { type: String, required: true },
 	statusCode: { type: Number, required: true },
-	userAgent: { type: String, required: true },
+	userAgent: { type: String, required: false },
 	body: { type: Object, required: true },
 	params: { type: Object, required: true },
 	query: { type: Object, required: true },
 });
 
-export const LogModel = mongoose.model<ILog>('Log', logSchema);
+export const LogModel = mongoose.model<ILog>("Log", logSchema);
