@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/userController";
-import { CreateUserValidator } from "../tools/apiInputValidators";
+import { CreateUserValidator, UpdateUserValidator } from "../tools/apiInputValidators";
 
 const userRoutes = Router();
 const userController = new UserController();
@@ -159,7 +159,7 @@ userRoutes.post("/", CreateUserValidator(), userController.create);
  *       404:
  *         description: User not found.
  */
-userRoutes.put("/:id", userController.update);
+userRoutes.put("/:id", UpdateUserValidator(), userController.update);
 
 /**
  * @swagger

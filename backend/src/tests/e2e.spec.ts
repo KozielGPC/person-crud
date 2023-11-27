@@ -1,45 +1,34 @@
-import { setup } from "./utils/setup";
+import { setup } from "./setup";
 import { app } from "../app";
 import supertest from "supertest";
 import { config } from "../config/config";
 import { IUser } from "../models/userModel";
 
-// describe("AuthController E2E Tests", () => {
-// 	setupDB();
+describe("AuthController E2E Tests", () => {
+	it("should validate API key and return success", async () => {
+		const apiKey = config.API_KEY;
+		const response = await supertest(app)
+			.post("/auth/validate")
+			.send({ apiKey });
 
-// 	it("should validate API key and return success", async () => {
-// 		const apiKey = config.API_KEY;
-// 		const response = await supertest(app)
-// 			.post("/auth/validate")
-// 			.send({ apiKey });
+		expect(response.status).toEqual(200);
+		expect(response.body.message).toEqual("API KEY validation successful");
+		expect(response.body.data.isValid).toEqual(true);
+		expect(response.body.data.token).toBeDefined();
+	});
 
-// 		expect(response.status).toEqual(200);
-// 		expect(response.body.message).toEqual("API KEY validation successful");
-// 		expect(response.body.data.isValid).toEqual(true);
-// 		expect(response.body.data.token).toBeDefined();
-// 	});
+	it("should handle invalid API key and return failure", async () => {
+		const invalidApiKey = "invalid_api_key";
+		const response = await supertest(app)
+			.post("/auth/validate")
+			.send({ apiKey: invalidApiKey });
 
-// 	it("should handle invalid API key and return failure", async () => {
-// 		const invalidApiKey = "invalid_api_key";
-// 		const response = await supertest(app)
-// 			.post("/auth/validate")
-// 			.send({ apiKey: invalidApiKey });
-
-// 		expect(response.status).toEqual(200);
-// 		expect(response.body.message).toEqual("API KEY validation failed");
-// 		expect(response.body.data.isValid).toEqual(false);
-// 		expect(response.body.data.token).toEqual("");
-// 	});
-
-// 	// it("should handle errors during API key validation", async () => {
-// 	// 	const response = await supertest(app)
-// 	// 		.post("/auth/validate")
-// 	// 		.send({ apiKey: "some_api_key" });
-
-// 	// 	expect(response.status).toEqual(500);
-// 	// 	expect(response.body.message).toEqual("Error validating API KEY");
-// 	// });
-// });
+		expect(response.status).toEqual(200);
+		expect(response.body.message).toEqual("API KEY validation failed");
+		expect(response.body.data.isValid).toEqual(false);
+		expect(response.body.data.token).toEqual("");
+	});
+});
 
 describe("UserController E2E Tests", () => {
 	let authToken: string;
@@ -247,23 +236,45 @@ describe("UserController E2E Tests", () => {
 		expect(response.body.data).toEqual(usersArray[0]);
 	});
 
-	// it("should update a user", async () => {
-	// 	const updateUserRequest = {
-	// 		// Provide valid data for updating the user
-	// 		name: "Updated Test User",
-	// 		// ... other fields to update
-	// 	};
+	it("/PUT - should update a user FirstName", async () => {
+		const updateUserRequest = {
+			firstName: "Joana",
+		};
+		const response = await supertest(app)
+			.put(`/users/${testUserId}`)
+			.set("token", authToken)
+			.send(updateUserRequest);
+		expect(response.status).toEqual(200);
 
-	// 	const response = await supertest(app)
-	// 		.put(`/users/${testUserId}`) // Adjust the route based on your Express setup
-	// 		.send(updateUserRequest);
+		expect(response.body.message).toEqual("User updated successfully");
+		expect(response.body.data).toEqual({
+			...usersArray[0],
+			firstName: "Joana",
+		});
+	});
 
-	// 	expect(response.status).toEqual(200);
-	// 	expect(response.body.message).toEqual("User updated successfully");
-	// 	expect(response.body.data).toBeDefined();
-	// 	expect(response.body.data._id).toEqual(testUserId);
-	// 	expect(response.body.data.name).toEqual("Updated Test User");
-	// });
+	it("/PUT - should fail to update a user email due to incorrect format", async () => {
+		const updateUserRequest = {
+			email: "incorrectemail",
+		};
+		const response = await supertest(app)
+			.put(`/users/${testUserId}`)
+			.set("token", authToken)
+			.send(updateUserRequest);
+		expect(response.status).toEqual(400);
+
+		expect(response.body).toEqual({
+			errors: [
+				{
+					type: "field",
+					value: "incorrectemail",
+					msg: "Email must be a valid email address",
+					path: "email",
+					location: "body",
+				},
+			],
+		});
+	});
 
 	it("DELETE - should delete a user", async () => {
 		const response = await supertest(app)

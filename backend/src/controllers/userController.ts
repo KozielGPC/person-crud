@@ -76,6 +76,12 @@ export class UserController {
 
 	async update(req: Request, res: Response) {
 		try {
+			const errors = validationResult(req);
+
+			if (!errors.isEmpty()) {
+				return res.status(400).json({ errors: errors.array() });
+			}
+
 			const input: UpdateUserDto = req.body;
 			const user = await UserModel.findById(req.params.id);
 

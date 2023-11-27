@@ -79,4 +79,41 @@ function CreateUserValidator() {
 	];
 }
 
-export { CreateUserValidator };
+function UpdateUserValidator() {
+	return [
+		body("firstName")
+			.notEmpty()
+			.withMessage("First name is required")
+			.isString()
+			.withMessage("First name must be a string")
+			.isLength({ max: 50 })
+			.withMessage("First name must be less than 50 characters")
+			.optional(),
+		body("lastName")
+			.notEmpty()
+			.withMessage("Last name is required")
+			.isString()
+			.withMessage("Last name must be a string")
+			.isLength({ max: 50 })
+			.withMessage("Last name must be less than 50 characters")
+			.optional(),
+		body("email")
+			.notEmpty()
+			.withMessage("Email is required")
+			.isString()
+			.withMessage("Email must be a string")
+			.custom((value) => validateEmail(value))
+			.withMessage("Email must be a valid email address")
+			.optional(),
+		body("documentNumber")
+			.notEmpty()
+			.withMessage("Document number is required")
+			.isString()
+			.withMessage("Document number must be a string")
+			.custom((value) => validateCPF(value))
+			.withMessage("Document number must be a valid CPF")
+			.optional(),
+	];
+}
+
+export { CreateUserValidator, UpdateUserValidator };

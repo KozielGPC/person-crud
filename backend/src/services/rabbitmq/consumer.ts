@@ -3,10 +3,10 @@ import { LogModel } from "../../models/logModel";
 import { config, rabbitMQConfig } from "../../config/config";
 import "../database/database";
 
+let connection: amqp.Connection;
 export const listen = async () => {
-	// let connection;
 	try {
-		const connection = await amqp.connect(config.RABBIT_MQ_URL);
+		connection = await amqp.connect(config.RABBIT_MQ_URL);
 		const channel = await connection.createChannel();
 
 		process.once("SIGINT", async () => {
@@ -35,7 +35,11 @@ export const listen = async () => {
 	} catch (err) {
 		console.warn(err);
 	}
-	// finally{
-	// 	// if (connection) await connection.close();
-	// }
+};
+
+export const closeConnection = async () => {
+	if (connection)
+		await connection
+			.close()
+			.then(() => console.log("Rabbitmq connection closed"));
 };

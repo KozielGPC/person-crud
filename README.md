@@ -23,10 +23,9 @@
 - [x] Implementar fila com RabbitMQ
 - [x] Implementar cache com Redis
 - [x] Adicionar testes unitarios
+- [x] Adicionar testes end to end
 - [ ] Adicionar paginação
-- [ ] Adicionar códigos de erro personalizados
 - [ ] Criar configuração de container docker e configurar docker-compose
-- [ ] Criar service de websocket
 
 ### Frontend
 - [x] Criar setup inicial
@@ -40,9 +39,7 @@
 - [x] Adicionar validador de input nos formulários
 - [x] Adicionar error handler
 - [x] Adicionar filtros e ordenação na tabela
+- [x] Adicionar loading com skeleton
 - [ ] Adicionar requisição para API de CEPs
-- [ ] Adicionar loading com skeleton
-- [ ] Adicionar validadores de erros
 - [ ] Adicionar dark/light mode
 - [ ] Adicionar tradução pt-BR / en-US
-- [ ] Adicionar conexão com socket

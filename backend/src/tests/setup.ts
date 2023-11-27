@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-import { redisClient } from "../../services/redis/service";
-import { UserModel } from "../../models/userModel";
-import { connectDB } from "../../tools/databaseConnection";
+import { UserModel } from "../models/userModel";
+import { connectDB } from "../tools/databaseConnection";
+import { redisClient } from "../services/redis/service";
+import { closeConnection } from "../services/rabbitmq/consumer";
 
 export async function cleanDatabase() {
 	try {
@@ -22,5 +23,6 @@ export const setup = () => {
 		await cleanDatabase();
 		await mongoose.connection.close();
 		await redisClient.disconnect();
+		await closeConnection();
 	});
 };

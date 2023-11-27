@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn --pretty --transpile-only src/server.ts",
     "build": "tsc",
-    "test": "jest --detectOpenHandles --forceExit --runInBand"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
