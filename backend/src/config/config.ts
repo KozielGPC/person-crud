@@ -8,6 +8,7 @@ export const config = {
 	JWT_SECRET: process.env.JWT_SECRET,
 	JWT_EXPIRATION_TIME: process.env.JWT_EXPIRATION_TIME,
 	LOGGER: process.env.LOGGER,
+	REDIS_URL: process.env.REDIS_URL,
 };
 
 Object.entries(config).forEach(([key, value]) => {

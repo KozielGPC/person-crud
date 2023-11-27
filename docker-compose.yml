@@ -28,12 +28,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=username
       - RABBITMQ_DEFAULT_PASS=password
-  backend:
-    build: ./backend
-    ports:
-      - 3000:3000
-    networks:
-      - mongo-compose-network
 
 volumes:
   mongodb_data:
