@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { UserController } from "../controllers/userController";
-import { CreateUserValidator, UpdateUserValidator } from "../tools/apiInputValidators";
+import {
+	CreateUserValidator,
+	UpdateUserValidator,
+} from "../tools/apiInputValidators";
+import { authenticateKey } from "../middlewares/authentication";
 
 const userRoutes = Router();
 const userController = new UserController();
@@ -33,7 +37,7 @@ const userController = new UserController();
  *                   - number: 555-1234
  *                     type: mobile
  */
-userRoutes.get("/", userController.findMany);
+userRoutes.get("/users", authenticateKey, userController.findMany);
 
 /**
  * @swagger
@@ -72,7 +76,7 @@ userRoutes.get("/", userController.findMany);
  *       404:
  *         description: User not found.
  */
-userRoutes.get("/:id", userController.findOne);
+userRoutes.get("/users/:id", authenticateKey, userController.findOne);
 
 /**
  * @swagger
@@ -120,7 +124,12 @@ userRoutes.get("/:id", userController.findOne);
  *       400:
  *         description: Invalid input.
  */
-userRoutes.post("/", CreateUserValidator(), userController.create);
+userRoutes.post(
+	"/users",
+	CreateUserValidator(),
+	authenticateKey,
+	userController.create
+);
 
 /**
  * @swagger
@@ -159,7 +168,12 @@ userRoutes.post("/", CreateUserValidator(), userController.create);
  *       404:
  *         description: User not found.
  */
-userRoutes.put("/:id", UpdateUserValidator(), userController.update);
+userRoutes.put(
+	"/users/:id",
+	UpdateUserValidator(),
+	authenticateKey,
+	userController.update
+);
 
 /**
  * @swagger
@@ -199,10 +213,18 @@ userRoutes.put("/:id", UpdateUserValidator(), userController.update);
  *       404:
  *         description: User not found.
  */
-userRoutes.delete("/:id", userController.delete);
+userRoutes.delete("/users/:id", authenticateKey, userController.delete);
 
-userRoutes.put("/:id/phoneNumbers", userController.updatePhoneNumbers);
+userRoutes.put(
+	"/users/:id/phoneNumbers",
+	authenticateKey,
+	userController.updatePhoneNumbers
+);
 
-userRoutes.put("/:id/addresses", userController.updateAddresses);
+userRoutes.put(
+	"/users/:id/addresses",
+	authenticateKey,
+	userController.updateAddresses
+);
 
 export { userRoutes };

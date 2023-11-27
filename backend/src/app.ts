@@ -15,11 +15,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(logger);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-app.use("/users", authenticateKey, userRoutes);
-app.use("/logs", authenticateKey, logRoutes);
-app.use("/auth", authRoutes);
+app.use(userRoutes);
+app.use(logRoutes);
+app.use(authRoutes);
 app.all("*", function (req: Request, res: Response) {
 	return responseHandler.notFoundResponse(res, "Page not found");
 });

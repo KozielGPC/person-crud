@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { LogController } from "../controllers/logController";
+import { authenticateKey } from "../middlewares/authentication";
 
 const logRoutes = Router();
 
@@ -29,5 +30,5 @@ const logController = new LogController();
  *               params: {}
  *               query: {}
  */
-logRoutes.get("/", logController.findMany);
+logRoutes.get("/logs", authenticateKey, logController.findMany);
 export { logRoutes };
