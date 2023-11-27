@@ -14,6 +14,7 @@ import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validateZipCodeInput } from "../../tools/formValidators";
 import api from "../../providers/api";
 import { errorHandler } from "../../tools/errorHandler";
+import { normalizeZipCode } from "../../tools/formNormalizers";
 
 export const AddressesForm = (props: {
 	addresses: IAddress[];
@@ -148,6 +149,7 @@ export const AddressesForm = (props: {
 															labelCol={{ span: 24 }}
 															wrapperCol={{ span: 24 }}
 															name={[name, "zipCode"]}
+															normalize={normalizeZipCode}
 															rules={[
 																{
 																	required: true,

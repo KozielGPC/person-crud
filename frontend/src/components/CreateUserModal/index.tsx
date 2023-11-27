@@ -25,6 +25,11 @@ import {
 } from "../../tools/formValidators";
 import api from "../../providers/api";
 import { errorHandler } from "../../tools/errorHandler";
+import {
+	normalizeDocumentNumber,
+	normalizePhoneNumber,
+	normalizeZipCode,
+} from "../../tools/formNormalizers";
 
 const { Option } = Select;
 
@@ -78,7 +83,6 @@ const CreateUserModal = (props: props) => {
 					})
 					.catch((error) => {
 						throw error;
-						
 					});
 			})
 			.catch((error) => {
@@ -191,6 +195,7 @@ const CreateUserModal = (props: props) => {
 								name="documentNumber"
 								labelCol={{ span: 24 }}
 								wrapperCol={{ span: 24 }}
+								normalize={normalizeDocumentNumber}
 								rules={[
 									{
 										required: true,
@@ -273,6 +278,7 @@ const CreateUserModal = (props: props) => {
 													labelCol={{ span: 24 }}
 													wrapperCol={{ span: 24 }}
 													name={[name, "zipCode"]}
+													normalize={normalizeZipCode}
 													rules={[
 														{
 															required: true,
@@ -328,6 +334,7 @@ const CreateUserModal = (props: props) => {
 													name={[name, "number"]}
 													labelCol={{ span: 24 }}
 													wrapperCol={{ span: 24 }}
+													normalize={normalizePhoneNumber}
 													rules={[
 														{
 															required: true,

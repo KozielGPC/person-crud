@@ -15,6 +15,7 @@ import { openNotificationWithIcon } from "../../tools/showNotification";
 import { validatePhoneNumberInput } from "../../tools/formValidators";
 import api from "../../providers/api";
 import { errorHandler } from "../../tools/errorHandler";
+import { normalizePhoneNumber } from "../../tools/formNormalizers";
 const { Option } = Select;
 
 export const PhoneNumbersForm = (props: {
@@ -102,6 +103,7 @@ export const PhoneNumbersForm = (props: {
 															name={[name, "number"]}
 															labelCol={{ span: 24 }}
 															wrapperCol={{ span: 24 }}
+															normalize={normalizePhoneNumber}
 															rules={[
 																{
 																	required: true,

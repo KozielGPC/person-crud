@@ -31,6 +31,7 @@ import { PhoneNumbersForm } from "../PhoneNumbersForm";
 import { AddressesForm } from "../AddressesForm";
 import api from "../../providers/api";
 import { errorHandler } from "../../tools/errorHandler";
+import { normalizeDocumentNumber } from "../../tools/formNormalizers";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
 	editing: boolean;
@@ -60,9 +61,20 @@ const EditableCell: React.FC<EditableCellProps> = ({
 }) => {
 	const inputNode =
 		inputType === "text" ? (
-			<Form.Item style={{ margin: 0 }} name={dataIndex} rules={rules}>
-				<Input />
-			</Form.Item>
+			dataIndex === "documentNumber" ? (
+				<Form.Item
+					style={{ margin: 0 }}
+					name={dataIndex}
+					rules={rules}
+					normalize={normalizeDocumentNumber}
+				>
+					<Input />
+				</Form.Item>
+			) : (
+				<Form.Item style={{ margin: 0 }} name={dataIndex} rules={rules}>
+					<Input />
+				</Form.Item>
+			)
 		) : (
 			<Form.Item style={{ margin: 0 }} name={dataIndex} rules={rules}>
 				<MyDatePicker disabledDate={disabledDate} />
