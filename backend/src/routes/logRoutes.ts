@@ -13,6 +13,13 @@ const logController = new LogController();
  *     tags: [Logs]
  *     summary: Get system logs
  *     description: Get system logs
+ *     parameters:
+ *       - in: header
+ *         name: token
+ *         required: true
+ *         description: An authentication token.
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: Logs found.
