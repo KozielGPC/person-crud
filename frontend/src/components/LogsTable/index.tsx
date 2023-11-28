@@ -1,5 +1,5 @@
 import { ILog } from "../../interfaces/log";
-import { Table, Divider, notification, Skeleton, Empty } from "antd";
+import { Table, Divider, notification, Button } from "antd";
 import React, { Key, useContext, useEffect, useState } from "react";
 import { ApiKeyContext } from "../../context/ApiKeyContext";
 import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
@@ -102,6 +102,28 @@ export function LogTable() {
 		});
 	}
 
+	const refresh = () => {
+		if (validApiKey) {
+			setLoading(true);
+			api
+				.get("/logs")
+				.then((response) => {
+					setLoading(false);
+					if (response.status === 200) {
+						setLogs(response.data.data);
+					} else {
+						setLogs([]);
+					}
+				})
+				.catch((error) => {
+					errorHandler(error, notificationApi);
+					setLogs([]);
+				});
+		} else {
+			setLogs([]);
+		}
+	};
+
 	const columns = [
 		{
 			title: "ID",
@@ -157,16 +179,25 @@ export function LogTable() {
 		<>
 			{contextHolder}
 			<Table
-				title={() => <h1>Logs</h1>}
+				title={() => (
+					<div>
+						<h1>Logs</h1>
+						<Button
+							type="primary"
+							onClick={refresh}
+							loading={loading}
+							disabled={!validApiKey}
+						>
+							Refresh Logs
+						</Button>
+					</div>
+				)}
 				rowKey={(record) => record._id}
 				scroll={{ x: 1000 }}
 				className="components-table-demo-nested"
 				columns={columns}
 				expandable={{ expandedRowRender }}
-				dataSource={loading ? [] : logs}
-					locale={{
-						emptyText: loading ? <Skeleton active={true} /> : <Empty />,
-					}}
+				dataSource={logs}
 				bordered
 				rowClassName={(record, index) =>
 					index % 2 === 0 ? "table-row-light" : "table-row-dark"
