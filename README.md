@@ -125,9 +125,12 @@ Dois middlewares foram implementados, explico com mais detalhes sobre eles logo 
 ## Extras
 
 ### Testes automatizados
-Para demonstrar conhecimento com testes automatizados, foram escritos tanto testes unitários quanto testes e2e. No total, existem 21 casos de teste para funções de validação (no caso dos testes unitários) e requests para as principais rotas (no caso e2e)
+Para demonstrar conhecimento com testes automatizados, foram escritos tanto testes unitários quanto testes e2e, testando as principais funcionalidades do sistema. No total, existem 21 casos de teste para funções de validação (no caso dos testes unitários) e requests para as principais rotas (no caso e2e)
 
 Para rodar, basta utilizar o comando `npm run test` (na pasta backend)
+
+![image](https://github.com/KozielGPC/person-crud/assets/37910437/aed29ece-a3f9-436f-aecc-d44a47e3f07c)
+
 
 ### Documentação (Swagger)
 A documentação completa da API pode ser acessada em `http://localhost:3001/api-docs`
