@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node-dev --respawn --pretty --transpile-only src/server.ts",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
