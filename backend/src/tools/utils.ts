@@ -39,13 +39,13 @@ export function validateCPF(documentNumber: string) {
 }
 
 export function validateCEP(zipCode: string) {
-	var re = /^\d{5}-?\d{3}$/;
-	return re.test(zipCode);
+	var regex = /^\d{5}-?\d{3}$/;
+	return regex.test(zipCode);
 }
 
 export function validatePhoneNumber(phoneNumber: string) {
-	var re = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
-	return re.test(phoneNumber);
+	var regex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
+	return regex.test(phoneNumber);
 }
 
 export function validateEmail(email: string) {
