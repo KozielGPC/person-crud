@@ -30,7 +30,7 @@ cp .env.example .env
 # Instale as dependências
 npm install
 
-# Rode o backend
+# Rode o frontend
 npm start
 ```
 # Backend
@@ -41,68 +41,68 @@ Para o backend, utilizei o NodeJs.
 A collection principal é a `Users`, definida como no exemplo abaixo:
 ``` json
 {
-			"_id": "6564d13f6a76b0f57933e45a",
-			"firstName": "Márcio Gabriel",
-			"lastName": "de Campos",
-			"addresses": [
-				{
-					"street": "Cristo Rei",
-					"city": "Campo Mourão",
-					"state": "Paraná",
-					"zipCode": "23242-423",
-					"_id": "6564d73e6a76b0f57933e470"
-				}
-			],
-			"dateOfBirth": "2023-11-02T17:26:11.561Z",
-			"email": "gpcgabriel0@gmail.com",
-			"documentNumber": "063.297.329-30",
-			"phoneNumbers": [
-				{
-					"number": "(44) 99101-6824",
-					"type": "work",
-					"_id": "6564d79e850b5928299a28f1"
-				},
-				{
-					"number": "(44) 99101-6482",
-					"type": "personal",
-					"_id": "6564d79e850b5928299a28f2"
-				}
-			],
-			"__v": 0
+	"_id": "6564d13f6a76b0f57933e45a",
+	"firstName": "Márcio Gabriel",
+	"lastName": "de Campos",
+	"addresses": [
+		{
+			"street": "Cristo Rei",
+			"city": "Campo Mourão",
+			"state": "Paraná",
+			"zipCode": "23242-423",
+			"_id": "6564d73e6a76b0f57933e470"
 		}
+	],
+	"dateOfBirth": "2023-11-02T17:26:11.561Z",
+	"email": "gpcgabriel0@gmail.com",
+	"documentNumber": "063.297.329-30",
+	"phoneNumbers": [
+		{
+			"number": "(44) 99101-6824",
+			"type": "work",
+			"_id": "6564d79e850b5928299a28f1"
+		},
+		{
+			"number": "(44) 99101-6482",
+			"type": "personal",
+			"_id": "6564d79e850b5928299a28f2"
+		}
+	],
+	"__v": 0
+	}
 ```
 
 Além dela, também existe a collection de `Logs`:
 
 ``` json
 {
-			"_id": "6564d79e850b5928299a28f9",
-			"requestTime": "2023-11-27T17:53:34.111Z",
-			"responseTime": "2023-11-27T17:53:34.145Z",
-			"method": "PUT",
-			"url": "/6564d13f6a76b0f57933e45a/phoneNumbers",
-			"statusCode": 200,
-			"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/104.0.0.0",
-			"body": {
-				"phoneNumbers": [
-					{
-						"number": "(44) 99101-6824",
-						"type": "work",
-						"_id": "6564d79e850b5928299a28f1"
-					},
-					{
-						"number": "(44) 99101-6482",
-						"type": "personal",
-						"_id": "6564d79e850b5928299a28f2"
-					}
-				]
+	"_id": "6564d79e850b5928299a28f9",
+	"requestTime": "2023-11-27T17:53:34.111Z",
+	"responseTime": "2023-11-27T17:53:34.145Z",
+	"method": "PUT",
+	"url": "/6564d13f6a76b0f57933e45a/phoneNumbers",
+	"statusCode": 200,
+	"userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/104.0.0.0",
+	"body": {
+		"phoneNumbers": [
+			{
+				"number": "(44) 99101-6824",
+				"type": "work",
+				"_id": "6564d79e850b5928299a28f1"
 			},
-			"params": {
-				"id": "6564d13f6a76b0f57933e45a"
-			},
-            "query": {}
-			"__v": 0
-		}
+			{
+				"number": "(44) 99101-6482",
+				"type": "personal",
+				"_id": "6564d79e850b5928299a28f2"
+			}
+		]
+	},
+	"params": {
+		"id": "6564d13f6a76b0f57933e45a"
+	},
+	"query": {}
+		"__v": 0
+	}
 ```
 
 ### Autenticação
@@ -110,7 +110,7 @@ A autenticação é feita através de uma palavra chave, presente na variável d
 
 ``` json
 {
-	"apiKey": "KEY_WORD"
+   "apiKey": "KEY_WORD"
 }
 ```
 
