@@ -1,49 +1,77 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-test-deployment
+  name: backend-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend-test
+      app: backend
   template:
     metadata:
       labels:
-        app: backend-test
+        app: backend
     spec:
       containers:
-      - name: backend-test
-        image: backend-test:latest
+      - name: backend
+        image: backend-test
+        resources:
+          limits:
+            memory: "356Mi"
+            cpu: "500m"
         ports:
-        - containerPort: 3001
+        - containerPort: 4000
         env:
         - name: MONGO_URL
-          value: "mongodb://username:password@localhost:27017/"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: MONGO_URL
         - name: PORT
-          value: "3001"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: PORT
         - name: API_KEY
-          value: "KEY_WORD"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: API_KEY
         - name: RABBIT_MQ_URL
-          value: "amqp://username:password@localhost:5672"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: RABBIT_MQ_URL
         - name: JWT_SECRET
-          value: "SECRET_WORD"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: JWT_SECRET
         - name: JWT_EXPIRATION_TIME
-          value: "1h"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: JWT_EXPIRATION_TIME
         - name: LOGGER
-          value: "ON"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: LOGGER
         - name: REDIS_URL
-          value: "redis://localhost:6379"
+          valueFrom:
+            secretKeyRef:
+              name: backend-test-secret
+              key: REDIS_URL
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-test-service
+  name: backend-service
 spec:
-  selector:
-    app: backend-test
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3001
   type: LoadBalancer
+  selector:
+    app: backend
+  ports:
+  - port: 4000
+    targetPort: 4000
+    protocol: TCP
