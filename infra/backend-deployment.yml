@@ -15,6 +15,7 @@ spec:
       containers:
       - name: backend
         image: backend-test
+        imagePullPolicy: Never
         resources:
           limits:
             memory: "356Mi"
