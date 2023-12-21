@@ -1,3 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-service
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - name: rabbitmq-port
+      protocol: TCP
+      port: 5672
+      targetPort : 5672
+    - name: rabbitmq-management-port
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,7 +34,19 @@ spec:
         image: rabbitmq:latest
         ports:
         - containerPort: 5672
-        - containerPort: 15672  
+        - containerPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,6 +67,19 @@ spec:
         image: mongo:latest
         ports:
         - containerPort: 27017
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
 ---
 apiVersion: apps/v1
 kind: Deployment
