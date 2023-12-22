@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: frontend-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -14,13 +14,15 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: frontend-test
-        resources:
-          limits:
-            memory: "356Mi"
-            cpu: "500m"
+        image: person-crud-frontend
         ports:
         - containerPort: 3000
+        env:
+        - name: REACT_APP_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: frontend-secret
+              key: REACT_APP_API_URL
 ---
 apiVersion: v1
 kind: Service

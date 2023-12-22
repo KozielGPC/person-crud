@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: backend-test
+        image: person-crud-backend
         imagePullPolicy: Never
         resources:
           limits:
@@ -26,42 +26,42 @@ spec:
         - name: MONGO_URL
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: MONGO_URL
         - name: PORT
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: PORT
         - name: API_KEY
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: API_KEY
         - name: RABBIT_MQ_URL
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: RABBIT_MQ_URL
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: JWT_SECRET
         - name: JWT_EXPIRATION_TIME
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: JWT_EXPIRATION_TIME
         - name: LOGGER
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: LOGGER
         - name: REDIS_URL
           valueFrom:
             secretKeyRef:
-              name: backend-test-secret
+              name: backend-secret
               key: REDIS_URL
 ---
 apiVersion: v1
