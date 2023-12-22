@@ -1,6 +1,3 @@
-## Desafio
-![image](https://github.com/KozielGPC/person-crud/assets/37910437/d94271e3-9110-4ba1-a7aa-2b9bd3889ae6)
-
 # Utilização
 ### Serviços
 O primeiro passo é subir o Redis, RabbitMQ e o MongoDB rodando `docker-compose up -d` na pasta raíz do projeto.
