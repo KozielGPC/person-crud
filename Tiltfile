@@ -1,41 +1,27 @@
 load('ext://helm_resource', 'helm_resource', 'helm_repo')
 
 docker_build('person-crud-backend',
-           context='./backend',
-           # (Recommended) Updating a running container in-place
-           # https://docs.tilt.dev/live_update_reference.html
-          # live_update=[
-          #   # Sync files from host to container
-          #   sync('./app', '/src/'),
-          # ]
+          context='./backend',
+          live_update=[
+               sync('./backend', '/app'),
+          ]
 )
 
 docker_build('person-crud-frontend',
-           context='./frontend',
-           # (Recommended) Updating a running container in-place
-           # https://docs.tilt.dev/live_update_reference.html
-          # live_update=[
-          #   # Sync files from host to container
-          #   sync('./app', '/src/'),
-          # ]
+          context='./frontend',
+          live_update=[
+            sync('./frontend', '/app'),
+          ]
 )
 
 k8s_yaml(['infra/backend-secret.yml','infra/frontend-secret.yml', 'infra/backend-deployment.yml', 'infra/services.yml', 'infra/frontend-deployment.yml'])
 
 k8s_resource('backend-deployment',
-           port_forwards=['3001:3001'],
-           # change whether the resource is started by default
-           auto_init=False,
-           # control whether the resource automatically updates
-           trigger_mode=TRIGGER_MODE_MANUAL
+           port_forwards=['3001:3001']
 )
 
 k8s_resource('frontend-deployment',
-           port_forwards=['3000:3000'],
-           # change whether the resource is started by default
-           auto_init=False,
-           # control whether the resource automatically updates
-           trigger_mode=TRIGGER_MODE_MANUAL
+           port_forwards=['3000:3000']
 )
 
 # Add the Bitnami Helm repository

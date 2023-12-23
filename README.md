@@ -218,8 +218,3 @@ Prints para melhor visualização:
 - [ ] Adicionar requisição para API de CEPs
 - [ ] Adicionar dark/light mode
 - [ ] Adicionar tradução pt-BR / en-US
-
-
-### Nota
-Eu comecei a implementar a configuração para subir o frontend e o backend com docker e kubernetes, tanto para treinar os conhecimentos dessas stacks, quanto para adicionar algo a mais ao teste, porém commo comecei depois do prazo de entrega, entendo se não for considerar para o teste.
-A implementação será feita na branch `kubernetes-test`
