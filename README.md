@@ -2,11 +2,13 @@
 
 ## Rodando via Tilt
 
-O [Tilt][https://tilt.dev/] é uma ferramente de desenvolvimento que serve para rodar aplicações localmente via Kubernetes e gerenciá-las dentro de um cluster, simulando o ambiente de produção.
+O [Tilt](https://tilt.dev/) é uma ferramente de desenvolvimento que serve para orquestração de aplicações Kubernetes localmente.
 
-Para rodar a aplicação, você deve ter o Tilt [instalado][https://docs.tilt.dev/install.html], e então basta rodar o comando `tilt up` na pasta raíz do projeto, onde está o `Tiltfile`
+Para rodar a aplicação, você deve ter o Tilt [instalado](https://docs.tilt.dev/install.html), e então basta rodar o comando `tilt up` na pasta raíz do projeto, onde está o `Tiltfile`
 
 O Tilt conta com uma interface web para melhor visualização da aplicação:
+
+![image](https://github.com/KozielGPC/person-crud/assets/37910437/5943aa63-007f-4ba6-9afb-31b042431662)
 
 
 ## Rodando manualmente
