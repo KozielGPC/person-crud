@@ -1,4 +1,16 @@
 # Utilização
+
+## Rodando via Tilt
+
+O [Tilt][https://tilt.dev/] é uma ferramente de desenvolvimento que serve para rodar aplicações localmente via Kubernetes e gerenciá-las dentro de um cluster, simulando o ambiente de produção.
+
+Para rodar a aplicação, você deve ter o Tilt [instalado][https://docs.tilt.dev/install.html], e então basta rodar o comando `tilt up` na pasta raíz do projeto, onde está o `Tiltfile`
+
+O Tilt conta com uma interface web para melhor visualização da aplicação:
+
+
+## Rodando manualmente
+
 ### Serviços
 O primeiro passo é subir o Redis, RabbitMQ e o MongoDB rodando `docker-compose up -d` na pasta raíz do projeto.
 
