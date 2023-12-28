@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: person-crud-frontend
+        image: marciogpc/person-crud-frontend
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:

@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: person-crud-backend
-        imagePullPolicy: Never
+        image: marciogpc/person-crud-backend
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "356Mi"
