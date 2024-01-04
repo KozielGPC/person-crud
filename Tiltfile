@@ -16,11 +16,11 @@ docker_build(
 
 k8s_yaml(
     [
-      'infra/backend-secret.yml',
-      'infra/frontend-secret.yml', 
-      'infra/backend-deployment.yml', 
-      'infra/services.yml', 
-      'infra/frontend-deployment.yml'
+      'infra/dev/backend-secret.yml',
+      'infra/dev/frontend-secret.yml', 
+      'infra/dev/backend-deployment.yml', 
+      'infra/dev/services.yml', 
+      'infra/dev/frontend-deployment.yml'
     ]
 )
 

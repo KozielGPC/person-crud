@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: person-crud-backend
+        imagePullPolicy: Never
+        resources:
+          limits:
+            memory: "356Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4000
+        env:
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: MONGO_URL
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: PORT
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: API_KEY
+        - name: RABBIT_MQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: RABBIT_MQ_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: JWT_SECRET
+        - name: JWT_EXPIRATION_TIME
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: JWT_EXPIRATION_TIME
+        - name: LOGGER
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: LOGGER
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: REDIS_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: backend
+  ports:
+  - port: 4000
+    targetPort: 4000
+    protocol: TCP

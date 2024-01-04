@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: person-crud-frontend
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: frontend-secret
+              key: REACT_APP_API_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
