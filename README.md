@@ -66,10 +66,10 @@ A collection principal é a `Users`, definida como no exemplo abaixo:
 	],
 	"dateOfBirth": "2023-11-02T17:26:11.561Z",
 	"email": "gpcgabriel0@gmail.com",
-	"documentNumber": "063.297.329-30",
+	"documentNumber": "063.548.329-30",
 	"phoneNumbers": [
 		{
-			"number": "(44) 99101-6824",
+			"number": "(44) 99130-6824",
 			"type": "work",
 			"_id": "6564d79e850b5928299a28f1"
 		},
@@ -97,7 +97,7 @@ Além dela, também existe a collection de `Logs`:
 	"body": {
 		"phoneNumbers": [
 			{
-				"number": "(44) 99101-6824",
+				"number": "(44) 99148-6824",
 				"type": "work",
 				"_id": "6564d79e850b5928299a28f1"
 			},
@@ -228,7 +228,7 @@ Prints para melhor visualização:
 - [x] Adicionar filtros e ordenação na tabela
 - [x] Adicionar loading com skeleton
 
-### Extras (caso sobre tempo)
+### Próximas Features
 - [ ] Adicionar requisição para API de CEPs
 - [ ] Adicionar dark/light mode
 - [ ] Adicionar tradução pt-BR / en-US
