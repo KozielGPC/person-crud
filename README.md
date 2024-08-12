@@ -117,7 +117,7 @@ Além dela, também existe a collection de `Logs`:
 ```
 
 ### Autenticação
-A autenticação é feita através de uma palavra chave, presente na variável de ambiente `API_KEY`. Para validar uma palavra chave, uma requisição é feita na rota `http://localhost:3001/auth/validate`, passando no body a chave `apiKey`, e então a api retorna um token JWT (que contém a palavra chave testada pelo usuário). Este token é salvo no redis e a cada requisição nas rotas protegidas pelo middleware de autenticação, é feita uma consulta no redis para verificar se o token está presente, e se a palavra chave é válida. Toda requisição protegida pelo middleware deve conter a chave `token` no header. Exemplo de body:
+A autenticação é feita através de uma palavra chave, presente na variável de ambiente `API_KEY`. Para validar uma palavra chave, uma requisição é feita na rota `http://localhost:3001/auth/validate`, passando no body a chave `apiKey`, e então a api retorna um token JWT (que contém a palavra chave testada pelo usuário). Este token é salvo no Redis e a cada requisição nas rotas protegidas pelo middleware de autenticação, é feita uma consulta no redis para verificar se o token está presente, e se a palavra chave é válida. Toda requisição protegida pelo middleware deve conter a chave `token` no header. Exemplo de body:
 
 ``` json
 {
@@ -133,10 +133,9 @@ Dois middlewares foram implementados, explico com mais detalhes sobre eles logo 
 - Middleware de autenticação
 - Middleware de log
 
-## Extras
 
 ### Testes automatizados
-Para demonstrar conhecimento com testes automatizados, foram escritos tanto testes unitários quanto testes e2e, testando as principais funcionalidades do sistema. No total, existem 21 casos de teste para funções de validação (no caso dos testes unitários) e requests para as principais rotas (no caso e2e)
+A aplicação conta tanto com testes unitários quanto testes e2e, testando as principais funcionalidades do sistema. No total, existem 21 casos de teste para funções de validação (no caso dos testes unitários) e requests para as principais rotas (no caso e2e)
 
 Para rodar, basta utilizar o comando `npm run test` (na pasta backend)
 
@@ -151,10 +150,10 @@ A documentação completa da API pode ser acessada em `http://localhost:3001/api
 
 
 ### Fila (RabbitMQ)
-Como vi na descrição da vaga que um diferencial técnico seria o conhecimento de RabbitMQ, resolvi utilizá-lo também. O caso de uso é para a escrita de um novo registro na collection de Logs. Para cada requisição que passa pelo middleware de logs, é publicada uma mensagem para ser consumida de forma assíncrona pelo consumer, e então gerar o novo registro na collection. A ideia é que a escrita do novo log não gere gargalo nas requisições padrões. O consumidor pode ser ligado ou desligado através da variável de ambiente `LOGGER`, que por padrão vem com o valor `ON`.
+A utilização do RabbitMQ se da para a escrita de um novo registro na collection de Logs. Para cada requisição que passa pelo middleware de logs, é publicada uma mensagem para ser consumida de forma assíncrona pelo consumer, e então gerar o novo registro na collection. A ideia é que a escrita do novo log não gere gargalo nas requisições padrões. O consumidor pode ser ligado ou desligado através da variável de ambiente `LOGGER`, que por padrão vem com o valor `ON`.
 
 ### Redis
-Seguindo a mesma ideia do RabbitMQ, por ver que também seria um diferencial na descrição da vaga, implementei um sistema de cache com Redis com o objetivo de validar a autenticação do usuário. A validação é feita buscando o token na memória do redis, e extraindo dele a palavra chave. Cada vez que um usuário tenta validar uma apiKey, é salvo um novo registro no Redis.
+O Redis foi utilziado para implementar um sistema de cache, com o objetivo de validar a autenticação do usuário. A validação é feita buscando o token na memória do redis, e extraindo dele a palavra chave. Cada vez que um usuário tenta validar uma apiKey, é salvo um novo registro no Redis.
 
 ### Docker compose
 4 serviços estão presentes no `docker-compose.yml`:
